@@ -1,0 +1,8 @@
+
+First, you need to install the S60 python interpreter:
+
+http://opensource.nokia.com/projects/pythonfors60/
+
+Unfortunately, the .sis file is not working yet. So, you need
+to copy all source files to your card and run wordmobi.py 
+from python script shell. 
