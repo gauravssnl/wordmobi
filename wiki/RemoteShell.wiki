@@ -1,6 +1,6 @@
 #summary Using a remote shell over WiFi
 
-= Introduction =
+= Instructions =
 
 For using the remote shell over WiFi, download and install remoteshell.sis. Do not forget to install the python interpreter before installing remotes hell.
 
