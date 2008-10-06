@@ -1,0 +1,11 @@
+#summary Programs used and credits
+
+= Credits =
+
+The following softwares below were used/modified in this project:
+
+  * [http://www.blackbirdblog.it/programmazione/progetti/28 wordpresslib], by Michelle Ferretti. t was necessary some modifications since python 2.2  does not support yield statement.
+  * [http://cyke64.googlepages.com/datetime.py datetime] module for S60.
+  * xmlrpclib.py and xmllib.py from standard python [http://www.python.org/download/releases/2.2.3/ 2.2.3] distribution
+  * [http://sourceforge.net/projects/pys60-compat/ s60-compat] wxWindows emulator (essential for linux developers). I added support for e32dbm, see [http://code.google.com/p/wordmobi/source/browse/trunk/wordmobi/src/e32dbm.py e32dbm.py] file.
+  
