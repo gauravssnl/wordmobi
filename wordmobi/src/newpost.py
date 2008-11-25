@@ -56,6 +56,7 @@ class NewPost:
         
         self.body = gui.Listbox( [ (u"",u"") ], self.update_value )
         self.cancel = False
+        self.last_idx = 0
 
         self.refresh()
 
@@ -72,7 +73,7 @@ class NewPost:
                    (u"Images", img ) ]
 
         gui.app.body = self.body
-        gui.app.body.set_list( values )
+        gui.app.body.set_list( values, self.last_idx )
         gui.app.menu = [( u"Publish", self.close_app ),\
                         ( u"Cancel", self.cancel_app )]        
         
@@ -88,6 +89,7 @@ class NewPost:
 
     def update_value(self):
         idx = gui.app.body.current()
+        self.last_idx = idx
         if idx == 0:
             title = gui.query(u"Post title:","text", self.title)
             if title is not None:
