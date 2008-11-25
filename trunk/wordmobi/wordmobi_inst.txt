@@ -11,6 +11,9 @@ Development site and source code:
 
 * http://code.google.com/p/wordmobi/
 
+Blog:
+
+* http://wordmobi.wordpress.com
 
 Credits:
 
