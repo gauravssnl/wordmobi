@@ -12,8 +12,11 @@ from newpost import NewPost
 from editpost import EditPost
 import re
 from settings import Settings
+import topwindow, graphics
 
 __version__ = "0.1.5"
+
+months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 def decode_html(line):
     "http://mail.python.org/pipermail/python-list/2006-April/378536.html"
@@ -27,6 +30,25 @@ def parse_iso8601(val):
     dt,tm= val.split('T')
     tm = tm.split(':')
     return (int(dt[:4]),int(dt[4:6]),int(dt[6:8]),int(tm[0]),int(tm[1]),int(tm[2]))
+  
+class WaitDlg:
+    def __init__(self):
+        self.tw = topwindow.TopWindow()
+        app.menu = [] 
+        app.exit_key_handler = lambda: None
+    
+    def Show(self,text):
+        img_txt = graphics.Image.new( (10,10) )
+        (x,h,w,y) = img_txt.measure_text(text)[0]
+        h = -h
+        img_txt = graphics.Image.new((w+20,h+10))
+        img_txt.clear( 0xffff50 )
+        img_txt.text( (5,h-5), text )
+        self.tw.add_image( img_txt , (0,25))
+        self.tw.show()
+        
+    def Hide(self):  
+        self.tw.hide()  
         
 class WordMobi:
     def unicode(self,s):
@@ -36,12 +58,21 @@ class WordMobi:
         self.lock = e32.Ao_lock()
         self.posts = None
         self.cats = [u"Uncategorized"]
-        self.headlines = [ (u"<empty>", u"Please, update the post list") ]        
+        self.headlines = []       
         self.db = Persist()
         self.db.load()
-        self.body = Listbox( self.headlines, self.post_popup )
+        self.body = Listbox( [(u"",u"")], self.post_popup )
         self.blog = None
-        
+        self.menu = [( u"Posts", (
+                            ( u"Update", self.update ), 
+                            ( u"New", self.new_post ),
+                            ( u"Details", self.post_details ),
+                            ( u"Delete", self.delete_post )
+                            )),
+                        ( u"Settings", self.config_wordmobi ),
+                        ( u"About", self.about_wordmobi ),
+                        ( u"Exit", self.close_app )]
+        #               ( u"Categories", self.categories ),        
         self.set_blog_url()
         self.refresh()
 
@@ -52,16 +83,10 @@ class WordMobi:
             
     def refresh(self):
         app.title = u"Wordmobi"
-        app.menu = [( u"Posts", (
-                            ( u"Update", self.update ), 
-                            ( u"New", self.new_post ),
-                            ( u"Details", self.post_details ),
-                            ( u"Delete", self.delete_post )
-                            )),
-                        ( u"Settings", self.config_wordmobi ),
-                        ( u"About", self.about_wordmobi ),
-                        ( u"Exit", self.close_app )]
-        #               ( u"Categories", self.categories ),
+        app.menu = self.menu
+        if len( self.headlines ) == 0:
+            self.headlines = [ (u"<empty>", u"Please, update the post list") ] 
+        self.body.set_list( self.headlines )
         app.body = self.body        
         app.set_tabs( [], None )
         app.exit_key_handler = self.close_app
@@ -90,10 +115,17 @@ class WordMobi:
                 try:
                     new_post = self.blog.newPost(post, True)
                 except:
-                    note(u"Impossible to post to blog %s" % self.db["blog"],"info")
+                    note(u"Impossible to post to blog %s. Try again." % self.db["blog"],"error")
                     return
                 
-                note(u"Published ! Update the post list","info")
+                try:
+                    p = self.blog.getLastPostTitle( new_post )
+                    (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
+                    timestamp = u"%d/%s/%d  %02d:%02d:%02d" % (d,months[mo-1],y,h,m,s) 
+                    self.headlines.insert( 0, ( timestamp , self.unicode( p['title'] ) ) )                 
+                except:
+                    note(u"Impossible to get the last post title.","error")
+                                    
             self.refresh()
             
         self.dlg = NewPost( cbk, blog_categories=self.cats )
@@ -101,31 +133,38 @@ class WordMobi:
         self.dlg.run()
         
     def update(self):
+        #w = WaitDlg()
+        #w.Show( u"Checking for recent posts..." )
+        
         try:
             self.posts = self.blog.getRecentPostTitles( int(self.db["num_posts"]) )
         except:
-            note(u"Impossible to retrieve post titles list","info")
+            note(u"Impossible to retrieve post titles list","error")
+            #w.Hide()
+            #self.refresh()            
             return
-
+        
+        #w.Hide()
+        #self.refresh()
+        
         if len(self.posts) > 0:
             self.headlines = []
             for p in self. posts:
-                months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
                 timestamp = u"%d/%s/%d  %02d:%02d:%02d" % (d,months[mo-1],y,h,m,s) 
                 self.headlines.append( ( timestamp , self.unicode( p['title'] ) ) )
         else:
-            self.headlines = [ (u"<empty>", u"Please, update the post list") ]
+            self.headlines = []
             note( u"No posts available", "info" )
 
         try:
             cats = self.blog.getCategoryList()
         except:
-            note(u"Impossible to retrieve the categories list","info")
+            note(u"Impossible to retrieve the categories list","error")
             return
 
         self.cats = [ decode_html(c.name) for c in cats ]        
-        self.body.set_list( self.headlines )
+        self.refresh()
         
 
     def list_comments(self):
@@ -134,9 +173,9 @@ class WordMobi:
         app.title = u"wordmobi Posts"
 
     def post_popup(self):
-        idx = popup_menu( [u"Details", u"Delete"], u"Posts")
+        idx = popup_menu( [u"Details", u"Delete",u"Update"], u"Posts")
         if idx is not None:
-            [self.post_details , self.delete_post ][idx]()
+            [self.post_details , self.delete_post, self.update ][idx]()
 
     def delete_post(self):
         idx = self.body.current()
@@ -150,9 +189,11 @@ class WordMobi:
                 try:
                     self.blog.deletePost( self.posts[idx]['postid'] )
                 except:
-                    note(u"Impossible to delete the post","info")
+                    note(u"Impossible to delete the post","error")
                     return
+                self.headlines = self.headlines[:idx] + self.headlines[idx+1:]
                 note(u"Post deleted","info")
+                self.refresh()
         
     def post_details(self):
         idx = self.body.current()
