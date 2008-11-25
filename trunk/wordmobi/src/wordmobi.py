@@ -4,13 +4,14 @@ sys.path.append("e:\\python")
 import e32
 import dt as datetime
 import appuifw as gui
-import os.path
+import os
 import wordpresslib as wp
 import e32dbm
 from persist import Persist
 from newpost import NewPost
 from editpost import EditPost
 import re
+from settings import Settings
 
 VERSION = "0.1.3"
 
@@ -26,7 +27,7 @@ def parse_iso8601(val):
     dt,tm= val.split('T')
     tm = tm.split(':')
     return (int(dt[:4]),int(dt[4:6]),int(dt[6:8]),int(tm[0]),int(tm[1]),int(tm[2]))
-    
+        
 class WordMobi:
     def unicode(self,s):
         return unicode(s,'utf-8',errors='ignore')
@@ -35,26 +36,19 @@ class WordMobi:
         self.lock = e32.Ao_lock()
         self.posts = None
         self.cats = [u"Uncategorized"]
-        self.headlines = [ u"<empty>" ]        
+        self.headlines = [ (u"<empty>", u"Please, update the post list") ]        
         self.db = Persist()
         self.db.load()
         self.body = gui.Listbox( self.headlines, self.post_popup )
         self.blog = None
         
+        self.set_blog_url()
         self.refresh()
 
-    def connect(self):
-        if self.blog is None:
-            try:
-                url = "http://%s.wordpress.com/xmlrpc.php" % self.db["blog"]
-                self.blog = wp.WordPressClient(url, self.db["user"], self.db["pass"])
-            except:
-                gui.note(u"Error when connecting to blog %s" % self.db["blog"],"info")
-                return False
-            
-            self.blog.selectBlog(0)
-            
-            return True
+    def set_blog_url(self):
+        blog = self.db["blog"] + "/xmlrpc.php"
+        self.blog = wp.WordPressClient(blog, self.db["user"], self.db["pass"])
+        self.blog.selectBlog(0)
             
     def refresh(self):
         gui.app.title = u"Wordmobi"
@@ -77,9 +71,8 @@ class WordMobi:
 
     def new_post(self):
         def cbk( param ):
-            (title,contents,images,categories) = param
-            if title is not None:
-                self.connect()
+            if param[0] is not None:
+                (title,contents,images,categories) = param
                 img_contents = ""
                 
                 for img in images:
@@ -108,7 +101,6 @@ class WordMobi:
         self.dlg.run()
         
     def update(self):
-        self.connect()
         try:
             self.posts = self.blog.getRecentPostTitles( int(self.db["num_posts"]) )
         except:
@@ -120,11 +112,10 @@ class WordMobi:
             for p in self. posts:
                 months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
-                #timestamp = "%02d/%02d %02d:%02d " % (mo,d,h,m)
-                timestamp = "%02d/%s " % (d,months[mo-1]) 
-                self.headlines.append( self.unicode( timestamp + p['title'] ) )
+                timestamp = u"%d/%s/%d  %02d:%02d:%02d" % (d,months[mo-1],y,h,m,s) 
+                self.headlines.append( ( timestamp , self.unicode( p['title'] ) ) )
         else:
-            self.headlines = [ u"<empty>" ]
+            self.headlines = [ (u"<empty>", u"Please, update the post list") ]
             gui.note( u"No posts available", "info" )
 
         try:
@@ -149,14 +140,13 @@ class WordMobi:
 
     def delete_post(self):
         idx = self.body.current()
-        if self.headlines[ idx ] == u"<empty>":
+        if self.headlines[ idx ][0] == u"<empty>":
             gui.note( u"Please, update the post list", "info" )
             return
 
         ny = gui.popup_menu( [u"No", u"Yes"], u"Delete post ?" )
         if ny is not None:
             if ny == 1:
-                self.connect()
                 try:
                     self.blog.deletePost( self.posts[idx]['postid'] )
                 except:
@@ -166,7 +156,7 @@ class WordMobi:
         
     def post_details(self):
         idx = self.body.current()
-        if self.headlines[ idx ] == u"<empty>":
+        if self.headlines[ idx ][0] == u"<empty>":
             gui.note( u"Please, update the post list", "info" )
             return
 
@@ -174,7 +164,6 @@ class WordMobi:
             self.refresh()
 
         # if post was not totally retrieved yet, fetch all data
-        self.connect()
         if self.posts[idx].has_key('description') == False:
             self.posts[idx] = self.blog.getPost( self.posts[idx]['postid'] )
             
@@ -187,67 +176,32 @@ class WordMobi:
 
 
     def config_wordmobi(self):
-        fields = [ (u"Blog","text",self.db["blog"]), \
-                   (u"Posts","text",self.db["num_posts"]), \
-                   (u"Username","text",self.db["user"]), \
-                   (u"Password","text",self.db["pass"]) ]
+        def cbk( params ):
+            if params[0] is not None:
+                (self.db["blog"], self.db["user"], self.db["pass"], np) = params
+                self.db["num_posts"] = unicode( np )
+                self.db.save()
+                self.set_blog_url()
+            self.refresh()
+            
+        self.dlg = Settings( cbk,self.db["blog"], self.db["user"], self.db["pass"], int(self.db["num_posts"]) )
+        self.dlg.run()           
         
-        form = gui.Form(fields,gui.FFormEditModeOnly)
-        form.menu = []
-        form.save_hook = self.save_conf
-        form.execute()
-
-    def save_conf(self,conf):
-        blog = conf[0][2]
-        npst = conf[1][2]
-        user = conf[2][2]
-        pswd = conf[3][2]
-        
-        if not user or not pswd or not blog:
-            gui.note(u"User, password and blog fields may not be blank","error")
-            return
-
-        try:
-            np = int( npst )
-        except:
-            gui.note(u"Invalid value for number of posts","error")
-            return
-
-        if np < 1 or np > 100:
-            gui.note(u"Please, select a number of post between 1 and 100","error")
-            return
-
-        self.db["user"] = user
-        self.db["pass"] = pswd
-        self.db["blog"] = blog
-        self.db["num_posts"] = npst
-        
-        self.db.save()
-
     def about_wordmobi(self):
         def close_about():
             self.refresh()
-
+        gui.app.title = u"About"
         gui.app.exit_key_handler = close_about
-        
-        msg = u"""
-Wordmobi, a client for Wordpress (%s)
-
-Author: Marcelo Barros de Almeida
-Email: marcelobarrosalmeida@gmail.com
-Code: http://wordmobe.googlecode.com
-Blog: http://wordmobi.wordpress.com
-License: GNU GPLv3 (http://www.gnu.org/licenses/gpl-3.0.txt)
-
-Use At Your Own Risk.
-""" % VERSION
-        
-        about = gui.Text(msg)
-        about.focus = False
-        about.style = gui.STYLE_BOLD
-        gui.app.body = about
+        about = [ ( u"Wordmobi %s" % VERSION, u"A Wordpress client" ),\
+                  ( u"Author", u"Marcelo Barros de Almeida"), \
+                  ( u"Email", u"marcelobarrosalmeida@gmail.com"), \
+                  ( u"Source code", u"http://wordmobi.googlecode.com"), \
+                  ( u"Blog", u"http://wordmobi.wordpress.com"), \
+                  ( u"License", u"GNU GPLv3"), \
+                  ( u"Warning", u"Use at your own risk") ]
+        gui.app.body = gui.Listbox( about, lambda: None )
         gui.app.menu = [ (u"Close", close_about )]
-        
+ 
     def run(self):
         self.lock.wait()
         gui.app.set_tabs( [], None )
@@ -256,9 +210,3 @@ if __name__ == "__main__":
 
     wm = WordMobi()
     wm.run()
-
-#['mt_keywords', 'permaLink', 'wp_slug', 'description', 'title',
-#'post_status', 'date_created_gmt', 'mt_excerpt', 'userid', 'dateCreated',
-#'custom_fields', 'wp_author_display_name', 'link', 'mt_text_more', 'mt_allow_comments',
-#'wp_password', 'postid', 'wp_author_id', 'categories', 'mt_allow_pings']
-
