@@ -3,7 +3,7 @@ import sys
 sys.path.append("e:\\python")
 import e32
 import dt as datetime
-import appuifw as gui
+from appuifw import *
 import os
 import wordpresslib as wp
 import e32dbm
@@ -13,7 +13,7 @@ from editpost import EditPost
 import re
 from settings import Settings
 
-VERSION = "0.1.4"
+__version__ = "0.1.5"
 
 def decode_html(line):
     "http://mail.python.org/pipermail/python-list/2006-April/378536.html"
@@ -39,7 +39,7 @@ class WordMobi:
         self.headlines = [ (u"<empty>", u"Please, update the post list") ]        
         self.db = Persist()
         self.db.load()
-        self.body = gui.Listbox( self.headlines, self.post_popup )
+        self.body = Listbox( self.headlines, self.post_popup )
         self.blog = None
         
         self.set_blog_url()
@@ -51,8 +51,8 @@ class WordMobi:
         self.blog.selectBlog(0)
             
     def refresh(self):
-        gui.app.title = u"Wordmobi"
-        gui.app.menu = [( u"Posts", (
+        app.title = u"Wordmobi"
+        app.menu = [( u"Posts", (
                             ( u"Update", self.update ), 
                             ( u"New", self.new_post ),
                             ( u"Details", self.post_details ),
@@ -62,9 +62,9 @@ class WordMobi:
                         ( u"About", self.about_wordmobi ),
                         ( u"Exit", self.close_app )]
         #               ( u"Categories", self.categories ),
-        gui.app.body = self.body        
-        gui.app.set_tabs( [], None )
-        gui.app.exit_key_handler = self.close_app
+        app.body = self.body        
+        app.set_tabs( [], None )
+        app.exit_key_handler = self.close_app
 
     def close_app(self):
         self.lock.signal()
@@ -90,10 +90,10 @@ class WordMobi:
                 try:
                     new_post = self.blog.newPost(post, True)
                 except:
-                    gui.note(u"Impossible to post to blog %s" % self.db["blog"],"info")
+                    note(u"Impossible to post to blog %s" % self.db["blog"],"info")
                     return
                 
-                gui.note(u"Published ! Update the post list","info")
+                note(u"Published ! Update the post list","info")
             self.refresh()
             
         self.dlg = NewPost( cbk, blog_categories=self.cats )
@@ -104,7 +104,7 @@ class WordMobi:
         try:
             self.posts = self.blog.getRecentPostTitles( int(self.db["num_posts"]) )
         except:
-            gui.note(u"Impossible to retrieve post titles list","info")
+            note(u"Impossible to retrieve post titles list","info")
             return
 
         if len(self.posts) > 0:
@@ -116,12 +116,12 @@ class WordMobi:
                 self.headlines.append( ( timestamp , self.unicode( p['title'] ) ) )
         else:
             self.headlines = [ (u"<empty>", u"Please, update the post list") ]
-            gui.note( u"No posts available", "info" )
+            note( u"No posts available", "info" )
 
         try:
             cats = self.blog.getCategoryList()
         except:
-            gui.note(u"Impossible to retrieve the categories list","info")
+            note(u"Impossible to retrieve the categories list","info")
             return
 
         self.cats = [ decode_html(c.name) for c in cats ]        
@@ -129,35 +129,35 @@ class WordMobi:
         
 
     def list_comments(self):
-        gui.app.title = u"wordmobi comments"
-        gui.note( u"Comments cbk", "info" )
-        gui.app.title = u"wordmobi Posts"
+        app.title = u"wordmobi comments"
+        note( u"Comments cbk", "info" )
+        app.title = u"wordmobi Posts"
 
     def post_popup(self):
-        idx = gui.popup_menu( [u"Details", u"Delete"], u"Posts")
+        idx = popup_menu( [u"Details", u"Delete"], u"Posts")
         if idx is not None:
             [self.post_details , self.delete_post ][idx]()
 
     def delete_post(self):
         idx = self.body.current()
         if self.headlines[ idx ][0] == u"<empty>":
-            gui.note( u"Please, update the post list", "info" )
+            note( u"Please, update the post list", "info" )
             return
 
-        ny = gui.popup_menu( [u"No", u"Yes"], u"Delete post ?" )
+        ny = popup_menu( [u"No", u"Yes"], u"Delete post ?" )
         if ny is not None:
             if ny == 1:
                 try:
                     self.blog.deletePost( self.posts[idx]['postid'] )
                 except:
-                    gui.note(u"Impossible to delete the post","info")
+                    note(u"Impossible to delete the post","info")
                     return
-                gui.note(u"Post deleted","info")
+                note(u"Post deleted","info")
         
     def post_details(self):
         idx = self.body.current()
         if self.headlines[ idx ][0] == u"<empty>":
-            gui.note( u"Please, update the post list", "info" )
+            note( u"Please, update the post list", "info" )
             return
 
         def cbk( p ):
@@ -190,21 +190,27 @@ class WordMobi:
     def about_wordmobi(self):
         def close_about():
             self.refresh()
-        gui.app.title = u"About"
-        gui.app.exit_key_handler = close_about
-        about = [ ( u"Wordmobi %s" % VERSION, u"A Wordpress client" ),\
+        app.title = u"About"
+        app.exit_key_handler = close_about
+        about = [ ( u"Wordmobi %s" % __version__, u"A Wordpress client" ),\
                   ( u"Author", u"Marcelo Barros de Almeida"), \
                   ( u"Email", u"marcelobarrosalmeida@gmail.com"), \
                   ( u"Source code", u"http://wordmobi.googlecode.com"), \
                   ( u"Blog", u"http://wordmobi.wordpress.com"), \
                   ( u"License", u"GNU GPLv3"), \
                   ( u"Warning", u"Use at your own risk") ]
-        gui.app.body = gui.Listbox( about, lambda: None )
-        gui.app.menu = [ (u"Close", close_about )]
+        app.body = Listbox( about, lambda: None )
+        app.menu = [ (u"Close", close_about )]
  
     def run(self):
+        old_title = app.title
         self.lock.wait()
-        gui.app.set_tabs( [], None )
+        app.set_tabs( [], None )
+        app.title = old_title
+        app.menu = []
+        app.body = None
+        app.set_exit()
+
 
 if __name__ == "__main__":
 

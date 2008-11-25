@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import e32
-import appuifw as gui
+from appuifw import *
 import types
             
 class Settings(object):
@@ -17,22 +17,22 @@ class Settings(object):
         self.blog_url = blog_url
         self.num_posts = num_posts
         
-        self.body = gui.Listbox( [ (u"",u"") ], self.update_value )
+        self.body = Listbox( [ (u"",u"") ], self.update_value )
         self.cancel = False
         self.last_idx = 0
 
     def refresh(self):
-        gui.app.exit_key_handler = self.close_app
-        gui.app.title = u"Settings"
+        app.exit_key_handler = self.close_app
+        app.title = u"Settings"
 
         values = [ (u"Blog URL:", self.blog_url ), \
                    (u"Username:", self.username ), \
                    (u"Password:", u"*"*len( self.password )), \
                    (u"Number of Posts:", unicode( self.num_posts ) ) ]
 
-        gui.app.body = self.body
-        gui.app.body.set_list( values, self.last_idx )
-        gui.app.menu = [( u"Save", self.close_app ),\
+        app.body = self.body
+        app.body.set_list( values, self.last_idx )
+        app.menu = [( u"Save", self.close_app ),\
                         ( u"Cancel", self.cancel_app )]        
         
     def cancel_app(self):
@@ -46,14 +46,14 @@ class Settings(object):
             self.cbk( (None,None,None,None) )
 
     def update_value(self):
-        idx = gui.app.body.current()
+        idx = app.body.current()
         self.last_idx = idx
         
         vars = ( "blog_url", "username", "password", "num_posts" )
         labels = ( u"Blog URL:", u"Username:", u"Password:", u"Number of posts:" )
         formats = ( "text", "text", "code", "number" )
         
-        val = gui.query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
+        val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
             if type(val) in ( types.UnicodeType , types.StringType ):
                 val = val.strip()
