@@ -27,6 +27,8 @@
 		* getUserInfo
 		* getPost
 		* getRecentPosts
+		* getLastPostTitle		
+		* getRecentPostTitles		
 		* newPost
 		* editPost
 		* deletePost
@@ -58,339 +60,353 @@ import xmlrpclib
 import time
 
 class WordPressException(exceptions.Exception):
-	"""Custom exception for WordPress client operations
-	"""
-	def __init__(self, obj):
-		if isinstance(obj, xmlrpclib.Fault):
-			self.id = obj.faultCode
-			self.message = obj.faultString
-		else:
-			self.id = 0
-			self.message = obj
+    """Custom exception for WordPress client operations
+    """
+    def __init__(self, obj):
+        if isinstance(obj, xmlrpclib.Fault):
+            self.id = obj.faultCode
+            self.message = obj.faultString
+        else:
+            self.id = 0
+            self.message = obj
 
-	def __str__(self):
-		return '<%s %d: \'%s\'>' % (self.__class__.__name__, self.id, self.message)
-		
+    def __str__(self):
+        return '<%s %d: \'%s\'>' % (self.__class__.__name__, self.id, self.message)
+        
 class WordPressBlog:
-	"""Represents blog item
-	"""	
-	def __init__(self):
-		self.id = ''
-		self.name = ''
-		self.url = ''
-		self.isAdmin = False
-		
+    """Represents blog item
+    """ 
+    def __init__(self):
+        self.id = ''
+        self.name = ''
+        self.url = ''
+        self.isAdmin = False
+        
 class WordPressUser:
-	"""Represents user item
-	"""	
-	def __init__(self):
-		self.id = ''
-		self.firstName = ''
-		self.lastName = ''
-		self.nickname = ''
-		self.email = ''
-		
+    """Represents user item
+    """ 
+    def __init__(self):
+        self.id = ''
+        self.firstName = ''
+        self.lastName = ''
+        self.nickname = ''
+        self.email = ''
+        
 class WordPressCategory:
-	"""Represents category item
-	"""	
-	def __init__(self):
-		self.id = 0
-		self.name = ''
-		self.isPrimary = False
-	
+    """Represents category item
+    """ 
+    def __init__(self):
+        self.id = 0
+        self.name = ''
+        self.isPrimary = False
+    
 class WordPressPost:
-	"""Represents post item
-	"""	
-	def __init__(self):
-		self.id = 0
-		self.title = ''
-		self.date = None
-		self.permaLink = ''
-		self.description = ''
-		self.textMore = ''
-		self.excerpt = ''
-		self.link = ''
-		self.categories = []
-		self.user = ''
-		self.allowPings	= False
-		self.allowComments = False
+    """Represents post item
+    """ 
+    def __init__(self):
+        self.id = 0
+        self.title = ''
+        self.date = None
+        self.permaLink = ''
+        self.description = ''
+        self.textMore = ''
+        self.excerpt = ''
+        self.link = ''
+        self.categories = []
+        self.user = ''
+        self.allowPings = False
+        self.allowComments = False
 
-		
+        
 class WordPressClient:
-	"""Client for connect to WordPress XML-RPC interface
-	"""
-	
-	def __init__(self, url, user, password):
-		self.url = url
-		self.user = user
-		self.password = password
-		self.blogId = 0
-		self.categories = None
-		self._server = xmlrpclib.ServerProxy(self.url)
+    """Client for connect to WordPress XML-RPC interface
+    """
+    
+    def __init__(self, url, user, password):
+        self.url = url
+        self.user = user
+        self.password = password
+        self.blogId = 0
+        self.categories = None
+        self._server = xmlrpclib.ServerProxy(self.url)
 
-	def _filterPost(self, post):
-		"""Transform post struct in WordPressPost instance 
-		"""
-		postObj = WordPressPost()
-		postObj.permaLink 		= post['permaLink']
-		postObj.description 	= post['description']
-		postObj.title 			= post['title']
-		postObj.excerpt 		= post['mt_excerpt']
-		postObj.user 			= post['userid']
-		postObj.date 			= time.strptime(str(post['dateCreated']), "%Y%m%dT%H:%M:%S")
-		postObj.link 			= post['link']
-		postObj.textMore 		= post['mt_text_more']
-		postObj.allowComments 	= post['mt_allow_comments'] == 1
-		postObj.id 				= int(post['postid'])
-		postObj.categories 		= post['categories']
-		postObj.allowPings 		= post['mt_allow_pings'] == 1
-		return postObj
+    def _filterPost(self, post):
+        """Transform post struct in WordPressPost instance 
+        """
+        postObj = WordPressPost()
+        postObj.permaLink       = post['permaLink']
+        postObj.description     = post['description']
+        postObj.title           = post['title']
+        postObj.excerpt         = post['mt_excerpt']
+        postObj.user            = post['userid']
+        postObj.date            = time.strptime(str(post['dateCreated']), "%Y%m%dT%H:%M:%S")
+        postObj.link            = post['link']
+        postObj.textMore        = post['mt_text_more']
+        postObj.allowComments   = post['mt_allow_comments'] == 1
+        postObj.id              = int(post['postid'])
+        postObj.categories      = post['categories']
+        postObj.allowPings      = post['mt_allow_pings'] == 1
+        return postObj
 		
-	def _filterCategory(self, cat):
-		"""Transform category struct in WordPressCategory instance
-		"""
-		catObj = WordPressCategory()
-		catObj.id 			= int(cat['categoryId'])
-		catObj.name 		= cat['categoryName'] 
-		if cat.has_key('isPrimary'):
-			catObj.isPrimary 	= cat['isPrimary']
-		return catObj
+    def _filterCategory(self, cat):
+        """Transform category struct in WordPressCategory instance
+        """
+        catObj = WordPressCategory()
+        catObj.id           = int(cat['categoryId'])
+        catObj.name         = cat['categoryName'] 
+        if cat.has_key('isPrimary'):
+            catObj.isPrimary    = cat['isPrimary']
+        return catObj
 		
-	def selectBlog(self, blogId):
-		self.blogId = blogId
-		
-	def supportedMethods(self):
-		"""Get supported methods list
-		"""
-		return self._server.mt.supportedMethods()
+    def selectBlog(self, blogId):
+        self.blogId = blogId
+        
+    def supportedMethods(self):
+        """Get supported methods list
+        """
+        return self._server.mt.supportedMethods()
 
-	def getLastPost(self):
-		"""Get last post
-		"""
-		return tuple(self.getRecentPosts(1))[0]
+    def getLastPost(self):
+        """Get last post
+        """
+        return tuple(self.getRecentPosts(1))[0]
+            
+    def getRecentPosts(self, numPosts=5):
+        """Get recent posts
+        """
+        try:
+            posts = self._server.metaWeblog.getRecentPosts(self.blogId, self.user,self.password, numPosts)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return posts
+
+    def getLastPostTitle(self):
+        """Get last post title
+        """
+        return tuple(self.getRecentPostsTitles(1))[0]
+        
+    def getRecentPostTitles(self, numPosts = 5):
+        """Get recent post titles
+        """
+        try:
+            postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return postTitles
+    
+    def getPost(self, postId):
+        """Get post item
+        """
+        try:
+            #return self._filterPost(self._server.metaWeblog.getPost(str(postId), self.user, self.password))
+            return self._server.metaWeblog.getPost(str(postId), self.user, self.password)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+		
+    def getUserInfo(self):
+        """Get user info
+        """
+        try:
+            userinfo = self._server.blogger.getUserInfo('', self.user, self.password)
+            userObj = WordPressUser()
+            userObj.id = userinfo['userid']
+            userObj.firstName = userinfo['firstname']
+            userObj.lastName = userinfo['lastname']
+            userObj.nickname = userinfo['nickname']
+            userObj.email = userinfo['email']
+            return userObj
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 			
-	def getRecentPosts(self, numPosts=5):
-		"""Get recent posts
-		"""
-		try:
-			posts = self._server.metaWeblog.getRecentPosts(self.blogId, self.user,self.password, numPosts)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
+    def getUsersBlogs(self):
+        """Get blog's users info
+        """
+        try:
+            blogs = self._server.blogger.getUsersBlogs('', self.user, self.password)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 
-		return posts
+        blogObj = []
+        for blog in blogs:
+            bo = WordPressBlog()
+            bo.id = blog['blogid']
+            bo.name = blog['blogName']
+            bo.isAdmin = blog['isAdmin']
+            bo.url = blog['url']
+            blogObj.append(b)
 
-	def getRecentPostTitles(self, numPosts = 5):
-                """Get recent post titles
-                """
-		try:
-			postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
+        return blogObj
 
-		return postTitles
-	
-	def getPost(self, postId):
-		"""Get post item
-		"""
-		try:
-			#return self._filterPost(self._server.metaWeblog.getPost(str(postId), self.user, self.password))
-                        return self._server.metaWeblog.getPost(str(postId), self.user, self.password)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-		
-	def getUserInfo(self):
-		"""Get user info
-		"""
-		try:
-			userinfo = self._server.blogger.getUserInfo('', self.user, self.password)
-			userObj = WordPressUser()
-			userObj.id = userinfo['userid']
-			userObj.firstName = userinfo['firstname']
-			userObj.lastName = userinfo['lastname']
-			userObj.nickname = userinfo['nickname']
-			userObj.email = userinfo['email']
-			return userObj
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-			
-	def getUsersBlogs(self):
-		"""Get blog's users info
-		"""
-		try:
-			blogs = self._server.blogger.getUsersBlogs('', self.user, self.password)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
+    def newPost(self, post, publish):
+        """Insert new post
+        """
+        blogContent = {
+            'title' : post.title,
+            'description' : post.description    
+        }
+        
+        # add categories
+        i = 0
+        categories = []
+        for cat in post.categories:
+            if i == 0:
+                categories.append({'categoryId' : cat, 'isPrimary' : 1})
+            else:
+                categories.append({'categoryId' : cat, 'isPrimary' : 0})
+            i += 1
+        
+        # insert new post
+        try:
+            idNewPost = int(self._server.metaWeblog.newPost(self.blogId, self.user, self.password, blogContent, 0))
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+        
+        # set categories for new post
+        try:
+            self.setPostCategories(idNewPost, categories)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+                
+        # publish post if publish set at True 
+        if publish:
+            try:
+                self.publishPost(idNewPost)
+            except xmlrpclib.Fault, fault:
+                raise WordPressException(fault)                
+            
+        return idNewPost
+       
+    def getPostCategories(self, postId):
+        """Get post's categories
+        """
+        try:
+            categories = self._server.mt.getPostCategories(postId, self.user,self.password)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 
-		blogObj = []
-		for blog in blogs:
-			bo = WordPressBlog()
-			bo.id = blog['blogid']
-			bo.name = blog['blogName']
-			bo.isAdmin = blog['isAdmin']
-			bo.url = blog['url']
-			blogObj.append(b)
+        cats = []
+        for c in categories:
+            cats.append(self._filterCategory(c))
 
-		return blogObj
+        return cats
 
-	def newPost(self, post, publish):
-		"""Insert new post
-		"""
-		blogContent = {
-			'title' : post.title,
-			'description' : post.description	
-		}
-		
-		# add categories
-		i = 0
-		categories = []
-		for cat in post.categories:
-			if i == 0:
-				categories.append({'categoryId' : cat, 'isPrimary' : 1})
-			else:
-				categories.append({'categoryId' : cat, 'isPrimary' : 0})
-			i += 1
-		
-		# insert new post
-		idNewPost = int(self._server.metaWeblog.newPost(self.blogId, self.user, self.password, blogContent, 0))
-		
-		# set categories for new post
-		self.setPostCategories(idNewPost, categories)
-		
-		# publish post if publish set at True 
-		if publish:
-			self.publishPost(idNewPost)
-			
-		return idNewPost
-	   
-	def getPostCategories(self, postId):
-		"""Get post's categories
-		"""
-		try:
-			categories = self._server.mt.getPostCategories(postId, self.user,self.password)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
+    def setPostCategories(self, postId, categories):
+        """Set post's categories
+        """
+        self._server.mt.setPostCategories(postId, self.user, self.password, categories)
+    
+    def editPost(self, postId, post, publish):
+        """Edit post
+        """
+        blogcontent = {
+            'title' : post.title,
+            'description' : post.description,
+            'permaLink' : post.permaLink,
+            'mt_allow_pings' : post.allowPings,
+            'mt_text_more' : post.textMore,
+            'mt_excerpt' : post.excerpt
+        }
+        
+        if post.date:
+            blogcontent['dateCreated'] = xmlrpclib.DateTime(post.date) 
+        
+        # add categories
+        i = 0
+        categories = []
+        for cat in post.categories:
+            if i == 0:
+                categories.append({'categoryId' : cat, 'isPrimary' : 1})
+            else:
+                categories.append({'categoryId' : cat, 'isPrimary' : 0})
+            i += 1               
+        
+        result = self._server.metaWeblog.editPost(postId, self.user, self.password,
+                                              blogcontent, 0)
+        
+        if result == 0:
+            raise WordPressException('Post edit failed')
+            
+        # set categories for new post
+        self.setPostCategories(postId, categories)
+        
+        # publish new post
+        if publish:
+            self.publishPost(postId)
 
-		cats = []
-		for c in categories:
-			cats.append(self._filterCategory(c))
+    def deletePost(self, postId):
+        """Delete post
+        """
+        try:
+            return self._server.blogger.deletePost('', postId, self.user, 
+                                             self.password)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 
-		return cats
+    def getCategoryList(self):
+        """Get blog's categories list
+        """
+        try:
+            if not self.categories:
+                self.categories = []
+                categories = self._server.mt.getCategoryList(self.blogId, 
+                                                self.user, self.password)               
+                for cat in categories:
+                    self.categories.append(self._filterCategory(cat))   
 
-	def setPostCategories(self, postId, categories):
-		"""Set post's categories
-		"""
-		self._server.mt.setPostCategories(postId, self.user, self.password, categories)
-	
-	def editPost(self, postId, post, publish):
-		"""Edit post
-		"""
-		blogcontent = {
-			'title' : post.title,
-			'description' : post.description,
-			'permaLink' : post.permaLink,
-			'mt_allow_pings' : post.allowPings,
-			'mt_text_more' : post.textMore,
-			'mt_excerpt' : post.excerpt
-		}
-		
-		if post.date:
-			blogcontent['dateCreated'] = xmlrpclib.DateTime(post.date) 
-		
-		# add categories
-		i = 0
-		categories = []
-		for cat in post.categories:
-			if i == 0:
-				categories.append({'categoryId' : cat, 'isPrimary' : 1})
-			else:
-				categories.append({'categoryId' : cat, 'isPrimary' : 0})
-			i += 1				 
-		
-		result = self._server.metaWeblog.editPost(postId, self.user, self.password,
-											  blogcontent, 0)
-		
-		if result == 0:
-			raise WordPressException('Post edit failed')
-			
-		# set categories for new post
-		self.setPostCategories(postId, categories)
-		
-		# publish new post
-		if publish:
-			self.publishPost(postId)
+            return self.categories
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)     
 
-	def deletePost(self, postId):
-		"""Delete post
-		"""
-		try:
-			return self._server.blogger.deletePost('', postId, self.user, 
-											 self.password)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
+    def getCategoryIdFromName(self, name):
+        """Get category id from category name
+        """
+        for c in self.getCategoryList():
+            if c.name == name:
+                return c.id
+        
+    def getTrackbackPings(self, postId):
+        """Get trackback pings of post
+        """
+        try:
+            return self._server.mt.getTrackbackPings(postId)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+            
+    def publishPost(self, postId):
+        """Publish post
+        """
+        try:
+            return (self._server.mt.publishPost(postId, self.user, self.password) == 1)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 
-	def getCategoryList(self):
-		"""Get blog's categories list
-		"""
-		try:
-			if not self.categories:
-				self.categories = []
-				categories = self._server.mt.getCategoryList(self.blogId, 
-												self.user, self.password)				
-				for cat in categories:
-					self.categories.append(self._filterCategory(cat))	
-
-			return self.categories
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)		
-
-	def getCategoryIdFromName(self, name):
-		"""Get category id from category name
-		"""
-		for c in self.getCategoryList():
-			if c.name == name:
-				return c.id
-		
-	def getTrackbackPings(self, postId):
-		"""Get trackback pings of post
-		"""
-		try:
-			return self._server.mt.getTrackbackPings(postId)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-			
-	def publishPost(self, postId):
-		"""Publish post
-		"""
-		try:
-			return (self._server.mt.publishPost(postId, self.user, self.password) == 1)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-
-	def getPingbacks(self, postUrl):
-		"""Get pingbacks of post
-		"""
-		try:
-			return self._server.pingback.extensions.getPingbacks(postUrl)
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-			
-	def newMediaObject(self, mediaFileName):
-		"""Add new media object (image, movie, etc...)
-		"""
-		try:
-			f = file(mediaFileName, 'rb')
-			mediaBits = f.read()
-			f.close()
-			
-			mediaStruct = {
-				'name' : os.path.basename(mediaFileName),
-				'bits' : xmlrpclib.Binary(mediaBits)
-			}
-			
-			result = self._server.metaWeblog.newMediaObject(self.blogId, 
-									self.user, self.password, mediaStruct)
-			return result['url']
-			
-		except xmlrpclib.Fault, fault:
-			raise WordPressException(fault)
-	
+    def getPingbacks(self, postUrl):
+        """Get pingbacks of post
+        """
+        try:
+            return self._server.pingback.extensions.getPingbacks(postUrl)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+            
+    def newMediaObject(self, mediaFileName):
+        """Add new media object (image, movie, etc...)
+        """
+        try:
+            f = file(mediaFileName, 'rb')
+            mediaBits = f.read()
+            f.close()
+            
+            mediaStruct = {
+                'name' : os.path.basename(mediaFileName),
+                'bits' : xmlrpclib.Binary(mediaBits)
+            }
+            
+            result = self._server.metaWeblog.newMediaObject(self.blogId, 
+                                    self.user, self.password, mediaStruct)
+            return result['url']
+            
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+    
