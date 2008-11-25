@@ -178,12 +178,23 @@ class WordPressClient:
 			raise WordPressException(fault)
 
 		return posts
-			
+
+	def getRecentPostTitles(self, numPosts = 5):
+                """Get recent post titles
+                """
+		try:
+			postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
+		except xmlrpclib.Fault, fault:
+			raise WordPressException(fault)
+
+		return postTitles
+	
 	def getPost(self, postId):
 		"""Get post item
 		"""
 		try:
-			return self._filterPost(self._server.metaWeblog.getPost(str(postId), self.user, self.password))
+			#return self._filterPost(self._server.metaWeblog.getPost(str(postId), self.user, self.password))
+                        return self._server.metaWeblog.getPost(str(postId), self.user, self.password)
 		except xmlrpclib.Fault, fault:
 			raise WordPressException(fault)
 		

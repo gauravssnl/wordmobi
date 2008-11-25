@@ -12,7 +12,7 @@ SRCDIR="src"
 TXTFILE="wordmobi_inst.txt"
 TMPDIR="src.tmp"
 
-PYFILES="wordmobi.py wordpresslib.py dt.py xmllib.py xmlrpclib.py"
+PYFILES="newpost.py persist.py editpost.py filesel.py viewpost.py wordmobi.py wordpresslib.py dt.py xmllib.py xmlrpclib.py"
 
 if [ ! -d "$TMPDIR" ]
 then
@@ -30,5 +30,5 @@ python ./ensymble.py py2sis 	--uid=0xefefefef 	\
 				--textfile="$TXTFILE"	\
 				--icon="$APPNAME.svg"	\
 				--caps="$CAPBLS"	\
-				"$TMPDIR" "$APPNAME.sis"
+				"$TMPDIR" "$APPNAME-$1.sis"
 
