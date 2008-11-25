@@ -1,6 +1,6 @@
 import os
 import e32
-import appuifw
+from appuifw import *
 
 class FileSel:
     def __init__(self,init_dir = u""):
@@ -22,7 +22,7 @@ class FileSel:
         
     def run(self):
         while True:
-            item = appuifw.selection_list(self.items, search_field=1)
+            item = selection_list(self.items, search_field=1)
             if item == None:
                 return None
             f = self.items[item]

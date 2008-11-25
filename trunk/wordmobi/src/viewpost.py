@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import e32
-import appuifw as gui
+from appuifw import *
 import key_codes
 
 EMUL = e32.in_emulator()
@@ -15,12 +15,12 @@ class ViewPost:
                  comments = [u""] ):
         
         self.cbk = cbk
-        gui.app.exit_key_handler = self.cancel_app
-        gui.app.title = u"View Post"
-        self.bodies = [ gui.Text(),
-                        gui.Text(),
-                        gui.Text() ]
-        self.bodies[0].style = gui.STYLE_BOLD
+        app.exit_key_handler = self.cancel_app
+        app.title = u"View Post"
+        self.bodies = [ Text(),
+                        Text(),
+                        Text() ]
+        self.bodies[0].style = STYLE_BOLD
         self.bodies[0].set( title )
         self.bodies[1].set( contents )
         self.bodies[0].bind(key_codes.EKeySelect, lambda: self.change_focus(0))
@@ -35,7 +35,7 @@ class ViewPost:
         cat_menu = [( u"Select", self.select_cat )]
         
         self.menus = [ def_menu, def_menu, img_menu + def_menu, cat_menu + def_menu ]
-        gui.app.set_tabs( [ u"Title", u"Contents", u"Images", u"Categories"], self.handle_tabs )
+        app.set_tabs( [ u"Title", u"Contents", u"Images", u"Categories"], self.handle_tabs )
 
     def change_focus(self,idx):
         self.bodies[idx].focus = not self.bodies[idx].focus
@@ -51,12 +51,12 @@ class ViewPost:
             self.cbk( (None,None,None,None) )
 
     def popup_img(self):
-        idx = gui.popup_menu( [u"Insert", u"Remove"], u"Images")
+        idx = popup_menu( [u"Insert", u"Remove"], u"Images")
         if idx is not None:
             [self.insert_img , self.remove_img ][idx]()
             
     def popup_cat(self):
-        idx = gui.popup_menu( [u"Select"], u"Categories" )
+        idx = popup_menu( [u"Select"], u"Categories" )
         if idx is not None:
             self.select_cat()
 
@@ -66,27 +66,27 @@ class ViewPost:
             if self.images[0] == u"<empty>":
                 self.images = []
             self.images.append( sel )
-            gui.app.body.set_list( self.images )
+            app.body.set_list( self.images )
 
     def remove_img(self):
-        idx = gui.app.body.current()
+        idx = app.body.current()
         self.images = self.images[:idx] + self.images[idx+1:]
         if len(self.images) == 0:
             self.images.append(u"<empty>")
-        gui.app.body.set_list( self.images )
+        app.body.set_list( self.images )
 
     def select_cat(self):
-        sel = gui.multi_selection_list( self.cat_lst, style='checkbox', search_field=1 )
+        sel = multi_selection_list( self.cat_lst, style='checkbox', search_field=1 )
         if len(sel) == 0:
             self.categories = [u"Uncategorized"]
         else:
             self.categories = [ self.cat_lst[idx] for idx in sel ]
-        gui.app.body.set_list( self.categories )
+        app.body.set_list( self.categories )
 
     def handle_tabs(self,index):
-        gui.app.activate_tab(index)
-        gui.app.menu = self.menus[index]
-        gui.app.body = self.bodies[index]
+        app.activate_tab(index)
+        app.menu = self.menus[index]
+        app.body = self.bodies[index]
         
     def run(self):
         self.handle_tabs(0)
