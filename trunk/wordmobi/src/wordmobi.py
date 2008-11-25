@@ -13,7 +13,7 @@ from editpost import EditPost
 import re
 from settings import Settings
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 def decode_html(line):
     "http://mail.python.org/pipermail/python-list/2006-April/378536.html"
