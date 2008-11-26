@@ -12,7 +12,7 @@ from newpost import NewPost
 from editpost import EditPost
 from settings import Settings
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
