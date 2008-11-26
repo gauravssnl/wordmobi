@@ -16,3 +16,7 @@
  * Icons in all list views
  * Image visualization when selecting images
  * better icon for wordmobi
+ * TAGs support
+ * Better post edition dialog, supporting:
+ ** Insert->Links
+ ** User friendly edition instead HTML
