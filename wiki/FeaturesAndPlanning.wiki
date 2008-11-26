@@ -3,7 +3,7 @@
 = Current implemented features and caveats =
 
  * Show a fixed number of recent posts
- * Allow new posts with text and images. I have verified that images are not so stable and a retransmission mechanish should be implemented.
+ * Allow new posts with text and images. I have verified that images are not so stable and a retransmission mechanism should be implemented.
  * Post deletion
  * Post visualization working but need improvements.
 
@@ -12,6 +12,7 @@
  * Comments visualization and moderation
  * Local posts persistence
  * Categories management
- * Post status, allowing to post but not publish and to approve for publishing when desired  * Icons in all listviews
+ * Post status, allowing to post but not publish and to approve for publishing when desired  
+ * Icons in all list views
  * Image visualization when selecting images
  * better icon for wordmobi
