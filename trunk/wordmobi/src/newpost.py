@@ -2,12 +2,11 @@
 import sys
 import e32
 from appuifw import *
-import key_codes
 sys.path.append("e:\\python")
 from filesel import FileSel
 import os
 
-class Contents:
+class Contents(object):
     def __init__(self, cbk, contents=u""):
         self.cbk = cbk
         self.cancel = False
@@ -37,7 +36,7 @@ class Contents:
     def run(self):
         pass
             
-class NewPost:
+class NewPost(object):
     def __init__(self,
                  cbk,
                  title=u"",
@@ -45,36 +44,50 @@ class NewPost:
                  blog_categories = [u"Uncategorized"],                 
                  categories = [],
                  images = []):
-
+        
         self.cbk = cbk
         self.title = title
         self.contents = contents
         self.blog_categories = blog_categories
         self.categories = categories
         self.images = images
+        self.ui_lock = False
         
-        self.body = Listbox( [ (u"",u"") ], self.update_value )
+        self.body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         self.cancel = False
         self.last_idx = 0
-
-        self.refresh()
+        self.menu = [( u"Publish", self.close_app ), ( u"Cancel", self.cancel_app ) ]
+        self.app_title = u"New Post"
 
     def refresh(self):
         app.exit_key_handler = self.close_app
-        app.title = u"New Post"
+        app.title = self.app_title
         
         img = unicode(",".join(self.images))
         cat = unicode(",".join(self.categories))
 
-        values = [ (u"Title", self.title ), \
-                   (u"Contents", self.contents[:50]), \
-                   (u"Categories", cat), \
-                   (u"Images", img ) ]
+        self.lst_values = [ (u"Title", self.title ), \
+                            (u"Contents", self.contents[:50]), \
+                            (u"Categories", cat), \
+                            (u"Images", img ) ]
 
         app.body = self.body
-        app.body.set_list( values, self.last_idx )
-        app.menu = [( u"Publish", self.close_app ),\
-                        ( u"Cancel", self.cancel_app )]        
+        app.body.set_list( self.lst_values, self.last_idx )
+        app.menu = self.menu        
+
+    def lock_ui(self,msg = u""):
+        self.ui_lock = True
+        app.menu = []
+        if msg:
+            app.title = msg
+
+    def unlock_ui(self):
+        self.ui_lock = False
+        app.menu = self.menu
+        app.title = self.title
+
+    def ui_is_locked(self):
+        return self.ui_lock
         
     def cancel_app(self):
         self.cancel = True
@@ -82,12 +95,18 @@ class NewPost:
         
     def close_app(self):
         if not self.cancel:
-            self.cbk( (self.title, self.contents, self.images, self.categories) )
+            self.lock_ui()
+            if self.cbk( (self.title, self.contents, self.images, self.categories) ) == False:
+                self.unlock_ui()
+                self.refresh()
         else:
             self.cbk( (None,None,None,None) )
 
-    def update_value(self):
-        idx = app.body.current()
+    def update_value_check_lock(self):
+        if self.ui_is_locked() == False:
+            self.update_value( app.body.current() )
+
+    def update_value(self,idx):
         self.last_idx = idx
         if idx == 0:
             title = query(u"Post title:","text", self.title)
@@ -130,10 +149,4 @@ class NewPost:
             self.refresh()
         
     def run(self):
-        pass
-
-if __name__ == "__main__":
-
-    cat = [u"Uncategorized", u"Cat A", u"Cat B", u"Cat C", u"Cat D", u"Cat E"]
-    ep = NewPost(u"Title",u"Post contents",cat)
-    print ep.run()
+        self.refresh()

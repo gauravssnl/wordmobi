@@ -184,7 +184,7 @@ class WordPressClient:
     def getLastPostTitle(self):
         """Get last post title
         """
-        return tuple(self.getRecentPostsTitles(1))[0]
+        return tuple(self.getRecentPostTitles(1))[0]
         
     def getRecentPostTitles(self, numPosts = 5):
         """Get recent post titles

@@ -2,7 +2,7 @@ import os
 import e32
 from appuifw import *
 
-class FileSel:
+class FileSel(object):
     def __init__(self,init_dir = u""):
         self.cur_dir = unicode(init_dir)
         self.fill_items()
