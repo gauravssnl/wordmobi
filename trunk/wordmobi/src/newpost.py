@@ -21,7 +21,7 @@ class Contents(object):
         app.title = u"New Post"
 
         app.body = self.body
-        app.menu = [( u"Done", self.close_app ),( u"Cancel", self.cancel_app )]          
+        app.menu = [( u"Cancel", self.cancel_app )]          
 
     def cancel_app(self):
         self.cancel = True
