@@ -20,3 +20,4 @@
  * Better post edition dialog, supporting:
  ** Insert->Links
  ** User friendly edition instead HTML
+ ** Newlines preservation (instead explicit {{{<br>}}})
