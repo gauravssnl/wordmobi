@@ -14,7 +14,12 @@ class Persist(dict):
                "blog":u"http://blogname.wordpress.com",
                "num_posts":u"10",
                "num_comments":u"20",
-               "categories":u""}
+               "categories":u"",
+               "proxy_user":u"",
+               "proxy_pass":u"",
+               "proxy_addr":u"",
+               "proxy_port":u"8080",
+               "proxy_enabled":u"False"}
     
     def __init__(self):
         # make me singleton !
