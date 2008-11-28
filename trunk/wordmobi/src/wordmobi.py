@@ -247,14 +247,19 @@ class WordMobi(object):
 
     def config_wordmobi_cbk(self,params):
         if params[0] is not None:
-            (self.db["blog"], self.db["user"], self.db["pass"], np) = params
+            (self.db["blog"], self.db["user"], self.db["pass"], np, nc) = params
             self.db["num_posts"] = unicode( np )
+            self.db["num_comments"] = unicode( nc )
             self.db.save()
             self.set_blog_url()
         self.refresh()
             
     def config_wordmobi(self):
-        self.dlg = Settings( self.config_wordmobi_cbk,self.db["blog"], self.db["user"], self.db["pass"], int(self.db["num_posts"]) )
+        self.dlg = Settings( self.config_wordmobi_cbk,\
+                             self.db["blog"], \
+                             self.db["user"], self.db["pass"], \
+                             int(self.db["num_posts"]), \
+                             int(self.db["num_comments"]) )
         self.dlg.run()
         
     def about_wordmobi(self):

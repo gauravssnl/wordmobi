@@ -13,6 +13,7 @@ class Persist(dict):
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
                "num_posts":u"10",
+               "num_comments":u"20",
                "categories":u""}
     
     def __init__(self):
@@ -36,7 +37,10 @@ class Persist(dict):
     def load(self):
         db = e32dbm.open(Persist.DBNAME,"w")
         for k in Persist.DEFVALS.iterkeys():
-            self.__setitem__(k,unicode(db[k]))
+            try:
+                self.__setitem__(k,unicode(db[k]))
+            except:
+                self.__setitem__(k,Persist.DEFVALS[k])
         db.close()
 
     # TODO reise exceptions for keys that not belong to DEVALS

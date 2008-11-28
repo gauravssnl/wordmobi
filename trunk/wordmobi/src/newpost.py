@@ -56,7 +56,7 @@ class NewPost(object):
         self.body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         self.cancel = False
         self.last_idx = 0
-        self.menu = [( u"Publish", self.close_app ), ( u"Cancel", self.cancel_app ) ]
+        self.menu = [ ( u"Cancel", self.cancel_app ) ]
         self.app_title = u"New Post"
 
     def refresh(self):
