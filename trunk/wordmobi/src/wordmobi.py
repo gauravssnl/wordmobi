@@ -4,36 +4,21 @@ sys.path.append("e:\\python")
 import e32, e32dbm
 import dt as datetime
 from appuifw import *
-import os, re
+import os
 import topwindow, graphics
 import wordpresslib as wp
 from persist import Persist
 from newpost import NewPost
 from editpost import EditPost
 from settings import Settings
+from wmutil import *
+from viewcomments import ViewComments
 
 __version__ = "0.2.1"
 
-MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
-
-def decode_html(line):
-    "http://mail.python.org/pipermail/python-list/2006-April/378536.html"
-    pat = re.compile(r'&#(\d+);')
-    def sub(mo):
-        return unichr(int(mo.group(1)))
-    return pat.sub(sub, unicode(line))
-
-def parse_iso8601(val):
-    "Returns a tupple with (yyyy, mm, dd, hh, mm, ss). Argument is provided by xmlrpc DateTime.value"
-    dt,tm= val.split('T')
-    tm = tm.split(':')
-    return (int(dt[:4]),int(dt[4:6]),int(dt[6:8]),int(tm[0]),int(tm[1]),int(tm[2]))
         
 class WordMobi(object):
-    def unicode(self,s):
-        return unicode(s,'utf-8',errors='ignore')
-
     def __init__(self):
         self.lock = e32.Ao_lock()
         self.ui_lock = False
@@ -48,9 +33,10 @@ class WordMobi(object):
         self.dlg = None
         self.menu = [( u"Posts", (
                             ( u"Update", self.update ), 
+                            ( u"Contents", self.post_contents ),
+                            ( u"Comments", self.post_comments ),
+                            ( u"Delete", self.delete_post ),
                             ( u"New", self.new_post ),
-                            ( u"Details", self.post_details ),
-                            ( u"Delete", self.delete_post )
                             )),
                         ( u"Settings", self.config_wordmobi ),
                         ( u"About", self.about_wordmobi ),
@@ -138,7 +124,7 @@ class WordMobi(object):
   
             (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
             timestamp = u"%d/%s/%d  %02d:%02d:%02d" % (d,MONTHS[mo-1],y,h,m,s) 
-            self.headlines.insert( 0, ( timestamp , self.unicode( p['title'] ) ) )
+            self.headlines.insert( 0, ( timestamp , utf8_to_unicode( p['title'] ) ) )
             self.posts.insert( 0, p )
             
         self.unlock_ui()   
@@ -162,8 +148,9 @@ class WordMobi(object):
             self.headlines = []
             for p in self.posts:
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
-                timestamp = u"%d/%s/%d  %02d:%02d:%02d" % (d,MONTHS[mo-1],y,h,m,s) 
-                self.headlines.append( ( timestamp , self.unicode( p['title'] ) ) )
+                line1 = u"%d/%s/%d  %02d:%02d:%02d" % (d,MONTHS[mo-1],y,h,m,s)
+                line2 = utf8_to_unicode( p['title'] )
+                self.headlines.append( ( line1 , line2 ) )
         else:
             self.headlines = []
             note( u"No posts available.", "info" )
@@ -190,9 +177,9 @@ class WordMobi(object):
             self.post_popup()
             
     def post_popup(self):
-        idx = popup_menu( [u"Details", u"Delete",u"Update"], u"Posts")
+        idx = popup_menu( [u"Contents", u"Comments",u"Delete",u"Update"], u"Posts")
         if idx is not None:
-            [self.post_details , self.delete_post, self.update ][idx]()
+            [self.post_contents , self.post_comments, self.delete_post, self.update ][idx]()
 
     def delete_post(self):
         idx = self.body.current()
@@ -216,11 +203,11 @@ class WordMobi(object):
                 self.unlock_ui() 
                 self.refresh()
 
-    def post_details_cbk(self,params):
+    def post_contents_cbk(self,params):
         self.refresh()
         return True
         
-    def post_details(self):
+    def post_contents(self):
         idx = self.body.current()
         if self.headlines[idx][0] == u"<empty>":
             note( u"Please, update the post list.", "info" )
@@ -237,14 +224,47 @@ class WordMobi(object):
                 return
             self.unlock_ui() 
                         
-        self.dlg = NewPost( self.post_details_cbk, \
-                             self.unicode(self.posts[idx]['title']), \
-                             self.unicode(self.posts[idx]['description']), \
+        self.dlg = NewPost( self.post_contents_cbk, \
+                             utf8_to_unicode(self.posts[idx]['title']), \
+                             utf8_to_unicode(self.posts[idx]['description']), \
                              self.cats,\
                              [ decode_html(c) for c in self.posts[idx]['categories'] ], \
                             [])
         self.dlg.run()
 
+    def post_comments_cbk(self):
+        self.refresh()
+        return True
+
+    def post_comments(self):
+        idx = self.body.current()
+        if self.headlines[idx][0] == u"<empty>":
+            note( u"Please, update the post list.", "info" )
+            return
+        
+        # if post was not totally retrieved yet, fetch all data
+        if self.posts[idx].has_key('comments') == False:
+            self.lock_ui(u"Downloading comments...")
+            comm_info = wp.WordPressComment()
+            comm_info.post_id = self.posts[idx]['postid']
+            comm_info.number = self.db['num_comments']
+            try:
+                self.posts[idx]['comments'] = self.blog.getComments( comm_info )
+            except:
+                self.unlock_ui()
+                note(u"Impossible to download comments. Try again.","error")
+                return
+            self.unlock_ui() 
+
+        nc = len( self.posts[idx]['comments'] )
+        if nc == 0:
+            note(u"No comments for this post.","info")
+        else:
+            self.dlg = ViewComments( self.post_comments_cbk, \
+                                     self.posts[idx]['comments'], \
+                                     utf8_to_unicode(self.posts[idx]['title']))
+            self.dlg.run()
+            
     def config_wordmobi_cbk(self,params):
         if params[0] is not None:
             (self.db["blog"], self.db["user"], self.db["pass"], np, nc) = params
