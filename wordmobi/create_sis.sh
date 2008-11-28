@@ -12,7 +12,7 @@ SRCDIR="src"
 TXTFILE="wordmobi_inst.txt"
 TMPDIR="src.tmp"
 
-PYFILES="newpost.py settings.py persist.py editpost.py filesel.py viewpost.py wordmobi.py wordpresslib.py dt.py xmllib.py xmlrpclib.py"
+PYFILES="viewcomments.py wmutil.py newpost.py settings.py persist.py editpost.py filesel.py viewpost.py wordmobi.py wordpresslib.py dt.py xmllib.py xmlrpclib.py"
 
 if [ ! -d "$TMPDIR" ]
 then
