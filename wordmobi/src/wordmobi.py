@@ -14,7 +14,7 @@ from settings import Settings
 from wmutil import *
 from viewcomments import ViewComments
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
         
