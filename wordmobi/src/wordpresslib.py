@@ -39,6 +39,9 @@
 		* getTrackbackPings
 		* publishPost
 		* getPingbacks
+		* getCommentCount
+		* getComments
+		* getComment
 
 	References:
 		* http://codex.wordpress.org/XML-RPC_Support
@@ -81,6 +84,15 @@ class WordPressBlog:
         self.name = ''
         self.url = ''
         self.isAdmin = False
+
+class WordPressComment:
+    """Represents comment item
+    """ 
+    def __init__(self):
+        self.post_id = ''
+        self.status = ''
+        self.offset = 0
+        self.number = 10
         
 class WordPressUser:
     """Represents user item
@@ -409,4 +421,35 @@ class WordPressClient:
             
         except xmlrpclib.Fault, fault:
             raise WordPressException(fault)
+
+    def getCommentCount(self, post_id = ''):
+        """Get the number of commands for a post or for the blog ( post_id = '' )
+        """
+        try:
+            comments_cnt = self._server.wp.getCommentCount(self.blogId, self.user, self.password, post_id)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return comments_cnt
+
     
+    def getComment(self, commentId):
+        """Get a comment
+        """
+        try:
+            comment = self._server.wp.getComment(self.blogId, self.user, self.password, commentId)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return comment
+    
+    def getComments(self, commInfo):
+        """Get comments for a given post
+        """
+        try:
+            comments = self._server.wp.getComments(self.blogId, self.user, self.password, commInfo)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return comments
+
