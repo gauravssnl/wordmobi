@@ -6,15 +6,23 @@ sys.path.append("e:\\python")
 from filesel import FileSel
 import os
 
+PARAGRAPH_SEPARATOR = u"\u2029"
+
 class Contents(object):
     def __init__(self, cbk, contents=u""):
         self.cbk = cbk
         self.cancel = False
 
-        self.body = Text( contents )
+        self.body = Text( self.html_to_wiki(contents) )
         self.body.focus = True
 
         self.refresh()
+
+    def html_to_wiki(self,msg):
+        return msg.replace(u"<br>",PARAGRAPH_SEPARATOR)
+    
+    def wiki_to_html(self,msg):
+        return msg.replace(PARAGRAPH_SEPARATOR,u"<br>")
         
     def refresh(self):
         app.exit_key_handler = self.close_app
@@ -29,7 +37,7 @@ class Contents(object):
         
     def close_app(self):
         if not self.cancel:
-            self.cbk( self.body.get() )
+            self.cbk( self.wiki_to_html(self.body.get()) )
         else:
             self.cbk( None )
 
