@@ -2,8 +2,9 @@
 import e32
 from appuifw import *
 import types
-            
-class Settings(object):
+#from socket import set_default_access_point
+
+class BlogSettings(object):
     def __init__(self,
                  cbk,
                  blog_url= u"http://blogname.wordpress.com",                 
@@ -65,6 +66,106 @@ class Settings(object):
         
     def run(self):
         self.refresh()
+
+class ProxySettings(object):
+    def __init__(self,
+                 cbk,
+                 proxy_enabled,
+                 proxy_address,
+                 proxy_port,
+                 proxy_user,                 
+                 proxy_password):
+        
+        self.cbk = cbk
+        self.proxy_enabled = proxy_enabled
+        self.proxy_address = proxy_address
+        self.proxy_port = proxy_port
+        self.proxy_user = proxy_user             
+        self.proxy_password = proxy_password
+        self.ui_lock = False
+        
+        self.body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
+        self.cancel = False
+        self.last_idx = 0
+        self.menu = [ ( u"Cancel", self.cancel_app ) ]
+        self.app_title = u"Proxy settings"
+
+    def refresh(self):
+        app.exit_key_handler = self.close_app
+        app.title = self.app_title
+
+        self.lst_values = [ (u"Enabled", self.proxy_enabled  ), \
+                            (u"Address", self.proxy_address ), \
+                            (u"Port", unicode( self.proxy_port ) ), \
+                            (u"Username", self.proxy_user), \
+                            (u"Password", u"*"*len( self.proxy_password ) ) ]
+
+        app.body = self.body
+        app.body.set_list( self.lst_values, self.last_idx )
+        app.menu = self.menu        
+
+    def lock_ui(self,msg = u""):
+        self.ui_lock = True
+        app.menu = []
+        if msg:
+            app.title = msg
+
+    def unlock_ui(self):
+        self.ui_lock = False
+        app.menu = self.menu
+        app.title = self.title
+
+    def ui_is_locked(self):
+        return self.ui_lock
+        
+    def cancel_app(self):
+        self.cancel = True
+        self.close_app()
+        
+    def close_app(self):
+        if not self.cancel:
+            #set_default_access_point(None)
+            self.lock_ui()
+            if self.cbk( (self.proxy_enabled, self.proxy_address, self.proxy_port, \
+                          self.proxy_user, self.proxy_password) ) == False:
+                self.unlock_ui()
+                self.refresh()
+        else:
+            self.cbk( (None,) )
+
+    def update_value_check_lock(self):
+        if self.ui_is_locked() == False:
+            self.update_value( app.body.current() )
+
+    def update_value(self,idx):
+        self.last_idx = idx
+        if idx == 0:
+            if self.proxy_enabled == u"True":
+                self.proxy_enabled = u"False"
+            else:
+                self.proxy_enabled = u"True"
+        elif self.proxy_enabled == u"True":
+            if idx == 1:
+                addr = query(u"Proxy address:","text", self.proxy_address)
+                if addr is not None:
+                    self.proxy_address = addr
+            elif idx == 2:
+                port = query(u"Proxy port:","number", self.proxy_port)
+                if port is not None:
+                    self.proxy_port = port                         
+            elif idx == 3:
+                user = query(u"Proxy username:","text", self.proxy_user)
+                if user is not None:
+                    self.proxy_user = user                   
+            elif idx == 4:
+                password = query(u"Proxy username:","code", self.proxy_password)
+                if password is not None:
+                    self.proxy_password = password     
+        self.refresh()
+        
+    def run(self):
+        self.refresh()
+
 
 if __name__ == "__main__":
 

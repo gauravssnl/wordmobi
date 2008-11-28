@@ -10,11 +10,12 @@ import wordpresslib as wp
 from persist import Persist
 from newpost import NewPost
 from editpost import EditPost
-from settings import Settings
+from settings import *
 from wmutil import *
 from viewcomments import ViewComments
-
-__version__ = "0.2.2"
+from wmproxy import UrllibTransport
+from socket import select_access_point, access_point, access_points, set_default_access_point
+__version__ = "0.2.3"
 
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
         
@@ -36,17 +37,59 @@ class WordMobi(object):
                             ( u"Contents", self.post_contents ),
                             ( u"Comments", self.post_comments ),
                             ( u"Delete", self.delete_post ),
-                            ( u"New", self.new_post ),
+                            ( u"New", self.new_post )
                             )),
-                        ( u"Settings", self.config_wordmobi ),
+                        ( u"Settings", (
+                            ( u"Blog access", self.config_wordmobi ),
+                            ( u"Proxy",self.config_network ),
+                            ( u"Access Point", self.set_blog_url )
+                            )),
                         ( u"About", self.about_wordmobi ),
                         ( u"Exit", self.close_app )]     
         self.set_blog_url()
         self.refresh()
 
+    def sel_access_point(self):
+        aps = access_points()
+        if len(aps) == 0:
+            return False
+        
+        ap_labels = map( lambda x: x['name'], aps )
+        item = popup_menu( ap_labels, u"Access point:" )
+        if item == None:
+            return False
+        
+        apo = access_point(aps[item]['iapid'])
+        self.def_ap = { 'apo': apo, 'name': aps[item]['name'], 'apid': aps[item]['iapid'] }
+        set_default_access_point(self.def_ap['apo'])
+        
+        return True
+        
     def set_blog_url(self):
-        blog = self.db["blog"] + "/xmlrpc.php"
-        self.blog = wp.WordPressClient(blog, self.db["user"], self.db["pass"])
+        if self.db["proxy_enabled"] == u"True":
+            user = self.db["proxy_user"].encode('utf-8')
+            addr = self.db["proxy_addr"].encode('utf-8')
+            port = self.db["proxy_port"].encode('utf-8')
+            user = self.db["proxy_user"].encode('utf-8')
+            pwd = self.db["proxy_pass"].encode('utf-8')
+            
+            if len(user) > 0:
+                proxy = "http://%s:%s@%s:%s" % (user,pwd,addr,port)
+            else:
+                proxy = "http://%s:%s" % (addr,port)
+                
+            transp = UrllibTransport()
+            transp.set_proxy(proxy)
+        else:
+            transp = None
+
+        if not self.sel_access_point():
+            note(u"At least one access point is required. Aborting.","error")
+            self.close_app()
+            
+        blog = self.db["blog"].encode('utf-8') + "/xmlrpc.php"
+        del self.blog
+        self.blog = wp.WordPressClient(blog, self.db["user"].encode('utf-8'), self.db["pass"].encode('utf-8'),transp)
         self.blog.selectBlog(0)
             
     def refresh(self):
@@ -273,15 +316,34 @@ class WordMobi(object):
             self.db.save()
             self.set_blog_url()
         self.refresh()
+        return True
             
     def config_wordmobi(self):
-        self.dlg = Settings( self.config_wordmobi_cbk,\
-                             self.db["blog"], \
-                             self.db["user"], self.db["pass"], \
-                             int(self.db["num_posts"]), \
-                             int(self.db["num_comments"]) )
+        self.dlg = BlogSettings( self.config_wordmobi_cbk,\
+                                 self.db["blog"], \
+                                 self.db["user"], self.db["pass"], \
+                                 int(self.db["num_posts"]), \
+                                 int(self.db["num_comments"]) )
         self.dlg.run()
-        
+
+    def config_network_cbk(self,params):
+        if params[0] is not None:
+            (self.db["proxy_enabled"],self.db["proxy_addr"],port,self.db["proxy_user"],self.db["proxy_pass"]) = params
+            self.db["proxy_port"] = unicode( port )
+            self.db.save()
+            self.set_blog_url()
+        self.refresh()
+        return True
+    
+    def config_network(self):
+        self.dlg = ProxySettings( self.config_network_cbk,\
+                                  self.db["proxy_enabled"], \
+                                  self.db["proxy_addr"], \
+                                  int(self.db["proxy_port"]), \
+                                  self.db["proxy_user"], \
+                                  self.db["proxy_pass"])
+        self.dlg.run()
+    
     def about_wordmobi(self):
         app.title = u"About"
         app.exit_key_handler = lambda: self.refresh()

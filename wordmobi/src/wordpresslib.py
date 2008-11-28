@@ -134,13 +134,14 @@ class WordPressClient:
     """Client for connect to WordPress XML-RPC interface
     """
     
-    def __init__(self, url, user, password):
+    def __init__(self, url, user, password, transport=None):
         self.url = url
         self.user = user
         self.password = password
         self.blogId = 0
         self.categories = None
-        self._server = xmlrpclib.ServerProxy(self.url)
+        self.transport = transport
+        self._server = xmlrpclib.ServerProxy(self.url,self.transport)
 
     def _filterPost(self, post):
         """Transform post struct in WordPressPost instance 
