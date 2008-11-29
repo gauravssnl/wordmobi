@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
+sys.path.append("e:\\python")
 import e32
 from appuifw import *
-sys.path.append("e:\\python")
 from filesel import FileSel
-import os
+import os, re
+from beautifulsoup import BeautifulSoup
 
 PARAGRAPH_SEPARATOR = u"\u2029"
 
@@ -158,3 +159,28 @@ class NewPost(object):
         
     def run(self):
         self.refresh()
+
+class EditPost(NewPost):
+    def __init__(self,
+                 cbk,
+                 title=u"",
+                 contents=u"",
+                 blog_categories = [u"Uncategorized"],                 
+                 categories = [],
+                 images = []):
+        
+        super(EditPost,self).__init__(cbk,title,contents,blog_categories,categories,images)
+        self.app_title = u"Edit Post"
+        self.find_images()
+        
+    def find_images(self):
+        soup = BeautifulSoup( self.contents.encode('utf-8') )
+        imgs = soup.findAll('img')
+        for img in imgs:
+            try:
+                self.images.append( img['src'] )
+            except:
+                pass
+
+
+    

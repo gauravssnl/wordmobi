@@ -8,14 +8,17 @@ import os
 import topwindow, graphics
 import wordpresslib as wp
 from persist import Persist
-from newpost import NewPost
-from editpost import EditPost
+from posts import NewPost, EditPost
 from settings import *
 from wmutil import *
 from viewcomments import ViewComments
 from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
+
+__author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
 __version__ = "0.2.3"
+__copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
+__license__ = "GPLv3"
 
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
         
@@ -267,7 +270,7 @@ class WordMobi(object):
                 return
             self.unlock_ui() 
                         
-        self.dlg = NewPost( self.post_contents_cbk, \
+        self.dlg = EditPost( self.post_contents_cbk, \
                              utf8_to_unicode(self.posts[idx]['title']), \
                              utf8_to_unicode(self.posts[idx]['description']), \
                              self.cats,\
