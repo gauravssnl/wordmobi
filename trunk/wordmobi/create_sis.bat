@@ -9,12 +9,9 @@ SET SRCDIR=src
 SET TXTFILE=wordmobi_inst.txt
 SET TMPDIR=src.tmp
 
-SET PYFILES=viewcomments.py wmutil.py newpost.py settings.py persist.py editpost.py filesel.py viewpost.py wordmobi.py wordpresslib.py dt.py xmllib.py xmlrpclib.py
-
-ECHO %TMPDIR%
 IF NOT EXIST %TMPDIR% mkdir %TMPDIR%
 
-for %%f in (%PYFILES%) do copy  %SRCDIR%\%%f  %TMPDIR%
+copy  %SRCDIR%\*.py  %TMPDIR%
 
 copy %SRCDIR%\wordmobi.py %TMPDIR%\default.py
 
