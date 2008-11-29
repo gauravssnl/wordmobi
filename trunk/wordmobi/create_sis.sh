@@ -12,6 +12,11 @@ SRCDIR="src"
 TXTFILE="wordmobi_inst.txt"
 TMPDIR="src.tmp"
 
+if [ ! -d $TMPDIR ]
+then
+	mkdir $TMPDIR
+fi
+
 cp  $SRCDIR/*.py $TMPDIR/
 
 cp $TMPDIR/wordmobi.py $TMPDIR/default.py
