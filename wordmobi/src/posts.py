@@ -137,26 +137,41 @@ class NewPost(object):
                 self.categories = [ self.blog_categories[idx] for idx in sel ]
             self.refresh()            
         elif idx == 3:
-            ir = popup_menu( [u"Insert", u"List", u"Remove"], u"Images")
+            ir = popup_menu( [u"Insert", u"View", u"Remove"], u"Images")
             if ir is not None:
                 if ir == 0:
                     sel = FileSel().run()
                     if sel is not None:
                         self.images.append( sel )
-                elif ir == 1:
+                else:
                     if len(self.images) > 0:
-                        selection_list(self.images, search_field=1)
-                    else:
-                        note(u"No images selected","info")
-                elif ir == 2:
-                    if len(self.images) > 0:
-                        item = selection_list(self.images, search_field=1)
+                        item = selection_list(self.images, search_field=1) 
                         if item is not None:
-                            self.images = self.images[:item] + self.images[item+1:]
+                            if ir == 1:
+                                self.view_image( self.images[item] )
+                            elif ir == 2:
+                                self.images = self.images[:item] + self.images[item+1:]
                     else:
-                        note(u"No images selected","info")
+                        note(u"No images selected.","info")
             self.refresh()
-        
+
+    def view_image( self, img):
+        if os.path.isfile( img ):
+            local = True
+        else:
+            local = False
+            
+        if local:
+            viewer = Content_handler( self.refresh )
+            try:
+                viewer.open( img )
+            except:
+                note(u"Impossible to open %s" % img,"error") 
+        else:
+            note(u"Support for remote images not implemented.","info")
+            pass
+            # download it to local folder with urllib and visualize
+            # urllib.urlretrieve( url, local_file )
     def run(self):
         self.refresh()
 
