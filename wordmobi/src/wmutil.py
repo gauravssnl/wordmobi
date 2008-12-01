@@ -1,4 +1,5 @@
 import re
+import time
 
 MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
@@ -17,3 +18,6 @@ def parse_iso8601(val):
 
 def utf8_to_unicode(s):
     return unicode(s,'utf-8',errors='ignore')
+
+def localtime_iso8601():
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())

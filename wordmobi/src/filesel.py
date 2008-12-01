@@ -1,10 +1,12 @@
 import os
 import e32
 from appuifw import *
+import re
 
 class FileSel(object):
-    def __init__(self,init_dir = u""):
+    def __init__(self,init_dir = "", mask = ".*"):
         self.cur_dir = unicode(init_dir)
+        self.mask = mask
         self.fill_items()
         
     def fill_items(self):
@@ -15,6 +17,7 @@ class FileSel(object):
             d = self.cur_dir
             dirs  = [ e.upper() for e in entries if os.path.isdir(os.path.join(d,e).encode('utf-8'))  ]
             files = [ e.lower() for e in entries if os.path.isfile(os.path.join(d,e).encode('utf-8')) ]
+            files = [ f for f in files if re.match(self.mask,f) ]
             dirs.sort()
             files.sort()
             dirs.insert( 0, u".." )
