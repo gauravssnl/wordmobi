@@ -16,7 +16,7 @@ from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -45,26 +45,30 @@ class WordMobi(object):
                         ( u"Settings", (
                             ( u"Blog access", self.config_wordmobi ),
                             ( u"Proxy",self.config_network ),
-                            ( u"Access Point", self.set_blog_url )
+                            ( u"Access Point", self.sel_access_point )
                             )),
                         ( u"About", self.about_wordmobi ),
-                        ( u"Exit", self.close_app )]     
-        self.set_blog_url()
+                        ( u"Exit", self.close_app )]
+        self.sel_access_point()
         self.refresh()
 
     def sel_access_point(self):
         aps = access_points()
         if len(aps) == 0:
+            note(u"Could't find any access point.","error")
             return False
         
         ap_labels = map( lambda x: x['name'], aps )
-        item = popup_menu( ap_labels, u"Access point:" )
+        item = popup_menu( ap_labels, u"Access points:" )
         if item == None:
+            note(u"At least one access point is required.","error")
             return False
         
         apo = access_point(aps[item]['iapid'])
         self.def_ap = { 'apo': apo, 'name': aps[item]['name'], 'apid': aps[item]['iapid'] }
         set_default_access_point(self.def_ap['apo'])
+
+        self.set_blog_url()
         
         return True
         
@@ -83,12 +87,11 @@ class WordMobi(object):
                 
             transp = UrllibTransport()
             transp.set_proxy(proxy)
+            os.environ["http_proxy"] = proxy # for urllib
         else:
             transp = None
-
-        if not self.sel_access_point():
-            note(u"At least one access point is required. Aborting.","error")
-            self.close_app()
+            os.environ["http_proxy"] = {}
+            del os.environ["http_proxy"]
             
         blog = self.db["blog"].encode('utf-8') + "/xmlrpc.php"
         del self.blog
