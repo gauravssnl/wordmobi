@@ -2,7 +2,7 @@
 import sys
 sys.path.append("e:\\python")
 import e32, e32dbm
-import dt as datetime
+import datetime
 from appuifw import *
 import os
 import topwindow, graphics
