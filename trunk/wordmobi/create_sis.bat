@@ -6,7 +6,7 @@ SET PYTHON=C:\Python25\python
 SET APPNAME=wordmobi
 SET CAPBLS=NetworkServices+LocalServices+ReadUserData+WriteUserData
 SET SRCDIR=src
-SET TXTFILE=wordmobi_inst.txt
+SET TXTFILE=README
 SET TMPDIR=src.tmp
 
 IF NOT EXIST %TMPDIR% mkdir %TMPDIR%
