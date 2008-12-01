@@ -9,7 +9,7 @@ fi
 APPNAME="wordmobi"
 CAPBLS="NetworkServices+LocalServices+ReadUserData+WriteUserData"
 SRCDIR="src"
-TXTFILE="wordmobi_inst.txt"
+TXTFILE="README"
 TMPDIR="src.tmp"
 
 if [ ! -d $TMPDIR ]
