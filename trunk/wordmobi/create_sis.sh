@@ -11,6 +11,7 @@ CAPBLS="NetworkServices+LocalServices+ReadUserData+WriteUserData"
 SRCDIR="src"
 TXTFILE="README"
 TMPDIR="src.tmp"
+ICON="wordmobi.svg"
 
 if [ ! -d $TMPDIR ]
 then
@@ -25,7 +26,7 @@ python ./ensymble.py py2sis 	--uid=0xefefefef 	\
 				--version="$1" 		\
 				--appname="$APPNAME" 	\
 				--textfile="$TXTFILE"	\
-				--icon="$APPNAME.svg"	\
+				--icon="$ICON"	\
 				--caps="$CAPBLS"	\
 				"$TMPDIR" "$APPNAME-$1.sis"
 
