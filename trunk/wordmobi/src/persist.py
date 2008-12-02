@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-import sys
-sys.path.append("e:\\python")
 import e32
 import os
 import e32dbm
+from appuifw import *
 
 class Persist(dict):
-    DEFDIR = "c:\\wordmobi\\"
-    DEFCFG = "wordmobi"
-    DBNAME = DEFDIR+DEFCFG
+    DEFDIR = "e:\\wordmobi\\"
+    DBNAME = os.path.join(DEFDIR,"wordmobi")
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
@@ -24,9 +22,10 @@ class Persist(dict):
     def __init__(self):
         # make me singleton !
         super(Persist,self).__init__()
-
         if not os.path.exists(Persist.DEFDIR):
             os.makedirs(Persist.DEFDIR)
+            os.makedirs(os.path.join(Persist.DEFDIR,"cache"))
+            os.makedirs(os.path.join(Persist.DEFDIR,"images"))
             for k,v in Persist.DEFVALS.iteritems():
                 self.__setitem__(k,v)
             self.save()
@@ -34,7 +33,7 @@ class Persist(dict):
             self.load()
             
     def save(self):
-        db = e32dbm.open(Persist.DBNAME,"c")    
+        db = e32dbm.open(Persist.DBNAME,"c")
         for k in Persist.DEFVALS.iterkeys():
             db[k] = self.__getitem__(k)
         db.close()
