@@ -7,7 +7,7 @@ then
 fi
 
 APPNAME="wordmobi"
-CAPBLS="NetworkServices+LocalServices+ReadUserData+WriteUserData"
+CAPBLS="NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment"
 SRCDIR="src"
 TXTFILE="README"
 TMPDIR="src.tmp"
