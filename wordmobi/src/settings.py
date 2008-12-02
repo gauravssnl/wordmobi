@@ -2,7 +2,6 @@
 import e32
 from appuifw import *
 import types
-#from socket import set_default_access_point
 
 class BlogSettings(object):
     def __init__(self,
