@@ -334,19 +334,27 @@ class WordPressClient:
             else:
                 categories.append({'categoryId' : cat, 'isPrimary' : 0})
             i += 1               
-        
-        result = self._server.metaWeblog.editPost(postId, self.user, self.password,
-                                              blogcontent, 0)
+
+        try:
+            result = self._server.metaWeblog.editPost(postId, self.user, self.password, blogcontent, 0)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)            
         
         if result == 0:
             raise WordPressException('Post edit failed')
             
         # set categories for new post
-        self.setPostCategories(postId, categories)
+        try:
+            self.setPostCategories(postId, categories)
+        except:
+            raise WordPressException('Category edit failed')
         
         # publish new post
         if publish:
-            self.publishPost(postId)
+            try:
+                self.publishPost(postId)
+            except:
+                raise WordPressException('publish failed')
 
     def deletePost(self, postId):
         """Delete post
