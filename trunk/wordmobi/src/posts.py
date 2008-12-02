@@ -1,13 +1,66 @@
 # -*- coding: utf-8 -*-
-import sys
-sys.path.append("e:\\python")
 import e32
 from appuifw import *
 from filesel import FileSel
 import os, re
 from beautifulsoup import BeautifulSoup
 from wmutil import *
+import camera
+import graphics
+import key_codes
+import time
 
+class TakePhoto(object):
+    def __init__(self):
+        self.cancel = False
+        self.taken = False
+        self.filename = ""
+        self.body = Canvas()
+        self.body.bind(key_codes.EKeySelect, self.take_photo)
+        app.menu = [ ( u"Take photo", self.take_photo ),( u"Cancel", self.cancel_app ) ]
+        app.exit_key_handler = self.cancel_app
+        app.title = u"Take Photo"
+        app.body = self.body        
+        
+    def cancel_app(self):
+        self.cancel = True
+        self.filename = None
+        
+    def run(self):
+        try:
+            camera.start_finder( self.redraw )
+        except:
+            note(u"Could not start the view finder.","error")
+            return None
+        
+        while (not self.taken) and (not self.cancel):
+            e32.ao_yield()
+            
+        try:
+            camera.stop_finder()
+        except:
+            note(u"Could not stop the view finder.","error")
+        
+        return self.filename
+
+    def take_photo(self):
+        try:
+            img = camera.take_photo( size = (640,480), flash = "auto" )
+            self.filename = "e:\\wordmobi\images\\img_" + \
+                            time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
+                            ".jpg"
+            img.save( self.filename )            
+        except:
+            note(u"Could not take the photo.","error")
+            self.cancel_app()
+            return
+        
+        self.taken = True
+        
+    def redraw(self, img):
+        app.body.blit(img)
+
+    
 class Contents(object):
     
     PARAGRAPH_SEPARATOR = u"\u2029"
@@ -187,10 +240,14 @@ class Contents(object):
     def insert_img(self, closing):
         txt =  u""
 
-        ir = popup_menu( [u"Local file", u"URL"], u"Image from:")
+        ir = popup_menu( [u"Local file", u"Take photo", u"URL"], u"Image from:")
         if ir is not None:
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                if sel is not None:
+                    txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
+            if ir == 1:
+                sel = TakePhoto().run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
             else:
@@ -200,7 +257,8 @@ class Contents(object):
 
         if len(txt) > 0:                    
             self.body.add( txt )
-            self.refresh()
+
+        self.refresh()
 
     def insert_link(self, closing):
         txt = u""
@@ -338,10 +396,17 @@ class NewPost(object):
                 self.categories = [ self.blog_categories[idx] for idx in sel ]
             self.refresh()            
         elif idx == 3:
-            ir = popup_menu( [u"Insert", u"View", u"Remove"], u"Images")
+            ir = popup_menu( [u"Insert", u"Take photo", u"View/List", u"Remove"], u"Images")
             if ir is not None:
                 if ir == 0:
                     sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                    if sel is not None:
+                        self.images.append( sel )
+                        self.contents = self.contents + \
+                                        u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
+                                        (sel,os.path.basename( sel ))
+                elif ir == 1:
+                    sel = TakePhoto().run()
                     if sel is not None:
                         self.images.append( sel )
                         self.contents = self.contents + \
@@ -351,9 +416,9 @@ class NewPost(object):
                     if len(self.images) > 0:
                         item = selection_list(self.images, search_field=1) 
                         if item is not None:
-                            if ir == 1:
+                            if ir == 2:
                                 self.view_image( self.images[item] )
-                            elif ir == 2:
+                            elif ir == 3:
                                 self.remove_image( self.images[item] )
                                 self.images = self.images[:item] + self.images[item+1:]
                     else:
