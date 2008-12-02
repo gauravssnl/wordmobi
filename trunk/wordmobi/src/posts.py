@@ -25,8 +25,22 @@ class TakePhoto(object):
     def cancel_app(self):
         self.cancel = True
         self.filename = None
+
+    def get_options(self):
+        res = None
+        while res is None:
+            res = popup_menu( [u"(320x240)", u"(640x480)" ], u"Resolution ?")
+        self.res = ( (320,240), (640,480) )[res]
         
+        flash = None
+        while flash is None:
+            flash = popup_menu( [u"Auto", u"None", u"Forced" ], u"Flash ?")
+        self.flash = ( "auto", "none", "forced" )[flash]            
+    
     def run(self):
+
+        self.get_options()
+        
         try:
             camera.start_finder( self.redraw )
         except:
@@ -45,7 +59,7 @@ class TakePhoto(object):
 
     def take_photo(self):
         try:
-            img = camera.take_photo( size = (640,480), flash = "auto" )
+            img = camera.take_photo( size = self.res, flash = self.flash)
             self.filename = "e:\\wordmobi\images\\img_" + \
                             time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
                             ".jpg"
@@ -220,6 +234,7 @@ class Contents(object):
                         (gen_label("INS"), gen_ckb("INS")),
                         (gen_label("DEL"), gen_ckb("DEL")))
                      ),
+                    ( u"Preview", self.preview_html ),
                     ( u"Cancel", self.cancel_app )]        
 
         app.exit_key_handler = self.close_app
@@ -295,7 +310,39 @@ class Contents(object):
         self.text_snippets["DEL"]["MENU_STATE"] = not self.text_snippets["DEL"]["MENU_STATE"]
         self.body.add( txt )
         self.refresh()
-                     
+
+    def preview_html(self):
+
+        html = self.text_to_html(self.body.get()).encode('utf-8')
+        
+        name = "e:\\wordmobi\cache\\html_" + \
+               time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
+               ".html"
+
+        soup = BeautifulSoup( html )
+        imgs = soup.findAll('img')
+        for img in imgs:
+            if os.path.isfile( img["src"] ):
+                img["src"] = "file://localhost/" + img["src"]
+                
+        html = soup.prettify().replace("\n","")      
+
+        try:
+            fp = open(name,"wt")
+            fp.write(r"<html><body>")
+            fp.write(html)
+            fp.write(r"</body></html>")
+            fp.close()
+        except:
+            note(u"Could not generate preview file.","error")
+            return
+        
+        viewer = Content_handler( self.refresh )
+        try:
+            viewer.open( name )
+        except:
+            note(u"Impossible to preview." ,"error")
+
     def run(self):
         self.refresh()
             
