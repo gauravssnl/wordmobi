@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-import sys
-sys.path.append("e:\\python")
+from appuifw import *
 import e32, e32dbm
 import datetime
-from appuifw import *
 import os
-import topwindow, graphics
 import wordpresslib as wp
 from persist import Persist
 from posts import NewPost, EditPost
@@ -17,7 +14,7 @@ from socket import select_access_point, access_point, access_points, set_default
 from beautifulsoup import BeautifulSoup
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 

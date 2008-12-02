@@ -1,6 +1,4 @@
-import sys
-sys.path.append('e:\\python')
-
+# -*- coding: utf-8 -*-
 import base64
 import urllib
 from urllib import unquote, splittype, splithost
