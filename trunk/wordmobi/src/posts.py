@@ -19,6 +19,7 @@ class Contents(object):
 
         self.body = Text( self.html_to_text(contents) )
         self.body.focus = True
+        self.body.set_pos( 0 )
 
         self.text_snippets = {}
         # [ 0: menu name,
@@ -104,10 +105,12 @@ class Contents(object):
         self.refresh()
 
     def html_to_text(self,msg):
-        return msg.replace(u"<br>",Contents.PARAGRAPH_SEPARATOR)
+        msg = msg.replace(u"<br>",Contents.PARAGRAPH_SEPARATOR)
+        msg = msg.replace(u"<br/>",Contents.PARAGRAPH_SEPARATOR)
+        return msg.replace(u"<br />",Contents.PARAGRAPH_SEPARATOR)
     
     def text_to_html(self,msg):
-        return msg.replace(Contents.PARAGRAPH_SEPARATOR,u"<br>")
+        return msg.replace(Contents.PARAGRAPH_SEPARATOR,u"<br />")
 
     def refresh(self):
         def gen_label(menu):
@@ -244,15 +247,15 @@ class NewPost(object):
                  title=u"",
                  contents=u"",
                  blog_categories = [u"Uncategorized"],                 
-                 categories = [],
-                 images = []):
+                 categories = [] ):
         
         self.cbk = cbk
         self.title = title
         self.contents = contents
         self.blog_categories = blog_categories
         self.categories = categories
-        self.images = images
+        self.images = []
+        self.find_images()
         self.ui_lock = False
         
         self.body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
@@ -298,11 +301,11 @@ class NewPost(object):
     def close_app(self):
         if not self.cancel:
             self.lock_ui()
-            if self.cbk( (self.title, self.contents, self.images, self.categories) ) == False:
+            if self.cbk( (self.title, self.contents, self.categories) ) == False:
                 self.unlock_ui()
                 self.refresh()
         else:
-            self.cbk( (None,None,None,None) )
+            self.cbk( None )
 
     def update_value_check_lock(self):
         if self.ui_is_locked() == False:
@@ -347,7 +350,7 @@ class NewPost(object):
                             if ir == 1:
                                 self.view_image( self.images[item] )
                             elif ir == 2:
-                                # TODO: remove from contents using beautiful soap
+                                self.remove_image( self.images[item] )
                                 self.images = self.images[:item] + self.images[item+1:]
                     else:
                         note(u"No images selected.","info")
@@ -383,27 +386,37 @@ class NewPost(object):
             except:
                 pass
             
-class EditPost(NewPost):
-    def __init__(self,
-                 cbk,
-                 title=u"",
-                 contents=u"",
-                 blog_categories = [u"Uncategorized"],                 
-                 categories = [],
-                 images = []):
-        
-        super(EditPost,self).__init__(cbk,title,contents,blog_categories,categories,images)
-        self.app_title = u"Edit Post"
-        self.find_images()
-        
-    def find_images(self):
+    def remove_image(self,del_img):
         soup = BeautifulSoup( self.contents.encode('utf-8') )
         imgs = soup.findAll('img')
         for img in imgs:
-            try:
-                self.images.append( img['src'] )
-            except:
-                pass
+            if img["src"] == del_img:
+                img.extract()
+        self.contents = utf8_to_unicode( soup.prettify().replace("\n","") )
+        
+class EditPost(NewPost):
+    def __init__(self, cbk, cats, post ):
+        super(EditPost,self).__init__(cbk,
+                                      utf8_to_unicode(post['title']),
+                                      utf8_to_unicode(post['description']),
+                                      cats,
+                                      [ decode_html(c) for c in post['categories'] ])
+        self.app_title = u"Edit Post"
+        self.post = post
+        self.find_images()
 
+    def close_app(self):
+        if not self.cancel:
+            ny = popup_menu( [u"No", u"Yes"], u"Update post ?")
+            if ny == 1:
+                self.lock_ui()
+                if self.cbk( (self.title, self.contents, self.categories, self.post) ) == False:
+                    self.unlock_ui()
+                    self.refresh()
+            else:
+                self.cbk( None )
+                
+        else:
+            self.cbk( None )
+            
 
-    

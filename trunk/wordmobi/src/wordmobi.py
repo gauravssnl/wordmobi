@@ -14,9 +14,10 @@ from wmutil import *
 from viewcomments import ViewComments
 from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
+from beautifulsoup import BeautifulSoup
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -126,37 +127,54 @@ class WordMobi(object):
     def close_app(self):
         self.lock.signal()
 
+    def upload_images(self, fname):
+        self.lock_ui( u"Uploading %s..." % ( os.path.basename(fname) ) )
+        try:
+            img_src = self.blog.newMediaObject(fname)
+        except:
+            note(u"Impossible to upload %s. Try again." % fname,"error")
+            return None
+        
+        return img_src
+
+    def upload_new_post(self, title, contents, categories):
+        """ Uplaod a new or edited post. For new post, use post_id as None
+        """
+        self.lock_ui( u"Uploading post contents...")
+                      
+        soup = BeautifulSoup( contents.encode('utf-8') )
+        for img in soup.findAll('img'):
+            if os.path.isfile( img['src'] ): # just upload local files
+                url = self.upload_images( img['src'] )
+                if url is not None:
+                    img['src'] = url
+
+        contents = soup.prettify()    
+        self.lock_ui( u"Uploading post contents..." )
+
+        post = wp.WordPressPost()
+        post.description = contents + PROMO_PHRASE
+                      
+        post.title = title.encode('utf-8')
+        post.categories = [ self.blog.getCategoryIdFromName(c.encode('utf-8')) for c in categories ]
+        post.allowComments = True
+
+        try:
+            npost = self.blog.newPost(post, True)
+        except:
+            note(u"Impossible to post. Try again.","error")
+            raise
+
+        return npost
+    
     def new_post_cbk( self, params ):
-        if params[0] is not None:
-            (title,contents,images,categories) = params
-            more_contents = ""
-            m = len(images)
-            for n in range(m):
-                fname = images[n].encode('utf-8')
-                self.lock_ui( u"Uploading (%d/%d) %s..." % (n+1,m,os.path.basename(fname)) )
-                try:
-                    img_src = self.blog.newMediaObject(fname)
-                except:
-                    note(u"Impossible to upload %s. Try again." % fname,"error")
-                    self.unlock_ui()
-                    return False
-                more_contents = more_contents + \
-                               ("<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % (img_src,os.path.basename(fname)))
-                
-            self.lock_ui( u"Uploading post contents..." )
-            more_contents = more_contents + PROMO_PHRASE
-            post = wp.WordPressPost()
-            post.title = title.encode('utf-8')
-            post.description = contents.encode('utf-8') + more_contents
-            post.categories = [ self.blog.getCategoryIdFromName(c.encode('utf-8')) for c in categories ]
-            post.allowComments = True
-            
+        if params is not None:
+            (title,contents,categories) = params
+
             try:
-                npost = self.blog.newPost(post, True)
+                self.upload_new_post(title, contents, categories)
             except:
-                note(u"Impossible to post. Try again.","error")
-                self.unlock_ui()
-                return False
+                return False                    
 
             self.lock_ui( u"Updating post list..." )
             try:
@@ -181,7 +199,7 @@ class WordMobi(object):
         return True
         
     def new_post(self):
-        self.dlg = NewPost( self.new_post_cbk, u"", u"", self.cats, [], [] )
+        self.dlg = NewPost( self.new_post_cbk, u"", u"", self.cats, [] )
         self.dlg.run()
                  
     def update(self):
@@ -253,6 +271,45 @@ class WordMobi(object):
                 self.refresh()
 
     def post_contents_cbk(self,params):
+        if params is not None:
+            (title,contents,categories,post_orig) = params
+
+            self.lock_ui( u"Uploading post contents...")
+
+            soup = BeautifulSoup( contents.encode('utf-8') )
+            for img in soup.findAll('img'):
+                if os.path.isfile( img['src'] ): # just upload local files
+                    url = self.upload_images( img['src'] )
+                    if url is not None:
+                        img['src'] = url
+
+            contents = soup.prettify()
+
+            post = wp.WordPressPost()
+            post.id = post_orig['postid']
+            post.title = title.encode('utf-8')
+            post.description = contents
+            post.categories = [ self.blog.getCategoryIdFromName(c.encode('utf-8')) for c in categories ]
+            post.allowComments = True
+            post.permaLink = post_orig['permaLink']
+            post.textMore = post_orig['mt_text_more']
+            post.excerpt = post_orig['mt_excerpt']
+
+            try:
+                npost = self.blog.editPost( post.id, post, True)
+            except:
+                note(u"Impossible to update the post. Try again.","error")
+                self.unlock_ui()
+                return False
+
+            try:
+                upd_post = self.blog.getPost(post.id)
+            except:
+                note(u"Impossible to update post title. Try again.","error")
+
+            # TODO: update the list !
+    
+        self.unlock_ui()   
         self.refresh()
         return True
         
@@ -273,12 +330,7 @@ class WordMobi(object):
                 return
             self.unlock_ui() 
                         
-        self.dlg = EditPost( self.post_contents_cbk, \
-                             utf8_to_unicode(self.posts[idx]['title']), \
-                             utf8_to_unicode(self.posts[idx]['description']), \
-                             self.cats,\
-                             [ decode_html(c) for c in self.posts[idx]['categories'] ], \
-                            [])
+        self.dlg = EditPost( self.post_contents_cbk, self.cats, self.posts[idx] )
         self.dlg.run()
 
     def post_comments_cbk(self):
@@ -315,7 +367,7 @@ class WordMobi(object):
             self.dlg.run()
             
     def config_wordmobi_cbk(self,params):
-        if params[0] is not None:
+        if params is not None:
             (self.db["blog"], self.db["user"], self.db["pass"], np, nc) = params
             self.db["num_posts"] = unicode( np )
             self.db["num_comments"] = unicode( nc )
@@ -333,7 +385,7 @@ class WordMobi(object):
         self.dlg.run()
 
     def config_network_cbk(self,params):
-        if params[0] is not None:
+        if params is not None:
             (self.db["proxy_enabled"],self.db["proxy_addr"],port,self.db["proxy_user"],self.db["proxy_pass"]) = params
             self.db["proxy_port"] = unicode( port )
             self.db.save()
