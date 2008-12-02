@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import sys
 import e32
 from appuifw import *
-sys.path.append("e:\\python")
 from wmutil import *
 
 class ViewComments(object):
