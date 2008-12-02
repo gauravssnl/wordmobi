@@ -151,8 +151,8 @@ class Contents(object):
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
-                       (gen_label("CODE"), gen_ckb("CODE")),
-                       (gen_label("MORE"), gen_ckb("MORE")))
+                       (gen_label("CODE"), gen_ckb("CODE")))
+                       #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests 
                      ),
                     (u"References",(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
@@ -300,10 +300,14 @@ class NewPost(object):
         
     def close_app(self):
         if not self.cancel:
-            self.lock_ui()
-            if self.cbk( (self.title, self.contents, self.categories) ) == False:
-                self.unlock_ui()
-                self.refresh()
+            ny = popup_menu( [u"Yes", u"No"], u"Publish post ?")
+            if ny == 0:            
+                self.lock_ui()
+                if self.cbk( (self.title, self.contents, self.categories) ) == False:
+                    self.unlock_ui()
+                    self.refresh()
+            else:
+                self.cbk( None )                    
         else:
             self.cbk( None )
 

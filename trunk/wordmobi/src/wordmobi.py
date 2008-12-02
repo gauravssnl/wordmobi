@@ -17,7 +17,7 @@ from socket import select_access_point, access_point, access_points, set_default
 from beautifulsoup import BeautifulSoup
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -149,7 +149,7 @@ class WordMobi(object):
                 if url is not None:
                     img['src'] = url
 
-        contents = soup.prettify()    
+        contents = soup.prettify().replace("\n","")
         self.lock_ui( u"Uploading post contents..." )
 
         post = wp.WordPressPost()
@@ -283,7 +283,7 @@ class WordMobi(object):
                     if url is not None:
                         img['src'] = url
 
-            contents = soup.prettify()
+            contents = soup.prettify().replace("\n","")
 
             post = wp.WordPressPost()
             post.id = post_orig['postid']
@@ -307,7 +307,14 @@ class WordMobi(object):
             except:
                 note(u"Impossible to update post title. Try again.","error")
 
-            # TODO: update the list !
+            # update the list !
+            for idx in range(len(self.posts)):
+                if self.posts[idx]['postid'] == post.id:
+                    ( line1 , line2 ) = self.headlines[idx]
+                    line2 = utf8_to_unicode( post.title )
+                    self.headlines[idx] = ( line1 , line2 )
+                    del self.posts[idx]['description'] # force reload
+                    break
     
         self.unlock_ui()   
         self.refresh()
