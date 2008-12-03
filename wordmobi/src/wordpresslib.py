@@ -93,7 +93,18 @@ class WordPressComment:
         self.status = ''
         self.offset = 0
         self.number = 10
-        
+
+class WordPressCommentEdit:
+    """Represents comment item for editing
+    """ 
+    def __init__(self):
+        self.status = ''
+        self.date_created_gmt = ''
+        self.content = ''
+        self.author = ''
+        self.author_url = ''
+        self.author_email = ''
+
 class WordPressUser:
     """Represents user item
     """ 
@@ -453,7 +464,7 @@ class WordPressClient:
         return comment
     
     def getComments(self, commInfo):
-        """Get comments for a given post
+        """Get comments for a given post. Use WordPressComment
         """
         try:
             comments = self._server.wp.getComments(self.blogId, self.user, self.password, commInfo)
@@ -461,4 +472,38 @@ class WordPressClient:
             raise WordPressException(fault)
 
         return comments
+
+    def editComment(self, commentId, commEdit):
+        """Get comments for a given post. Use WordPressCommentEdit
+        """
+        try:
+            resp = self._server.wp.editComment(self.blogId, self.user, self.password, commentId, commEdit)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return resp
+
+    def deleteComment(self, commentId):
+        """Delete a comment
+        """
+        try:
+            resp = self._server.wp.deleteComment(self.blogId, self.user, self.password, commentId)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return resp
+    
+#wp.deleteComment
+#wp.editComment
+#wp.newComment
+"""
+wp.deleteComment(blog_id, username, password, comment_id)
+
+wp.editComment(blog_id, username, password, comment_id, {status,
+date_created_gmt, content, author, author_url, author_email, })
+
+wp.newComment(blog_id, username, password, post, {content, author,
+author_email, author_url})
+"""
+
 
