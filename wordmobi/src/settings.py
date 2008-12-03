@@ -45,7 +45,7 @@ class BlogSettings(object):
         if not self.cancel:
             self.cbk( ( self.blog_url, self.username, self.password, self.num_posts, self.num_comments) )
         else:
-            self.cbk( (None,) )
+            self.cbk( None )
 
     def update_value(self):
         idx = app.body.current()
@@ -123,11 +123,8 @@ class ProxySettings(object):
         
     def close_app(self):
         if not self.cancel:
-            #set_default_access_point(None)
-            self.lock_ui()
             if self.cbk( (self.proxy_enabled, self.proxy_address, self.proxy_port, \
                           self.proxy_user, self.proxy_password) ) == False:
-                self.unlock_ui()
                 self.refresh()
         else:
             self.cbk( None )
