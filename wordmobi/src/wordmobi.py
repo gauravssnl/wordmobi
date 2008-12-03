@@ -134,7 +134,7 @@ class WordMobi(object):
         
         return img_src
 
-    def upload_new_post(self, title, contents, categories):
+    def upload_new_post(self, title, contents, categories, publish):
         """ Uplaod a new or edited post. For new post, use post_id as None
         """
         self.lock_ui( u"Uploading post contents...")
@@ -157,19 +157,19 @@ class WordMobi(object):
         post.allowComments = True
 
         try:
-            npost = self.blog.newPost(post, True)
+            npost = self.blog.newPost(post, publish)
         except:
-            note(u"Impossible to post. Try again.","error")
+            note(u"Impossible to publish the post. Try again.","error")
             raise
 
         return npost
     
     def new_post_cbk( self, params ):
         if params is not None:
-            (title,contents,categories) = params
+            (title,contents,categories,publish) = params
 
             try:
-                self.upload_new_post(title, contents, categories)
+                self.upload_new_post(title, contents, categories, publish)
             except:
                 return False                    
 
@@ -196,7 +196,7 @@ class WordMobi(object):
         return True
         
     def new_post(self):
-        self.dlg = NewPost( self.new_post_cbk, u"", u"", self.cats, [] )
+        self.dlg = NewPost( self.new_post_cbk, u"", u"", self.cats, [], True )
         self.dlg.run()
                  
     def update(self):
@@ -269,7 +269,7 @@ class WordMobi(object):
 
     def post_contents_cbk(self,params):
         if params is not None:
-            (title,contents,categories,post_orig) = params
+            (title,contents,categories,post_orig, publish) = params
 
             self.lock_ui( u"Uploading post contents...")
 
@@ -293,7 +293,7 @@ class WordMobi(object):
             post.excerpt = post_orig['mt_excerpt']
 
             try:
-                npost = self.blog.editPost( post.id, post, True)
+                npost = self.blog.editPost( post.id, post, publish)
             except:
                 note(u"Impossible to update the post. Try again.","error")
                 self.unlock_ui()
@@ -333,8 +333,12 @@ class WordMobi(object):
                 note(u"Impossible to download the post. Try again.","error")
                 return
             self.unlock_ui() 
-                        
-        self.dlg = EditPost( self.post_contents_cbk, self.cats, self.posts[idx] )
+        if self.posts[idx]['post_status'] == 'publish': # 'publish' or 'draft'
+            publish = True
+        else:
+            publish = False
+            
+        self.dlg = EditPost( self.post_contents_cbk, self.cats, self.posts[idx], publish )
         self.dlg.run()
 
     def post_comments_cbk(self):
