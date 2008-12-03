@@ -25,7 +25,11 @@ class ViewComments(object):
         self.lst_values = []
         for comment in self.comments:
             (y, mo, d, h, m, s) = parse_iso8601( comment['date_created_gmt'].value )
-            line1 = u"%d/%s %02d:%02d %s" % (d,MONTHS[mo-1],h,m,utf8_to_unicode( comment['author'] ))
+            if comment['status'] == 'approve':
+                status = 'Approved'
+            else:
+                status = 'Wait. moder.'
+            line1 = u"%d/%s %02d:%02d %s (%s(" % (d,MONTHS[mo-1],h,m,status,utf8_to_unicode( comment['author'] ))
             line2 = utf8_to_unicode(comment['content'])
             self.lst_values.append( (line1, line2) )
 
