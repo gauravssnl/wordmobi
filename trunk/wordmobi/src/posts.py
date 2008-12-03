@@ -222,7 +222,7 @@ class Contents(object):
                        (gen_label("CODE"), gen_ckb("CODE")))
                        #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests 
                      ),
-                    (u"References",(
+                    (u"Links/images",(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
                         (gen_label("LINK"), gen_ckb("LINK")))
                      ),
@@ -353,7 +353,8 @@ class NewPost(object):
                  title=u"",
                  contents=u"",
                  blog_categories = [u"Uncategorized"],                 
-                 categories = [] ):
+                 categories = [],
+                 publish = True):
         
         self.cbk = cbk
         self.title = title
@@ -363,6 +364,7 @@ class NewPost(object):
         self.images = []
         self.find_images()
         self.ui_lock = False
+        self.publish = publish
         
         self.body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         self.cancel = False
@@ -376,11 +378,16 @@ class NewPost(object):
         
         img = unicode(",".join(self.images))
         cat = unicode(",".join(self.categories))
+        if self.publish:
+            pub = u"Yes"
+        else:
+            pub = u"No (draft)"
 
         self.lst_values = [ (u"Title", self.title ), \
                             (u"Contents", self.contents[:50]), \
                             (u"Categories", cat), \
-                            (u"Images", img ) ]
+                            (u"Images", img ), \
+                            (u"Publish", pub) ]
 
         app.body = self.body
         app.body.set_list( self.lst_values, self.last_idx )
@@ -406,10 +413,10 @@ class NewPost(object):
         
     def close_app(self):
         if not self.cancel:
-            ny = popup_menu( [u"Yes", u"No"], u"Publish post ?")
+            ny = popup_menu( [u"Yes", u"No"], u"Send post ?")
             if ny == 0:            
                 self.lock_ui()
-                if self.cbk( (self.title, self.contents, self.categories) ) == False:
+                if self.cbk( (self.title, self.contents, self.categories, self.publish) ) == False:
                     self.unlock_ui()
                     self.refresh()
             else:
@@ -417,61 +424,74 @@ class NewPost(object):
         else:
             self.cbk( None )
 
+    def update_title(self):
+        title = query(u"Post title:","text", self.title)
+        if title is not None:
+            self.title = title
+        self.refresh()
+        
+    def update_contents(self):
+        def cbk( txt ):
+            if txt is not None:
+                self.contents = txt
+                self.find_images()
+            self.refresh()
+        self.dlg = Contents( cbk, self.contents )
+        self.dlg.run()
+
+    def update_categories(self):
+        sel = multi_selection_list( self.blog_categories, style='checkbox', search_field=1 )
+        if len(sel) == 0:
+            self.categories = [u"Uncategorized"]
+        else:
+            self.categories = [ self.blog_categories[idx] for idx in sel ]
+        self.refresh()
+        
+    def update_images(self):
+        ir = popup_menu( [u"Insert", u"Take a photo", u"View/List", u"Remove"], u"Images")
+        if ir is not None:
+            if ir == 0:
+                sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                if sel is not None:
+                    self.images.append( sel )
+                    self.contents = self.contents + \
+                                    u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
+                                    (sel,os.path.basename( sel ))
+            elif ir == 1:
+                sel = TakePhoto().run()
+                if sel is not None:
+                    self.images.append( sel )
+                    self.contents = self.contents + \
+                                    u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
+                                    (sel,os.path.basename( sel ))
+            else:
+                if len(self.images) > 0:
+                    item = selection_list(self.images, search_field=1) 
+                    if item is not None:
+                        if ir == 2:
+                            self.view_image( self.images[item].encode('utf-8') )
+                        elif ir == 3:
+                            self.remove_image( self.images[item].encode('utf-8') )
+                            self.images = self.images[:item] + self.images[item+1:]
+                else:
+                    note(u"No images selected.","info")
+        self.refresh()
+
+    def update_publish(self):
+        self.publish = not self.publish
+        self.refresh()
+        
     def update_value_check_lock(self):
         if self.ui_is_locked() == False:
-            self.update_value( app.body.current() )
-
-    def update_value(self,idx):
+            self.update( app.body.current() )
+            
+    def update(self,idx):
         self.last_idx = idx
-        if idx == 0:
-            title = query(u"Post title:","text", self.title)
-            if title is not None:
-                self.title = title
-            self.refresh()
-        elif idx == 1:
-            def cbk( txt ):
-                if txt is not None:
-                    self.contents = txt
-                    self.find_images()
-                self.refresh()
-            self.dlg = Contents( cbk, self.contents )
-            self.dlg.run()
-        elif idx == 2:
-            sel = multi_selection_list( self.blog_categories, style='checkbox', search_field=1 )
-            if len(sel) == 0:
-                self.categories = [u"Uncategorized"]
-            else:
-                self.categories = [ self.blog_categories[idx] for idx in sel ]
-            self.refresh()            
-        elif idx == 3:
-            ir = popup_menu( [u"Insert", u"Take a photo", u"View/List", u"Remove"], u"Images")
-            if ir is not None:
-                if ir == 0:
-                    sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
-                    if sel is not None:
-                        self.images.append( sel )
-                        self.contents = self.contents + \
-                                        u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
-                                        (sel,os.path.basename( sel ))
-                elif ir == 1:
-                    sel = TakePhoto().run()
-                    if sel is not None:
-                        self.images.append( sel )
-                        self.contents = self.contents + \
-                                        u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
-                                        (sel,os.path.basename( sel ))
-                else:
-                    if len(self.images) > 0:
-                        item = selection_list(self.images, search_field=1) 
-                        if item is not None:
-                            if ir == 2:
-                                self.view_image( self.images[item].encode('utf-8') )
-                            elif ir == 3:
-                                self.remove_image( self.images[item].encode('utf-8') )
-                                self.images = self.images[:item] + self.images[item+1:]
-                    else:
-                        note(u"No images selected.","info")
-            self.refresh()
+        updates = ( self.update_title, self.update_contents, \
+                    self.update_categories, self.update_images, \
+                    self.update_publish )
+        if idx < len(updates):
+            updates[idx]()
 
     def view_image( self, img):
         if os.path.isfile( img ):
@@ -531,22 +551,31 @@ class NewPost(object):
         self.contents = utf8_to_unicode( soup.prettify().replace("\n","") )
         
 class EditPost(NewPost):
-    def __init__(self, cbk, cats, post ):
+    def __init__(self, cbk, cats, post, publish ):
         super(EditPost,self).__init__(cbk,
                                       utf8_to_unicode(post['title']),
                                       utf8_to_unicode(post['description']),
                                       cats,
-                                      [ decode_html(c) for c in post['categories'] ])
+                                      [ decode_html(c) for c in post['categories'] ],
+                                      publish )
+        self.original_state = publish
         self.app_title = u"Edit Post"
         self.post = post
         self.find_images()
 
+    def update_publish(self):
+        # just allow changes if post was not published yet
+        if self.original_state == False:
+            super(EditPost,self).update_publish()
+        else:
+            note(u"Post already published.","info")
+            
     def close_app(self):
         if not self.cancel:
             ny = popup_menu( [u"No", u"Yes"], u"Update post ?")
             if ny == 1:
                 self.lock_ui()
-                if self.cbk( (self.title, self.contents, self.categories, self.post) ) == False:
+                if self.cbk( (self.title, self.contents, self.categories, self.post, self.publish) ) == False:
                     self.unlock_ui()
                     self.refresh()
             else:
