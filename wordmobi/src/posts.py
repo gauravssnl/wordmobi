@@ -115,6 +115,12 @@ class Contents(object):
                                          "CLOSE_TAG":u"</blockquote>",
                                          "OPEN_FUNC":None,
                                          "CLOSE_FUNC":None }
+        self.text_snippets["SPACE"]  = { "MENU_NAME":u"Space",
+                                         "MENU_STATE":None,
+                                         "OPEN_TAG":u"&nbsp;",
+                                         "CLOSE_TAG":u"",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }        
         self.text_snippets["CODE"]   = { "MENU_NAME":u"Code",
                                          "MENU_STATE":False,
                                          "OPEN_TAG":u"<code>",
@@ -219,7 +225,8 @@ class Contents(object):
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
-                       (gen_label("CODE"), gen_ckb("CODE")))
+                       (gen_label("CODE"), gen_ckb("CODE")),
+                       (gen_label("SPACE"), gen_ckb("SPACE")))
                        #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests 
                      ),
                     (u"Links/images",(
