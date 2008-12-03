@@ -76,7 +76,7 @@ class TakePhoto(object):
         app.body.blit(img)
 
     
-class Contents(object):
+class PostContents(object):
     
     PARAGRAPH_SEPARATOR = u"\u2029"
 
@@ -179,12 +179,12 @@ class Contents(object):
         self.refresh()
 
     def html_to_text(self,msg):
-        msg = msg.replace(u"<br>",Contents.PARAGRAPH_SEPARATOR)
-        msg = msg.replace(u"<br/>",Contents.PARAGRAPH_SEPARATOR)
-        return msg.replace(u"<br />",Contents.PARAGRAPH_SEPARATOR)
+        msg = msg.replace(u"<br>",PostContents.PARAGRAPH_SEPARATOR)
+        msg = msg.replace(u"<br/>",PostContents.PARAGRAPH_SEPARATOR)
+        return msg.replace(u"<br />",PostContents.PARAGRAPH_SEPARATOR)
     
     def text_to_html(self,msg):
-        return msg.replace(Contents.PARAGRAPH_SEPARATOR,u"<br />")
+        return msg.replace(PostContents.PARAGRAPH_SEPARATOR,u"<br />")
 
     def refresh(self):
         def gen_label(menu):
@@ -443,7 +443,7 @@ class NewPost(object):
                 self.contents = txt
                 self.find_images()
             self.refresh()
-        self.dlg = Contents( cbk, self.contents )
+        self.dlg = PostContents( cbk, self.contents )
         self.dlg.run()
 
     def update_categories(self):
@@ -479,7 +479,7 @@ class NewPost(object):
                             self.view_image( self.images[item].encode('utf-8') )
                         elif ir == 3:
                             self.remove_image( self.images[item].encode('utf-8') )
-                            self.images = self.images[:item] + self.images[item+1:]
+                            del self.images[item]
                 else:
                     note(u"No images selected.","info")
         self.refresh()
