@@ -9,6 +9,7 @@ import camera
 import graphics
 import key_codes
 import time
+import urllib
 
 class TakePhoto(object):
     def __init__(self):
@@ -17,9 +18,9 @@ class TakePhoto(object):
         self.filename = ""
         self.body = Canvas()
         self.body.bind(key_codes.EKeySelect, self.take_photo)
-        app.menu = [ ( u"Take photo", self.take_photo ),( u"Cancel", self.cancel_app ) ]
+        app.menu = [ ( u"Take a photo", self.take_photo ),( u"Cancel", self.cancel_app ) ]
         app.exit_key_handler = self.cancel_app
-        app.title = u"Take Photo"
+        app.title = u"Take a Photo"
         app.body = self.body        
         
     def cancel_app(self):
@@ -60,12 +61,12 @@ class TakePhoto(object):
     def take_photo(self):
         try:
             img = camera.take_photo( size = self.res, flash = self.flash)
-            self.filename = "e:\\wordmobi\images\\img_" + \
+            self.filename = "e:\\wordmobi\\images\\img_" + \
                             time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
                             ".jpg"
             img.save( self.filename )            
         except:
-            note(u"Could not take the photo.","error")
+            note(u"Could not take any photo.","error")
             self.cancel_app()
             return
         
@@ -255,13 +256,13 @@ class Contents(object):
     def insert_img(self, closing):
         txt =  u""
 
-        ir = popup_menu( [u"Local file", u"Take photo", u"URL"], u"Image from:")
+        ir = popup_menu( [u"Local file", u"Take a photo", u"URL"], u"Image from:")
         if ir is not None:
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
-            if ir == 1:
+            elif ir == 1:
                 sel = TakePhoto().run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
@@ -315,7 +316,7 @@ class Contents(object):
 
         html = self.text_to_html(self.body.get()).encode('utf-8')
         
-        name = "e:\\wordmobi\cache\\html_" + \
+        name = "e:\\wordmobi\\cache\\html_" + \
                time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
                ".html"
 
@@ -443,7 +444,7 @@ class NewPost(object):
                 self.categories = [ self.blog_categories[idx] for idx in sel ]
             self.refresh()            
         elif idx == 3:
-            ir = popup_menu( [u"Insert", u"Take photo", u"View/List", u"Remove"], u"Images")
+            ir = popup_menu( [u"Insert", u"Take a photo", u"View/List", u"Remove"], u"Images")
             if ir is not None:
                 if ir == 0:
                     sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
@@ -464,9 +465,9 @@ class NewPost(object):
                         item = selection_list(self.images, search_field=1) 
                         if item is not None:
                             if ir == 2:
-                                self.view_image( self.images[item] )
+                                self.view_image( self.images[item].encode('utf-8') )
                             elif ir == 3:
-                                self.remove_image( self.images[item] )
+                                self.remove_image( self.images[item].encode('utf-8') )
                                 self.images = self.images[:item] + self.images[item+1:]
                     else:
                         note(u"No images selected.","info")
@@ -485,10 +486,29 @@ class NewPost(object):
             except:
                 note(u"Impossible to open %s" % img,"error") 
         else:
-            note(u"Support for remote images not implemented.","info")
-            pass
-            # download it to local folder with urllib and visualize
-            # urllib.urlretrieve( url, local_file )
+            # urllib seems not to support proxy authentication
+            # so, download will fail in these cases
+            local_file = "e:\\wordmobi\\cache\\img_" + \
+                         time.strftime("%Y%m%d_%H%M%S", time.localtime())
+            d = img.rfind(".")
+            if d >= 0:
+                local_file = local_file + img[d:]
+                self.lock_ui(u"Downloading %s" % img)
+                try:
+                    urllib.urlretrieve( img, local_file )
+                except:
+                    note(u"Impossible to download %s" % img,"error")
+                    self.unlock_ui()
+                    return
+                self.unlock_ui()
+                viewer = Content_handler( self.refresh )
+                try:
+                    viewer.open( local_file )
+                except:
+                    note(u"Impossible to open %s" % img,"error") 
+            else:
+                note(u"Unkown externsion for %s" % img,"error")
+                
     def run(self):
         self.refresh()
 
