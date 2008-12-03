@@ -1,0 +1,7 @@
+#summary Wordmobi changelog
+
+= Change log =
+
+== 0.2.8 ==
+ * support for later publishing (draft post)
+ * [http://code.google.com/p/wordmobi/issues/detail?id=7 space tag] added
