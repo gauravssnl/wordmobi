@@ -418,10 +418,25 @@ class WordMobi(object):
                   ( u"Warning", u"Use at your own risk") ]
         app.body = Listbox( about, lambda: None )
         app.menu = [ (u"Close", lambda: self.refresh() )]
- 
+
+    def clear_cache(self):
+        not_all = False
+        cache = "e:\\wordmobi\\cache\\"
+        entries = os.listdir( cache )
+        for e in entries:
+            fname = os.path.join(cache,e)
+            if os.path.isfile( fname ):
+                try:
+                    os.remove( fname )
+                except:
+                    not_all = True
+        if not_all:
+            note(u"Not all files in %s could be removed. Try to remove them later." % cache,"error")
+                
     def run(self):
         old_title = app.title
         self.lock.wait()
+        self.clear_cache()
         app.set_tabs( [], None )
         app.title = old_title
         app.menu = []

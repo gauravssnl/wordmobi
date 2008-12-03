@@ -130,7 +130,7 @@ class ProxySettings(object):
                 self.unlock_ui()
                 self.refresh()
         else:
-            self.cbk( (None,) )
+            self.cbk( None )
 
     def update_value_check_lock(self):
         if self.ui_is_locked() == False:
