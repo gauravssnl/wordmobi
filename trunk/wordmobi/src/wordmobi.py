@@ -14,7 +14,7 @@ from socket import select_access_point, access_point, access_points, set_default
 from beautifulsoup import BeautifulSoup
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
