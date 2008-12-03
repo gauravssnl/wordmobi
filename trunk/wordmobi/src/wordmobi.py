@@ -8,7 +8,7 @@ from persist import Persist
 from posts import NewPost, EditPost
 from settings import *
 from wmutil import *
-from viewcomments import ViewComments
+from comments import ViewComments
 from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
 from beautifulsoup import BeautifulSoup
@@ -230,11 +230,6 @@ class WordMobi(object):
         self.cats = [ decode_html(c.name) for c in cats ]
         self.unlock_ui()
         self.refresh()
-        
-    def list_comments(self):
-        app.title = u"wordmobi comments"
-        note( u"Comments cbk", "info" )
-        app.title = u"wordmobi Posts"
 
     def post_popup_check_lock(self):
         if self.ui_is_locked() == False:
@@ -261,8 +256,8 @@ class WordMobi(object):
                     self.unlock_ui()
                     note(u"Impossible to delete the post.","error")
                     return
-                self.headlines = self.headlines[:idx] + self.headlines[idx+1:]
-                self.posts = self.posts[:idx] + self.posts[idx+1:]
+                del self.headlines[idx]
+                del self.posts[idx]
                 note(u"Post deleted.","info")
                 self.unlock_ui() 
                 self.refresh()
@@ -370,6 +365,7 @@ class WordMobi(object):
             note(u"No comments for this post.","info")
         else:
             self.dlg = ViewComments( self.post_comments_cbk, \
+                                     self.blog, \
                                      self.posts[idx]['comments'], \
                                      utf8_to_unicode(self.posts[idx]['title']))
             self.dlg.run()
