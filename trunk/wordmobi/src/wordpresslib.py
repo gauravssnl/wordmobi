@@ -94,7 +94,7 @@ class WordPressComment:
         self.offset = 0
         self.number = 10
 
-class WordPressCommentEdit:
+class WordPressEditComment:
     """Represents comment item for editing
     """ 
     def __init__(self):
@@ -105,6 +105,16 @@ class WordPressCommentEdit:
         self.author_url = ''
         self.author_email = ''
 
+class WordPressNewComment:
+    """Represents a new comment 
+    """ 
+    def __init__(self):
+        self.status = ''
+        self.content = ''
+        self.author = ''
+        self.author_url = ''
+        self.author_email = ''
+        
 class WordPressUser:
     """Represents user item
     """ 
@@ -492,18 +502,16 @@ class WordPressClient:
             raise WordPressException(fault)
 
         return resp
-    
-#wp.deleteComment
-#wp.editComment
-#wp.newComment
-"""
-wp.deleteComment(blog_id, username, password, comment_id)
 
-wp.editComment(blog_id, username, password, comment_id, {status,
-date_created_gmt, content, author, author_url, author_email, })
+    def newComment(self, postId, commentNew):
+        """Insert a new comment
+        """
+        try:
+            comment = self._server.wp.newComment(self.blogId, self.user, self.password, postId, commentNew)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
 
-wp.newComment(blog_id, username, password, post, {content, author,
-author_email, author_url})
-"""
+        return comment    
 
 
+        

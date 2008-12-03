@@ -8,7 +8,7 @@ from persist import Persist
 from posts import NewPost, EditPost
 from settings import *
 from wmutil import *
-from comments import ViewComments
+from comments import Comments
 from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
 from beautifulsoup import BeautifulSoup
@@ -364,10 +364,10 @@ class WordMobi(object):
         if nc == 0:
             note(u"No comments for this post.","info")
         else:
-            self.dlg = ViewComments( self.post_comments_cbk, \
-                                     self.blog, \
-                                     self.posts[idx]['comments'], \
-                                     utf8_to_unicode(self.posts[idx]['title']))
+            self.dlg = Comments( self.post_comments_cbk, \
+                                 self.blog, \
+                                 self.posts[idx]['comments'], \
+                                 utf8_to_unicode(self.posts[idx]['title']))
             self.dlg.run()
             
     def config_wordmobi_cbk(self,params):
