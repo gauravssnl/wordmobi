@@ -158,11 +158,15 @@ class ProxySettings(object):
             elif idx == 3:
                 user = query(u"Proxy username:","text", self.proxy_user)
                 if user is not None:
-                    self.proxy_user = user                   
+                    self.proxy_user = user
+                else:
+                    self.proxy_user = u""
             elif idx == 4:
                 password = query(u"Proxy username:","code", self.proxy_password)
                 if password is not None:
-                    self.proxy_password = password     
+                    self.proxy_password = password
+                else:
+                    self.proxy_password = u""
         self.refresh()
         
     def run(self):

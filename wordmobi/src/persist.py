@@ -26,12 +26,7 @@ class Persist(dict):
     def __init__(self):
         # make me singleton !
         super(Persist,self).__init__()
-        if not os.path.exists(DEFDIR):
-            for k,v in Persist.DEFVALS.iteritems():
-                self.__setitem__(k,v)
-            self.save()
-        else:
-            self.load()
+        self.load()
             
     def save(self):
         db = e32dbm.open(Persist.DBNAME,"c")
@@ -40,15 +35,16 @@ class Persist(dict):
         db.close()
 
     def load(self):
-        db = e32dbm.open(Persist.DBNAME,"w")
+        try:
+            db = e32dbm.open(Persist.DBNAME,"w")
+        except:
+            db = e32dbm.open(Persist.DBNAME,"n")
+            
         for k in Persist.DEFVALS.iterkeys():
             try:
                 self.__setitem__(k,unicode(db[k]))
             except:
                 self.__setitem__(k,Persist.DEFVALS[k])
         db.close()
-
-    # TODO reise exceptions for keys that not belong to DEVALS
-
 
     
