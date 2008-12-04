@@ -1,4 +1,5 @@
 #summary latest
 
-[http://wordmobi.googlecode.com/files/wordmobi-0.2.9.sis file]
 [http://0.2.9 latest_version]
+
+[http://wordmobi.googlecode.com/files/wordmobi-0.2.9.sis file_url]
