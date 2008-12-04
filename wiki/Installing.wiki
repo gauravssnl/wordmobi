@@ -39,4 +39,14 @@ You may insert images from local files, URLs or you may take a shot and add it t
 
 If you want, there is a html preview as well. In fact, wordmobi call the default browser for presenting your current post.
 
-[http://media.share.ovi.com/m1/medium/0516/137594f31254452d831dffca00e56580.jpg}
+[http://media.share.ovi.com/m1/medium/0516/137594f31254452d831dffca00e56580.jpg]
+
+You have a similar view when creating a new post. If you want to post but not to publish the post, set field "Publish" to "No (draft)". You may publish it later, if you want.
+
+[]
+
+In the post list, pressing select it is possible to download all comments for some selected post. The comment view is intuitive. You may approve, reply, delete and edit comments. Comments are organized in a per post basis, slightly different from original wordpress site, where comments are showed together. Again, comments are download only when necessary, saving bandwidth.
+
+[http://media.share.ovi.com/m1/medium/0516/9be9f68214c04f20b689d13b2fdcebd9.jpg]
+
+[http://media.share.ovi.com/m1/medium/0516/9d54270e08204d73b91974db557c527e.jpg]
