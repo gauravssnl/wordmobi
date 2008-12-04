@@ -2,6 +2,12 @@
 
 = Change log =
 
+== 0.2.9 ==
+
+Initial support for comments added to this version. It is possible to approve, delete and edit comments. However, menus and dialogs for comments may change soon. Moreover, more tests need to be done. 
+
+If you want to use this version, put additional required information (email, name) inside Setting->blog.
+
 == 0.2.8 ==
  * support for later publishing (draft post)
  * [http://code.google.com/p/wordmobi/issues/detail?id=7 space tag] added
