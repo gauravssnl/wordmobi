@@ -2,6 +2,12 @@
 
 = Change log =
 
+== 0.2.10 ==
+
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=9 9]. Thanks to [http://code.google.com/u/Sebastian.Protasiuk/ Sebastian Protasiuk] for reporting and debuging.
+
+ * Small problem in proxy setup when user/pass need to be empty. Once you fill theses fields, never you will erase them again. Now, when you press cancel the field is cleared.
+
 == 0.2.9 ==
 
 Initial support for comments added to this version. It is possible to approve, delete and edit comments. However, menus and dialogs for comments may change soon. Moreover, more tests need to be done. 
