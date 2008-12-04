@@ -11,6 +11,8 @@ import key_codes
 import time
 import urllib
 
+DEFDIR = "e:\\wordmobi\\"
+
 class TakePhoto(object):
     def __init__(self):
         self.cancel = False
@@ -61,9 +63,8 @@ class TakePhoto(object):
     def take_photo(self):
         try:
             img = camera.take_photo( size = self.res, flash = self.flash)
-            self.filename = "e:\\wordmobi\\images\\img_" + \
-                            time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
-                            ".jpg"
+            self.filename = time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
+            self.filename = os.path.join(DEFDIR, "images", self.filename)
             img.save( self.filename )            
         except:
             note(u"Could not take any photo.","error")
@@ -323,9 +324,8 @@ class PostContents(object):
 
         html = self.text_to_html(self.body.get()).encode('utf-8')
         
-        name = "e:\\wordmobi\\cache\\html_" + \
-               time.strftime("%Y%m%d_%H%M%S", time.localtime()) + \
-               ".html"
+        name = "html_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
+        name = os.path.join(DEFDIR, "cache", name)
 
         soup = BeautifulSoup( html )
         imgs = soup.findAll('img')
@@ -515,8 +515,8 @@ class NewPost(object):
         else:
             # urllib seems not to support proxy authentication
             # so, download will fail in these cases
-            local_file = "e:\\wordmobi\\cache\\img_" + \
-                         time.strftime("%Y%m%d_%H%M%S", time.localtime())
+            local_file = "img_" + time.strftime("%Y%m%d_%H%M%S", time.localtime())
+            local_file = os.path.join(DEFDIR, "cache", local_file)
             d = img.rfind(".")
             if d >= 0:
                 local_file = local_file + img[d:]

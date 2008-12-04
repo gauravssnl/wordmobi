@@ -4,12 +4,16 @@ import os
 import e32dbm
 from appuifw import *
 
+DEFDIR = "e:\\wordmobi\\"
+
 class Persist(dict):
-    DEFDIR = "e:\\wordmobi\\"
+    
     DBNAME = os.path.join(DEFDIR,"wordmobi")
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
+               "email":u"@",
+               "realname":u"",
                "num_posts":u"10",
                "num_comments":u"20",
                "categories":u"",
@@ -22,10 +26,7 @@ class Persist(dict):
     def __init__(self):
         # make me singleton !
         super(Persist,self).__init__()
-        if not os.path.exists(Persist.DEFDIR):
-            os.makedirs(Persist.DEFDIR)
-            os.makedirs(os.path.join(Persist.DEFDIR,"cache"))
-            os.makedirs(os.path.join(Persist.DEFDIR,"images"))
+        if not os.path.exists(DEFDIR):
             for k,v in Persist.DEFVALS.iteritems():
                 self.__setitem__(k,v)
             self.save()

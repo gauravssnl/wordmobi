@@ -14,12 +14,13 @@ from socket import select_access_point, access_point, access_points, set_default
 from beautifulsoup import BeautifulSoup
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.8"
+__version__ = "0.2.9"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
 PROMO_PHRASE = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>"
-        
+DEFDIR = "e:\\wordmobi\\"
+
 class WordMobi(object):
     def __init__(self):
         self.lock = e32.Ao_lock()
@@ -27,12 +28,14 @@ class WordMobi(object):
         self.app_title = u"Wordmobi"
         self.cats = [u"Uncategorized"]
         self.headlines = []
-        self.posts = []        
+        self.posts = []
+        self.check_dirs()
         self.db = Persist()
         self.db.load()
         self.body = Listbox( [(u"",u"")], self.post_popup_check_lock )
         self.blog = None
         self.dlg = None
+        
         self.menu = [( u"Posts", (
                             ( u"Update", self.update ), 
                             ( u"Contents", self.post_contents ),
@@ -41,7 +44,7 @@ class WordMobi(object):
                             ( u"New", self.new_post )
                             )),
                         ( u"Settings", (
-                            ( u"Blog access", self.config_wordmobi ),
+                            ( u"Blog", self.config_wordmobi ),
                             ( u"Proxy",self.config_network ),
                             ( u"Access Point", self.sel_access_point )
                             )),
@@ -50,6 +53,15 @@ class WordMobi(object):
         self.sel_access_point()
         self.refresh()
 
+    def check_dirs(self):
+        if not os.path.exists(DEFDIR):
+            try:
+                os.makedirs(DEFDIR)
+                os.makedirs(os.path.join(DEFDIR,"cache"))
+                os.makedirs(os.path.join(DEFDIR,"images"))
+            except:
+                note(u"Could't create wordmobi directory %s" % DEFDIR,"error")
+                
     def sel_access_point(self):
         aps = access_points()
         if len(aps) == 0:
@@ -236,9 +248,10 @@ class WordMobi(object):
             self.post_popup()
             
     def post_popup(self):
-        idx = popup_menu( [u"Contents", u"Comments",u"Delete",u"Update"], u"Posts")
+        idx = popup_menu( [u"Contents", u"Comments",u"Update comments",u"Delete",u"Update posts"], u"Posts:")
         if idx is not None:
-            [self.post_contents , self.post_comments, self.delete_post, self.update ][idx]()
+            [self.post_contents , lambda: self.post_comments(False), lambda: self.post_comments(True), \
+             self.delete_post, self.update ][idx]()
 
     def delete_post(self):
         idx = self.body.current()
@@ -340,14 +353,18 @@ class WordMobi(object):
         self.refresh()
         return True
 
-    def post_comments(self):
+    def post_comments(self,force_update = False):
         idx = self.body.current()
         if self.headlines[idx][0] == u"<empty>":
             note( u"Please, update the post list.", "info" )
             return
         
         # if post was not totally retrieved yet, fetch all data
-        if self.posts[idx].has_key('comments') == False:
+        if self.posts[idx].has_key('comments') == True:
+            nc = len( self.posts[idx]['comments'] )
+        else:
+            nc = 1
+        if self.posts[idx].has_key('comments') == False or nc == 0 or force_update:
             self.lock_ui(u"Downloading comments...")
             comm_info = wp.WordPressComment()
             comm_info.post_id = self.posts[idx]['postid']
@@ -367,12 +384,15 @@ class WordMobi(object):
             self.dlg = Comments( self.post_comments_cbk, \
                                  self.blog, \
                                  self.posts[idx]['comments'], \
-                                 utf8_to_unicode(self.posts[idx]['title']))
+                                 utf8_to_unicode(self.posts[idx]['title']),
+                                 self.db["email"], \
+                                 self.db["realname"],
+                                 self.db["blog"])
             self.dlg.run()
             
     def config_wordmobi_cbk(self,params):
         if params is not None:
-            (self.db["blog"], self.db["user"], self.db["pass"], np, nc) = params
+            (self.db["blog"], self.db["user"], self.db["pass"], self.db["email"], self.db["realname"], np, nc) = params
             self.db["num_posts"] = unicode( np )
             self.db["num_comments"] = unicode( nc )
             self.db.save()
@@ -383,7 +403,10 @@ class WordMobi(object):
     def config_wordmobi(self):
         self.dlg = BlogSettings( self.config_wordmobi_cbk,\
                                  self.db["blog"], \
-                                 self.db["user"], self.db["pass"], \
+                                 self.db["user"], \
+                                 self.db["pass"], \
+                                 self.db["email"], \
+                                 self.db["realname"], \
                                  int(self.db["num_posts"]), \
                                  int(self.db["num_comments"]) )
         self.dlg.run()
@@ -421,7 +444,7 @@ class WordMobi(object):
 
     def clear_cache(self):
         not_all = False
-        cache = "e:\\wordmobi\\cache\\"
+        cache = os.path.join(DEFDIR, "cache")
         entries = os.listdir( cache )
         for e in entries:
             fname = os.path.join(cache,e)

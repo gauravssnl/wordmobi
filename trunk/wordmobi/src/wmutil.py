@@ -19,5 +19,13 @@ def parse_iso8601(val):
 def utf8_to_unicode(s):
     return unicode(s,'utf-8',errors='ignore')
 
+def unicode_to_utf8(s):
+    return s.encode('utf-8')
+
 def localtime_iso8601():
     return time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
+
+def gm_to_localtime( tm ):
+    diff = time.time() - time.mktime(time.gmtime())
+    return time.localtime(time.mktime( tm ) + diff)
+    
