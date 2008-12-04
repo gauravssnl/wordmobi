@@ -6,7 +6,7 @@ First install Python for your S60 mobile phone. The latest version is [http://so
 
 I tested the current version only in S60 3rd edition phones (N95 and E71), using Python   [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_4_3rdEd.sis?modtime=1214578033&big_mirror=0 PythonForS60 1.4.4] and [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis?modtime=1228327213&big_mirror=0 PythonForS60 1.4.5].
 
-Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ required). The directories used are the following:
+Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required). The directories used are the following:
 
  * e:\wordmobi => settings database
  * e:\wordmobi\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
@@ -14,21 +14,21 @@ Wordmobi saves all relevant data in memory card. So, do not forget to insert one
 
 = Setup =
 
-Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. It is important to fill up all fields, like your email and full name. They will be used when you add a new comment. Proxy is supported, even if using basic authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
+Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. It is important to fill up all fields, like your email and full name. They will be used when you add a new comment. Proxy is supported, even if using  authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
 
 [http://media.share.ovi.com/m1/medium/0516/3fe35acf02a441e6884d01dde82c33b9.jpg]
 
 == Using ==
 
-After this basic setup, start pressing select key and choosing "update" for retrieving the latest posts. Only post titles and categories will be download, to save bandwidth. If you want to see details about a post, select contents.
+After this basic setup, start pressing select key and choose "update" for retrieving the latest posts. Only post titles and categories will be download, to save bandwidth. If you want to see details about a post, select contents.
 
 [http://media.share.ovi.com/m1/medium/0516/371b76dcc71144c8a03f5e3b895a0b80.jpg]
 
-Title, post contents, categories, images attached and post status are available. In special, you may publish a draft post or make modifications in the post content. 
+Fields like Title, post contents, categories, images attached and post status are available. In special, you may publish a previous written post (draft) or make modifications in the post content. 
 
 [http://media.share.ovi.com/m1/medium/0516/c9f730f11ff54e619ceccf8de9f44e99.jpg]
 
-The contents edit window is similar to the html edit dialog, at Wordpress, with same html commands. Only newlines are automatically translated to <br> tags. The others may be inserted using the menu.
+The contents edit window is similar to the html edit dialog found at Wordpress, with same html commands. Only newlines are automatically translated to <br> tags. The others tags need to be inserted using menu shortcuts.
 
 [http://media.share.ovi.com/m1/medium/0516/e559da4e36bc45d488dffa37fd64bf42.jpg]
 
@@ -37,16 +37,17 @@ You may insert images from local files, URLs or you may take a shot and add it t
 [http://media.share.ovi.com/m1/medium/0516/ebd5804afc34442a8960c6e6bd8c25eb.jpg]
 [http://media.share.ovi.com/m1/medium/0516/8409dd88c62543a49e80023f214a7f21.jpg]
 
-If you want, there is a html preview as well. In fact, wordmobi call the default browser for presenting your current post.
+If you want, there is a html preview as well in contents edit window. In fact, wordmobi call the default browser for presenting your current post.
 
 [http://media.share.ovi.com/m1/medium/0516/137594f31254452d831dffca00e56580.jpg]
 
-You have a similar view when creating a new post. If you want to post but not to publish the post, set field "Publish" to "No (draft)". You may publish it later, if you want.
+You have a similar view when creating a new post (posts->new). If you want to post but not to publish the post, set field "Publish" to "No (draft)". You may publish it later, if you want, just editing it and setting "Publish" to "Yes".
 
-[]
+[http://media.share.ovi.com/m1/medium/0516/ff3ed0c5ecf540f8901dfd6754370679.jpg]
 
-In the post list, pressing select it is possible to download all comments for some selected post. The comment view is intuitive. You may approve, reply, delete and edit comments. Comments are organized in a per post basis, slightly different from original wordpress site, where comments are showed together. Again, comments are download only when necessary, saving bandwidth.
+In the post list, pressing select it is possible to download all comments for some post. The comment view is intuitive and you may approve, reply, delete and edit comments. Comments are organized in a per post basis, slightly different from original wordpress site, where comments are presented together. Again, comments are download only when necessary, saving bandwidth.
 
 [http://media.share.ovi.com/m1/medium/0516/9be9f68214c04f20b689d13b2fdcebd9.jpg]
-
 [http://media.share.ovi.com/m1/medium/0516/9d54270e08204d73b91974db557c527e.jpg]
+
+Have fun and report bugs !
