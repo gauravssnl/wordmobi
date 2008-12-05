@@ -1,6 +1,6 @@
 #summary Usage
 
-== Using ==
+== Using wordmobi ==
 
 After this basic setup, start pressing select key and choose "update" for retrieving the latest posts. Only post titles and categories will be download, to save bandwidth. If you want to see details about a post, select contents.
 
