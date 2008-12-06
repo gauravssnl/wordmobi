@@ -1,6 +1,11 @@
-#summary Usage
+#summary Using wordmobi
 
-== Using wordmobi ==
+
+== Using wordmobi (version 0.3.0 or superior) ==
+
+Wormobi 0.3.0 is similar to previous versions. However, the new user interface is based on tabs. A new tutorial is coming soon.
+
+== Using wordmobi (before version 0.3.0) ==
 
 After this basic setup, start pressing select key and choose "update" for retrieving the latest posts. Only post titles and categories will be download, to save bandwidth. If you want to see details about a post, select contents.
 
