@@ -166,9 +166,9 @@ class PostTab(BaseTabWin):
         if self.headlines[0][0] == u"<empty>":
             note( u"Please, update the post list.", "info" )
             return
-        #arghhh - ugly ! RTI: remote tab invocation ...
         BaseTabWin.tab_handler(1)
-        BaseTabWin.tabs['TABS'][1].update_comment( idx )
+        if not BaseTabWin.tabs['TABS'][1].update_comment( idx ):
+            self.refresh()
 
     def key_up(self):
         if self.ui_is_locked() == False:
@@ -516,13 +516,51 @@ class CommentTab(BaseTabWin):
         self.update_comment(post_idx)
         
     def update_comment(self,post_idx):
+        stat_lst = [ u"Any", u"Spam", u"Moderated", u"Unmoderated" ]
+        item = popup_menu( stat_lst, u"With post status:")
+        if item is None:
+            return False
+        status =  ( "", "spam", "approve", "hold" )[item]
+        
         if post_idx == -1:
-            note(u"Not implemented.","info")
+            all_comments = []
+            np = len(WordMobi.posts)
+            for n in range(len(WordMobi.posts)):
+                self.lock_ui(u"[%d/%d] Downloading comments ..." % (n+1,np))
+                post_id = WordMobi.posts[n]['postid']
+                comm_info = wp.WordPressComment()
+                comm_info.post_id = post_id
+                comm_info.status = status
+                comm_info.number = WordMobi.db['num_comments']
+
+                try:
+                    comments = WordMobi.blog.getComments( comm_info )
+                except:
+                    self.lock_ui(u"[%d/%d] Failed !" % (n+1,np))
+                    e32.ao_sleep(0.5)
+                    continue
+                
+                all_comments = all_comments + comments
+
+            if len( all_comments ) == 0:
+                note(u"No comments with status %s." % stat_lst[item],"info")
+                self.unlock_ui()
+                self.refresh()
+                return False                
+            else:
+                self.headlines = []
+                for c in all_comments:
+                    (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
+                    line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']),utf8_to_unicode( c['author'] ))
+                    line2 = utf8_to_unicode( c['content'] )
+                    WordMobi.comments.append( c )
+                    self.headlines.append( ( line1 , line2 ) )
         else:
-            self.lock_ui(u"Downloading comments...")
+            self.lock_ui(u"Downloading comments ...")
             post_id = WordMobi.posts[post_idx]['postid']
             comm_info = wp.WordPressComment()
             comm_info.post_id = post_id
+            comm_info.status = status
             comm_info.number = WordMobi.db['num_comments']
             try:
                 comments = WordMobi.blog.getComments( comm_info )
@@ -530,10 +568,13 @@ class CommentTab(BaseTabWin):
                 note(u"Impossible to download comments. Try again.","error")
                 self.unlock_ui()                
                 self.refresh()
-                return
+                return False
 
             if len( comments ) == 0:
-                note(u"No comments for this post.","info")
+                note(u"No comments with status %s." % stat_lst[item],"info")
+                self.unlock_ui()
+                self.refresh()
+                return False
             else:
                 self.headlines = []
                 for c in comments:
@@ -545,6 +586,7 @@ class CommentTab(BaseTabWin):
                                     
         self.unlock_ui()
         self.refresh()
+        return True
 
     def new_cbk(self, params):
         if params is not None:
@@ -949,8 +991,12 @@ class WordMobi(object):
         self.dlg.run()
         
     def about_wordmobi(self):
+        def exit_about():
+            BaseTabWin.restore_tabs()
+            BaseTabWin.tabs['TABS'][0].refresh()
+        BaseTabWin.disable_tabs()
         app.title = u"About"
-        app.exit_key_handler = lambda: self.refresh()
+        app.exit_key_handler = exit_about
         about = [ ( u"Wordmobi %s" % __version__, u"A Wordpress client" ),\
                   ( u"Author", u"Marcelo Barros de Almeida"), \
                   ( u"Email", u"marcelobarrosalmeida@gmail.com"), \
@@ -959,7 +1005,7 @@ class WordMobi(object):
                   ( u"License", u"GNU GPLv3"), \
                   ( u"Warning", u"Use at your own risk") ]
         app.body = Listbox( about, lambda: None )
-        app.menu = [ (u"Close", lambda: self.refresh() )]
+        app.menu = [ (u"Close", exit_about )]
         
     def clear_cache(self):
         not_all = False
