@@ -12,6 +12,9 @@
  * Comments management (new, delete, edit, moderation) 
  * Categories management (new, delete) 
  
+There is a problem related to categories with accents:
+ * [http://code.google.com/p/wordmobi/issues/detail?id=5&can=1 Isuue 5]
+
 = Future enhancements =
 
  * Icons in all list views
