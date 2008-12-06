@@ -208,17 +208,6 @@ class PostTab(BaseTabWin):
         self.unlock_ui()
         BaseTabWin.tabs['TABS'][2].update()
 
-        #self.lock_ui(u"Downloading categories...")
-        #try:
-        #    WordMobi.categories = WordMobi.blog.getCategories()
-        #except:
-        #    note(u"Impossible to retrieve the categories list.","error")
-        #    self.unlock_ui()
-        #    self.refresh()
-        #    return
-        #for c in WordMobi.categories:
-        #    c['categoryName'] = decode_html(c['categoryName'])
-
         self.refresh()
     
     def upload_images(self, fname):
@@ -995,7 +984,7 @@ class WordMobi(object):
         app.title = old_title
         app.menu = []
         app.body = None
-        ### app.set_exit()
+        app.set_exit()
 
 if __name__ == "__main__":
 
