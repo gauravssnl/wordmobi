@@ -147,8 +147,8 @@ class PostTab(BaseTabWin):
                             ( u"Update", self.update ), 
                             ( u"View/Edit", self.contents ),
                             ( u"Delete", self.delete ),
-                            ( u"Comments", self.comments ),
-                            ( u"New", self.new )
+                            ( u"List  Comments", self.comments ),
+                            ( u"Create new", self.new )
                             ))] + common_menu
         
     def popup_check_lock(self):
@@ -157,7 +157,7 @@ class PostTab(BaseTabWin):
             self.popup()
             
     def popup(self):
-        idx = popup_menu( [ u"Update", u"View/Edit", u"Comments", u"Delete", u"New"], u"Posts:")
+        idx = popup_menu( [ u"Update", u"View/Edit", u"List Comments", u"Delete", u"Create new"], u"Posts:")
         if idx is not None:
             [ self.update, self.contents, self.comments, self.delete, self.new ][idx]()
 
@@ -205,16 +205,20 @@ class PostTab(BaseTabWin):
         else:
             note( u"No posts available.", "info" )
 
-        self.lock_ui(u"Downloading categories...")
-        try:
-            cats = WordMobi.blog.getCategoryList()
-        except:
-            note(u"Impossible to retrieve the categories list.","error")
-            self.unlock_ui()
-            return
-
-        WordMobi.categories = [ decode_html(c.name) for c in cats ]
         self.unlock_ui()
+        BaseTabWin.tabs['TABS'][2].update()
+
+        #self.lock_ui(u"Downloading categories...")
+        #try:
+        #    WordMobi.categories = WordMobi.blog.getCategories()
+        #except:
+        #    note(u"Impossible to retrieve the categories list.","error")
+        #    self.unlock_ui()
+        #    self.refresh()
+        #    return
+        #for c in WordMobi.categories:
+        #    c['categoryName'] = decode_html(c['categoryName'])
+
         self.refresh()
     
     def upload_images(self, fname):
@@ -227,6 +231,14 @@ class PostTab(BaseTabWin):
         
         return img_src
 
+    def categoryName2Id(self,cat):
+        for c in WordMobi.categories:
+            if c['categoryName'] == cat:
+                return (c['categoryId'], c['parentId'])
+
+    def categoryNamesList(self):
+        return map( lambda x: x['categoryName'], WordMobi.categories)
+            
     def upload_new_post(self, title, contents, categories, publish):
         """ Uplaod a new or edited post. For new post, use post_id as None
         """
@@ -246,7 +258,7 @@ class PostTab(BaseTabWin):
         post.description = contents + PROMO_PHRASE
                       
         post.title = unicode_to_utf8( title )
-        post.categories = [ WordMobi.blog.getCategoryIdFromName( unicode_to_utf8(c) ) for c in categories ]
+        post.categories = [ self.categoryName2Id( unicode_to_utf8(c) )[0] for c in categories ]
         post.allowComments = True
 
         try:
@@ -293,7 +305,7 @@ class PostTab(BaseTabWin):
 
     def new(self):
         BaseTabWin.disable_tabs()
-        self.dlg = NewPost( self.new_cbk, u"", u"", WordMobi.categories, [], True )
+        self.dlg = NewPost( self.new_cbk, u"", u"", self.categoryNamesList(), [], True )
         self.dlg.run()
 
     def delete(self):
@@ -337,7 +349,7 @@ class PostTab(BaseTabWin):
             post.id = post_orig['postid']
             post.title = unicode_to_utf8( title )
             post.description = contents
-            post.categories = [ WordMobi.blog.getCategoryIdFromName( unicode_to_utf8(c) ) for c in categories ]
+            post.categories = [ self.categoryName2Id( unicode_to_utf8(c) )[0] for c in categories ]
             post.allowComments = True
             post.permaLink = post_orig['permaLink']
             post.textMore = post_orig['mt_text_more']
@@ -391,7 +403,7 @@ class PostTab(BaseTabWin):
             publish = False
 
         BaseTabWin.disable_tabs()
-        self.dlg = EditPost( self.contents_cbk, WordMobi.categories, WordMobi.posts[idx], publish )
+        self.dlg = EditPost( self.contents_cbk, self.categoryNamesList(), WordMobi.posts[idx], publish )
         self.dlg.run()
 
     def refresh(self):
@@ -414,7 +426,7 @@ class CommentTab(BaseTabWin):
                             ( u"Update", self.update ), 
                             ( u"View/Edit", self.contents ),
                             ( u"Delete", self.delete ),
-                            ( u"New/Reply", self.new )
+                            ( u"Create new/Reply", self.new )
                             ))] + common_menu
         
     def popup_check_lock(self):
@@ -423,7 +435,7 @@ class CommentTab(BaseTabWin):
             self.popup()
             
     def popup(self):
-        menu = [ u"Update", u"View/Edit", u"Delete", u"New/Reply"]
+        menu = [ u"Update", u"View/Edit", u"Delete", u"Create new/Reply"]
         cbk = [ self.update, self.contents, self.delete, self.new ]
         if self.headlines[0][0] != u"<empty>":
             if WordMobi.comments[self.body.current()]['status'] != 'approve':
@@ -701,30 +713,111 @@ class CommentTab(BaseTabWin):
 
 class CategoryTab(BaseTabWin):
     def __init__(self, common_menu, exit_key_handler=lambda:None):
-        self.body = Listbox( [ (u"") ], self.update_value_check_lock )
-        BaseTabWin.__init__(self,u"Categories", self.body, exit_key_handler)
+        self.headlines = []        
+        self.body = Listbox( [ (u"") ], self.popup_check_lock )
+        BaseTabWin.__init__(self,u"[1/1] Categories", self.body, exit_key_handler)
+        self.body.bind(key_codes.EKeyUpArrow, self.key_up)
+        self.body.bind(key_codes.EKeyDownArrow, self.key_down)        
         self.menu = [( u"Categories", (
                             ( u"Update", self.update ), 
                             ( u"Delete", self.delete ),
-                            ( u"New", self.new )
+                            ( u"Create new", self.new )
                             ))] + common_menu
-    def update_value_check_lock(self):
-        pass
+
+    def popup_check_lock(self):
+        if self.ui_is_locked() == False:
+            self.last_idx = self.body.current()
+            self.popup()
+            
+    def popup(self):
+        idx = popup_menu( [ u"Update", u"Delete", u"Create new"], u"Catebories:")
+        if idx is not None:
+            [ self.update, self.delete, self.new ][idx]()
+
+    def key_up(self):
+        if self.ui_is_locked() == False:
+            p = self.body.current() - 1
+            m = len( self.headlines )
+            if p < 0:
+                p = m - 1
+            self.set_title( u"[%d/%d] Categories" % (p+1,m) )
+
+    def key_down(self):
+        if self.ui_is_locked() == False:
+            p = self.body.current() + 1
+            m = len( self.headlines )
+            if p >= m:
+                p = 0
+            self.set_title( u"[%d/%d] Categories" % (p+1,m) )
+
 
     def update(self):
-        pass
+        self.lock_ui(u"Downloading categories...")
+        try:
+            WordMobi.categories = WordMobi.blog.getCategories()
+        except:
+            note(u"Impossible to retrieve the categories list.","error")
+            self.unlock_ui()
+            self.refresh()
+            return
+
+        self.headlines = []
+        for c in WordMobi.categories:
+            c['categoryName'] = decode_html(c['categoryName'])
+            self.headlines.append( c['categoryName'] )
+
+        self.unlock_ui()
+        self.refresh()
 
     def delete(self):
-        pass
-
+        if self.headlines[0] == u"<empty>":
+            note( u"Please, update the category list.", "info" )
+            return
+        
+        item = self.body.current()
+        cat_name = self.headlines[item]
+        ny = popup_menu( [u"No", u"Yes"], u"Delete %s ?" % cat_name)
+        if ny is not None:
+            if ny == 1:
+                cat_id = WordMobi.categories[item]['categoryId']
+                self.lock_ui(u"Deleting category %s ..." % cat_name)
+                try:
+                    WordMobi.blog.deleteCategory(cat_id)
+                    del self.headlines[item]
+                    del WordMobi.categories[item]
+                except:
+                    note(u"Impossible to delete category %s." % cat_name,"error")
+                self.unlock_ui()
+            
+        self.refresh()
+            
     def new(self):
-        pass
+        cat_name = query(u"Category name:", "text", u"" )
+        if cat_name is not None:
+            wpc = wp.WordPressNewCategory()
+            wpc.name = unicode_to_utf8( cat_name )
+            wpc.slug=''
+            wpc.parent_id = 0
+            wpc.description = unicode_to_utf8( cat_name )
+            self.lock_ui(u"Creating category %s ..." % cat_name)
+            cat_id = None
+            try:
+                cat_id = WordMobi.blog.newCategory(wpc)
+            except:
+                note(u"Impossible to create category %s." % cat_name,"error")
+                
+            self.unlock_ui()
+            if cat_id is not None:
+                self.update()
+        self.refresh()
 
     def refresh(self):
         BaseTabWin.refresh(self)
-        lst_values = [ (u"E"), (u"F") ]        
-        self.body.set_list(lst_values, self.last_idx)
-        
+        if len( self.headlines ) == 0:
+            self.headlines = [ u"<empty>" ]
+            WordMobi.categories = []
+        self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
+        self.body.set_list( self.headlines, self.last_idx )
         
 class WordMobi(object):
     db = None
