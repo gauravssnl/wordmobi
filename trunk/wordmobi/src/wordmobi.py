@@ -900,7 +900,6 @@ class WordMobi(object):
         BaseTabWin.register_tabs(  tabs, labels )        
         
         self.sel_access_point()
-        BaseTabWin.tabs['TABS'][0].update()
         self.refresh()
 
     def check_dirs(self):
