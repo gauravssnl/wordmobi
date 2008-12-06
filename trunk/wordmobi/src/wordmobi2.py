@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-import e32, e32dbm
-import datetime
-import os
+import e32, e32dbm, key_codes
+import datetime, os
 from appuifw import *
 import wordpresslib as wp
 from posts import NewPost, EditPost
 from settings import *
 from wmutil import *
-from comments import Comments
+from comments import EditComment, NewComment
 from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
 from beautifulsoup import BeautifulSoup
-import key_codes
+from xmlrpclib import DateTime
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
 __version__ = "0.2.10"
@@ -146,8 +145,9 @@ class PostTab(BaseTabWin):
         self.body.bind(key_codes.EKeyDownArrow, self.key_down)
         self.menu = [( u"Posts", (
                             ( u"Update", self.update ), 
-                            ( u"Contents", self.contents ),
+                            ( u"View/Edit", self.contents ),
                             ( u"Delete", self.delete ),
+                            ( u"Comments", self.comments ),
                             ( u"New", self.new )
                             ))] + common_menu
         
@@ -157,9 +157,18 @@ class PostTab(BaseTabWin):
             self.popup()
             
     def popup(self):
-        idx = popup_menu( [ u"Update", u"Contents", u"Delete", u"New"], u"Posts:")
+        idx = popup_menu( [ u"Update", u"View/Edit", u"Comments", u"Delete", u"New"], u"Posts:")
         if idx is not None:
-            [ self.update, self.contents, self.delete, self.new ][idx]()
+            [ self.update, self.contents, self.comments, self.delete, self.new ][idx]()
+
+    def comments(self):
+        idx = self.body.current()
+        if self.headlines[0][0] == u"<empty>":
+            note( u"Please, update the post list.", "info" )
+            return
+        #arghhh - ugly ! RTI: remote tab invocation ...
+        BaseTabWin.tab_handler(1)
+        BaseTabWin.tabs['TABS'][1].update_comment( idx )
 
     def key_up(self):
         if self.ui_is_locked() == False:
@@ -289,7 +298,7 @@ class PostTab(BaseTabWin):
 
     def delete(self):
         idx = self.body.current()
-        if self.headlines[idx][0] == u"<empty>":
+        if self.headlines[0][0] == u"<empty>":
             note( u"Please, update the post list.", "info" )
             return
 
@@ -362,7 +371,7 @@ class PostTab(BaseTabWin):
         
     def contents(self):
         idx = self.body.current()
-        if self.headlines[idx][0] == u"<empty>":
+        if self.headlines[0][0] == u"<empty>":
             note( u"Please, update the post list.", "info" )
             return
         
@@ -403,9 +412,9 @@ class CommentTab(BaseTabWin):
         self.body.bind(key_codes.EKeyDownArrow, self.key_down)
         self.menu = [( u"Comments", (
                             ( u"Update", self.update ), 
-                            ( u"Contents", self.contents ),
+                            ( u"View/Edit", self.contents ),
                             ( u"Delete", self.delete ),
-                            ( u"New", self.new )
+                            ( u"New/Reply", self.new )
                             ))] + common_menu
         
     def popup_check_lock(self):
@@ -414,11 +423,11 @@ class CommentTab(BaseTabWin):
             self.popup()
             
     def popup(self):
-        menu = [ u"Update", u"Contents", u"Delete", u"New"]
+        menu = [ u"Update", u"View/Edit", u"Delete", u"New/Reply"]
         cbk = [ self.update, self.contents, self.delete, self.new ]
         if self.headlines[0][0] != u"<empty>":
             if WordMobi.comments[self.body.current()]['status'] != 'approve':
-                menu.append( u"Moderate" )
+                menu.append( u"Approve" )
                 cbk.append( self.moderate )
         idx = popup_menu( menu, u"Comments:")
         if idx is not None:
@@ -440,9 +449,54 @@ class CommentTab(BaseTabWin):
                 p = 0
             self.set_title( u"[%d/%d] Comments" % (p+1,m) )
 
+    def translate_status(self,status):
+        if status == 'approve':
+            translated = 'Published'
+        elif status == 'spam':
+            translated = '!!Spam!!'
+        else:
+            translated = 'Moderate'
+
+        return translated
+        
     def moderate(self):
-        pass
-    
+        idx = self.body.current()
+        self.lock_ui(u"Approving comment %s" % utf8_to_unicode( WordMobi.comments[idx]['content'][:15] ))
+        comment = wp.WordPressEditComment()
+        comment.status = 'approve'
+        comment.date_created_gmt = WordMobi.comments[idx]['date_created_gmt']
+        comment.content = WordMobi.comments[idx]['content']
+        comment.author = WordMobi.comments[idx]['author']
+        comment.author_url = WordMobi.comments[idx]['author_url']
+        comment.author_email = WordMobi.comments[idx]['author_email']
+        comment_id = WordMobi.comments[idx]['comment_id']
+
+        try:
+            WordMobi.blog.editComment(comment_id, comment)
+        except:
+            note(u"Impossible to approve the comment. Try again.","error")
+            self.unlock_ui()
+            return
+
+        note(u"Comment approved.","info")
+
+        try:
+            c = WordMobi.blog.getComment( comment_id )
+        except:
+            note(u"Impossible to update the comment list. Try again.","error")
+            WordMobi.comments[idx]['status'] = 'approve'
+            c = None
+
+        if c:
+            (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
+            line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']), c['author'])
+            line2 = utf8_to_unicode( c['content'] )
+            WordMobi.comments[idx] = c
+            self.headlines[idx] = ( line1 , line2 )
+        
+        self.unlock_ui()
+        self.refresh()
+        
     def update(self):
         res = popup_menu( [ u"Specific post", u"All posts", ], u"Comments for ?")
         if res is None:
@@ -451,12 +505,16 @@ class CommentTab(BaseTabWin):
             if len(WordMobi.posts) == 0:
                 note(u"Please, first update the post list.","info")
                 return
+            self.set_title( u"Which post?" )
             post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in WordMobi.posts ], search_field=1)
             if post_idx is None:
                 return
         else:
             post_idx = -1
 
+        self.update_comment(post_idx)
+        
+    def update_comment(self,post_idx):
         if post_idx == -1:
             note(u"Not implemented.","info")
         else:
@@ -479,28 +537,159 @@ class CommentTab(BaseTabWin):
                 self.headlines = []
                 for c in comments:
                     (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
-                    if c['status'] == 'approve':
-                        status = 'Published'
-                    elif c['status'] == 'spam':
-                        status = '!!Spam!!'
-                    else:
-                        status = 'Moderate'
-                    line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,status,utf8_to_unicode( c['author'] ))
+                    line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']),utf8_to_unicode( c['author'] ))
                     line2 = utf8_to_unicode( c['content'] )
-                    WordMobi.comments.insert( 0, c )
-                    self.headlines.insert( 0, ( line1 , line2 ) )
+                    WordMobi.comments.append( c )
+                    self.headlines.append( ( line1 , line2 ) )
                                     
         self.unlock_ui()
         self.refresh()
 
+    def new_cbk(self, params):
+        if params is not None:
+
+            (post_id, email, realname, website, contents) = params
+            
+            self.lock_ui( u"Sending comment %s" % contents[:15] )
+            
+            comment = wp.WordPressNewComment()
+            comment.status = 'approve'
+            comment.content = unicode_to_utf8( contents )
+            comment.author = unicode_to_utf8( realname )
+            comment.author_url = unicode_to_utf8( website )
+            comment.author_email = unicode_to_utf8( email )
+
+            try:
+                comment_id = WordMobi.blog.newComment( post_id, comment )
+            except:
+                note(u"Impossible to send the comment. Try again.","error")
+                self.unlock_ui()
+                return False
+            
+            try:
+                c = WordMobi.blog.getComment( comment_id )
+            except:
+                note(u"Impossible to update the comment list. Try again.","error")
+                c = None
+
+            if c:
+                (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
+                line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']), c['author'])
+                line2 = utf8_to_unicode( c['content'] )
+                if self.headlines[0][0] == u"<empty>":
+                    WordMobi.comments = [ c ]
+                    self.headlines= [ ( line1 , line2 ) ]
+                else:
+                    WordMobi.comments.insert( 0, c )
+                    self.headlines.insert( 0, ( line1 , line2 ) )
+                
+            self.unlock_ui()
+
+        BaseTabWin.restore_tabs()
+        self.refresh()
+        return True
+    
     def new(self):
-        pass
+        if self.headlines[0][0] == u"<empty>":
+            if len(WordMobi.posts) == 0:
+                note(u"Please, first update the post list.","info")
+                return
+            self.set_title( u"Which post?" )
+            idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in WordMobi.posts ], search_field=1)
+            # idx may be -1 if list is empty and user press OK... strange ... why not None ?
+            if idx is None:
+                return
+            post_id = WordMobi.posts[idx]['postid']
+        else:
+            idx = self.body.current()
+            post_id = WordMobi.comments[idx]['post_id']
+
+        BaseTabWin.disable_tabs()
+               
+        self.dlg = NewComment( self.new_cbk, post_id, WordMobi.db['realname'],
+                               WordMobi.db['email'],WordMobi.db['blog'], u"")
+        self.dlg.run()
+        
 
     def delete(self):
-        pass
+        if self.headlines[0][0] == u"<empty>":
+            note( u"Please, update the comment list.", "info" )
+            return
+        
+        ny = popup_menu( [u"No", u"Yes"], u"Delete comment ?")
+        if ny == 1:
+            idx = self.body.current()
+            self.lock_ui(u"Deleting comment %s" % utf8_to_unicode( WordMobi.comments[idx]['content'][:15] ))
 
+            try:
+                WordMobi.blog.deleteComment( WordMobi.comments[idx]['comment_id'] )
+            except:
+                note(u"Impossible to delete the comment. Try again.","error")
+                self.unlock_ui()
+                return
+
+            del WordMobi.comments[idx]
+            del self.headlines[idx]
+            
+            note(u"Comment deleted.","info")
+            self.unlock_ui()
+            self.refresh()
+
+    def contents_cbk(self,params):
+        if params is not None:
+
+            (idx, email, realname, website, contents) = params
+            
+            self.lock_ui( u"Sending comment %s" % contents[:15] )
+
+            comment_id = WordMobi.comments[idx]['comment_id']
+            comment = wp.WordPressEditComment()
+            comment.status = 'approve'
+            comment.content = unicode_to_utf8( contents )
+            comment.author = unicode_to_utf8( realname )
+            comment.author_url = unicode_to_utf8( website )
+            comment.author_email = unicode_to_utf8( email )
+            comment.date_created_gmt = DateTime( time.mktime(time.gmtime()) ) # gmt time required
+        
+            try:
+                WordMobi.blog.editComment(comment_id, comment)
+            except:
+                note(u"Impossible to update the comment. Try again.","error")
+                self.unlock_ui()
+                return False
+
+            try:
+                c = WordMobi.blog.getComment( comment_id )
+            except:
+                note(u"Impossible to update the comment list. Try again.","error")
+                c = None
+
+            if c:
+                (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
+                line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']), c['author'])
+                line2 = utf8_to_unicode( c['content'] )
+                WordMobi.comments[idx] = c
+                self.headlines[idx] = ( line1 , line2 ) 
+                
+            self.unlock_ui()
+
+        BaseTabWin.restore_tabs()
+        self.refresh()
+        return True
+    
     def contents(self):
-        pass
+        if self.headlines[0][0] == u"<empty>":
+            note( u"Please, update the comment list.", "info" )
+            return
+        
+        BaseTabWin.disable_tabs()
+        idx = self.body.current()
+        self.dlg = EditComment( self.contents_cbk, idx, \
+                                utf8_to_unicode( WordMobi.comments[idx]['author'] ), \
+                                utf8_to_unicode( WordMobi.comments[idx]['author_email'] ), \
+                                utf8_to_unicode( WordMobi.comments[idx]['author_url'] ), \
+                                utf8_to_unicode( WordMobi.comments[idx]['content'] ))
+        self.dlg.run()
     
     def refresh(self):
         BaseTabWin.refresh(self)
