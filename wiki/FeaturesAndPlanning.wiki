@@ -4,18 +4,16 @@
 
  * Show a fixed number of recent posts
  * Allow new posts with text and images. 
- * Post deletion
- * Post edit/visualization
+ * Post management (new, delete, edit, visualization) 
   * Insert->Links
   * User friendly edition instead HTML
   * Newlines preservation (instead explicit {{{<br>}}})
-
+  * Post status, allowing to post but not publish and to approve for publishing when desired
+ * Comments management (new, delete, edit, moderation) 
+ * Categories management (new, delete) 
+ 
 = Future enhancements =
 
- * Comments visualization and moderation
- * Local posts persistence
- * Categories management
- * Post status, allowing to post but not publish and to approve for publishing when desired  
  * Icons in all list views
- * Image visualization when selecting images
  * TAGs support
+ * multiples blogs support
