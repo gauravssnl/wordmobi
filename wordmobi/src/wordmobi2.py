@@ -13,7 +13,7 @@ from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.2.10"
+__version__ = "0.3.0"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
