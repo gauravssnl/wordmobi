@@ -13,7 +13,7 @@
  * Categories management (new, delete) 
  
 There is a problem related to categories with accents:
- * [http://code.google.com/p/wordmobi/issues/detail?id=5&can=1 Isuue 5]
+ * [http://code.google.com/p/wordmobi/issues/detail?id=5&can=1 Issue 5]
 
 = Future enhancements =
 
