@@ -2,6 +2,13 @@
 
 = Change log =
 
+== 0.3.0 2008/12/06 ==
+
+ * New interface based on tabs 
+ * Support for categories management (delete, new)
+ * Support for comments management (approve, delete, edit, new)
+ * New internal organization
+
 == 0.2.10 ==
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=9 9]. Thanks to [http://code.google.com/u/Sebastian.Protasiuk/ Sebastian Protasiuk] for reporting and debuging.
