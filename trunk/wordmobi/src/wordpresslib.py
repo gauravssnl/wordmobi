@@ -125,14 +125,30 @@ class WordPressUser:
         self.nickname = ''
         self.email = ''
         
-class WordPressCategory:
+class MovableTypeCategory:
     """Represents category item
     """ 
     def __init__(self):
         self.id = 0
         self.name = ''
         self.isPrimary = False
-    
+
+class WordPressCategory:
+    """Represents category item
+    """ 
+    def __init__(self):
+        self.categoryId = 0
+        self.parentId = 0
+        self.categoryName = ''
+        self.description = ''
+
+class WordPressNewCategory:
+    def __init__(self):
+        self.name = ''
+        self.slug = ''
+        self.parent_id = 0
+        self.description = ''
+        
 class WordPressPost:
     """Represents post item
     """ 
@@ -183,9 +199,9 @@ class WordPressClient:
         return postObj
 		
     def _filterCategory(self, cat):
-        """Transform category struct in WordPressCategory instance
+        """Transform category struct in MovableTypeCategory instance
         """
-        catObj = WordPressCategory()
+        catObj = MovableTypeCategory()
         catObj.id           = int(cat['categoryId'])
         catObj.name         = cat['categoryName'] 
         if cat.has_key('isPrimary'):
@@ -513,5 +529,38 @@ class WordPressClient:
 
         return comment    
 
+    def getCategories(self):
+        """Get blog's categories list using wp
+        """
+        def filterCategory(cat):
+            return { 'categoryId':cat['categoryId'],
+                     'parentId':cat['parentId'],
+                     'categoryName':cat['categoryName'],
+                     'description':cat['description'] }
 
+        cats = []
+        try:
+            wpcats = self._server.wp.getCategories(self.blogId, self.user, self.password) 
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        for c in wpcats:
+            cats.append( filterCategory(c) )   
+
+        return cats
         
+    def newCategory(self,cat):
+        try:
+            cat_id = self._server.wp.newCategory(self.blogId, self.user, self.password, cat) 
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+        
+        return cat_id
+
+    def deleteCategory(self,cat_id):
+        try:
+            res = self._server.wp.deleteCategory(self.blogId, self.user, self.password, cat_id) 
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+        
+        return res
