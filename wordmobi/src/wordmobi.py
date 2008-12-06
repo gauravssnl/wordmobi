@@ -26,7 +26,7 @@ class Persist(dict):
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
-               "email":u"@",
+               "email":u"",
                "realname":u"",
                "num_posts":u"10",
                "num_comments":u"20",
@@ -83,6 +83,9 @@ class BaseTabWin(object):
 
     def set_title(self,title):
         app.title = self.app_title = title
+
+    def get_title(self):
+        return app.title
         
     def register_tabs(tabs, labels):
         BaseTabWin.tabs = { "TABS": tabs, "LABELS":labels }
@@ -193,7 +196,7 @@ class PostTab(BaseTabWin):
         except:
             note(u"Impossible to retrieve post titles.","error")
             self.unlock_ui()
-            return
+            return False
 
         self.headlines = []
         if len(WordMobi.posts) > 0:
@@ -208,7 +211,9 @@ class PostTab(BaseTabWin):
         self.unlock_ui()
         BaseTabWin.tabs['TABS'][2].update()
 
+        self.set_title(u"Posts")
         self.refresh()
+        return True
     
     def upload_images(self, fname):
         self.lock_ui( u"Uploading %s..." % ( os.path.basename(fname) ) )
@@ -226,7 +231,7 @@ class PostTab(BaseTabWin):
                 return (c['categoryId'], c['parentId'])
 
     def categoryNamesList(self):
-        return map( lambda x: x['categoryName'], WordMobi.categories)
+        return map( lambda x: decode_html( x['categoryName'] ), WordMobi.categories)
             
     def upload_new_post(self, title, contents, categories, publish):
         """ Uplaod a new or edited post. For new post, use post_id as None
@@ -452,11 +457,11 @@ class CommentTab(BaseTabWin):
 
     def translate_status(self,status):
         if status == 'approve':
-            translated = 'Published'
+            translated = 'Moderated'
         elif status == 'spam':
             translated = '!!Spam!!'
         else:
-            translated = 'Moderate'
+            translated = 'Unmoderated'
 
         return translated
         
@@ -499,21 +504,32 @@ class CommentTab(BaseTabWin):
         self.refresh()
         
     def update(self):
-        res = popup_menu( [ u"Specific post", u"All posts", ], u"Comments for ?")
+        res = popup_menu( [ u"One post", u"All posts", ], u"Comments for ?")
+        
         if res is None:
-            return
+            return False
+
+        if len(WordMobi.posts) == 0:
+            if not BaseTabWin.tabs['TABS'][0].update():
+                note(u"Impossible to update the post list.","info")
+                self.refresh()
+                return False
+        
         if res == 0:
-            if len(WordMobi.posts) == 0:
-                note(u"Please, first update the post list.","info")
-                return
+            t = self.get_title()
             self.set_title( u"Which post?" )
             post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in WordMobi.posts ], search_field=1)
+            self.set_title( t )
             if post_idx is None:
-                return
+                self.refresh()
+                return False
         else:
             post_idx = -1
 
         self.update_comment(post_idx)
+        self.set_title(u"Comments")
+        self.refresh()
+        return True
         
     def update_comment(self,post_idx):
         stat_lst = [ u"Any", u"Spam", u"Moderated", u"Unmoderated" ]
@@ -798,6 +814,7 @@ class CategoryTab(BaseTabWin):
             self.headlines.append( c['categoryName'] )
 
         self.unlock_ui()
+        self.set_title(u"Categories")
         self.refresh()
 
     def delete(self):
@@ -846,7 +863,7 @@ class CategoryTab(BaseTabWin):
         BaseTabWin.refresh(self)
         if len( self.headlines ) == 0:
             self.headlines = [ u"<empty>" ]
-            WordMobi.categories = []
+            WordMobi.categories = [ { 'categoryName':"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
         self.body.set_list( self.headlines, self.last_idx )
         
@@ -856,8 +873,8 @@ class WordMobi(object):
     blog = None
     posts = []
     comments = []
-    categories = []
-    
+    categories = [ { 'categoryName':"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
+
     def __init__(self):
         
         self.lock = e32.Ao_lock()
@@ -882,7 +899,8 @@ class WordMobi(object):
         labels = [ u"Posts", u"Comments", u"Categories" ]
         BaseTabWin.register_tabs(  tabs, labels )        
         
-        self.sel_access_point()        
+        self.sel_access_point()
+        BaseTabWin.tabs['TABS'][0].update()
         self.refresh()
 
     def check_dirs(self):
@@ -943,7 +961,10 @@ class WordMobi(object):
         app.exit_key_handler = self.close_app
         
     def close_app(self):
-        self.lock.signal()
+        ny = popup_menu( [u"Yes", u"No"], u"Exit ?" )
+        if ny is not None:
+            if ny == 0:
+                self.lock.signal()
 
     def config_wordmobi_cbk(self,params):
         if params is not None:
@@ -957,7 +978,7 @@ class WordMobi(object):
             WordMobi.db.save()
             self.set_blog_url()
             
-        self.refresh()
+        BaseTabWin.tabs['TABS'][0].refresh()
         return True
             
     def config_wordmobi(self):
@@ -978,7 +999,7 @@ class WordMobi(object):
             WordMobi.db["proxy_port"] = utf8_to_unicode( str(port) )
             WordMobi.db.save()
             self.set_blog_url()
-        self.refresh()
+        BaseTabWin.tabs['TABS'][0].refresh()
         return True
     
     def config_network(self):
@@ -1023,7 +1044,7 @@ class WordMobi(object):
             
     def run(self):
         old_title = app.title
-        self.refresh()
+        BaseTabWin.tabs['TABS'][0].refresh()
         self.lock.wait()
         self.clear_cache()
         app.set_tabs( [], None )
