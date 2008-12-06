@@ -37,7 +37,7 @@ class BlogSettings(object):
                    (u"Email (for comments):", unicode( self.email )), \
                    (u"Real name (for comments):", unicode( self.realname )), \
                    (u"Number of posts:", unicode( self.num_posts )),
-                   (u"Number of comments:", unicode( self.num_comments )) ]
+                   (u"Number of comments per post:", unicode( self.num_comments )) ]
 
         app.body = self.body
         app.body.set_list( values, self.last_idx )
@@ -58,7 +58,8 @@ class BlogSettings(object):
         self.last_idx = idx
         
         vars = ( "blog_url", "username", "password", "email", "realname", "num_posts", "num_comments" )
-        labels = ( u"Blog URL:", u"Username:", u"Password:", u"Email (for comments):", u"Real name (for comments):", u"Number of posts:", u"Number of comments" )
+        labels = ( u"Blog URL:", u"Username:", u"Password:", u"Email (for comments):", \
+                   u"Real name (for comments):", u"Number of posts:", u"Number of comments per post" )
         formats = ( "text", "text", "code", "text", "text", "number", "number" )
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
