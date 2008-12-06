@@ -16,7 +16,6 @@ class Persist(dict):
                "realname":u"",
                "num_posts":u"10",
                "num_comments":u"20",
-               "categories":u"",
                "proxy_user":u"",
                "proxy_pass":u"",
                "proxy_addr":u"",
