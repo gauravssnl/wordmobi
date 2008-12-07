@@ -2,6 +2,11 @@
 
 = Change log =
 
+
+== 0.3.0.1 2008/12/07 ==
+
+ * [http://code.google.com/p/wordmobi/issues/detail?id=11 Issue 11]: After second comment update, edit/view comment continues to show contents from first update
+
 == 0.3.0 2008/12/06 ==
 
  * New interface based on tabs 
