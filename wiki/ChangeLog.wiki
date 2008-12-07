@@ -3,24 +3,24 @@
 = Change log =
 
 
-== 0.3.0.1 2008/12/07 ==
+== 0.3.0.1 - 2008/12/07 ==
 
  * [http://code.google.com/p/wordmobi/issues/detail?id=11 Issue 11]: After second comment update, edit/view comment continues to show contents from first update
 
-== 0.3.0 2008/12/06 ==
+== 0.3.0 - 2008/12/06 ==
 
  * New interface based on tabs 
  * Support for categories management (delete, new)
  * Support for comments management (approve, delete, edit, new)
  * New internal organization
 
-== 0.2.10 ==
+== 0.2.10 - 2008/12/05 ==
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=9 9]. Thanks to [http://code.google.com/u/Sebastian.Protasiuk/ Sebastian Protasiuk] for reporting and debuging.
 
  * Small problem in proxy setup when user/pass need to be empty. Once you fill theses fields, never you will erase them again. Now, when you press cancel the field is cleared.
 
-== 0.2.9 ==
+== 0.2.9 - 2008/12/04 ==
 
 Initial support for comments added to this version. It is possible to approve, delete and edit comments. However, menus and dialogs for comments may change soon. Moreover, more tests need to be done. 
 
