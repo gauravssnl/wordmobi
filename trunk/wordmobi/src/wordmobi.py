@@ -11,9 +11,10 @@ from wmproxy import UrllibTransport
 from socket import select_access_point, access_point, access_points, set_default_access_point
 from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime
+import urllib, time
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.0.1"
+__version__ = "0.3.1.3"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -893,7 +894,10 @@ class WordMobi(object):
                             ( u"Proxy",self.config_network ),
                             ( u"Access Point", self.sel_access_point )
                             )),
-                        ( u"About", self.about_wordmobi ),
+                        ( u"About", (
+                          ( u"About", self.about_wordmobi),
+                          ( u"Upgrade", self.upgrade_wordmobi)
+                          )),
                         ( u"Exit", self.close_app )]
 
 
@@ -1042,7 +1046,66 @@ class WordMobi(object):
                     not_all = True
         if not_all:
             note(u"Not all files in %s could be removed. Try to remove them later." % cache,"error")
-            
+
+    def upgrade_wordmobi(self):
+        t = app.title
+        app.menu = []
+        BaseTabWin.disable_tabs()            
+
+        url = "http://code.google.com/p/wordmobi/wiki/LatestVersion"
+        local_file = "web_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
+        local_file = os.path.join(DEFDIR, "cache", local_file)
+
+        app.title = u"Checking update page..."
+        ok = True
+        try:
+            urllib.urlretrieve( url, local_file )
+        except:
+            note(u"Impossible to access update page %s" % url,"error")
+            ok = False
+
+        if ok:
+            html = open(local_file).read()
+            soup = BeautifulSoup( html )
+            addrs = soup.findAll('a')
+            version = ""
+            file_url = ""
+            for addr in addrs:
+                if addr.contents[0] == "latest_wordmobi_version":
+                    version = addr["href"]
+                elif addr.contents[0] == "wordmobi_sis_url":
+                    file_url = addr["href"]
+
+            if version and file_url:
+                version = version[version.rfind("/")+1:]
+                yn = popup_menu( [ u"Yes", u"No"], "Upgrade to %s ?" % (version) )
+                if yn is not None:
+                    if yn == 0:
+                        local_file = file_url[file_url.rfind("/")+1:]
+                        local_file = os.path.join(DEFDIR, "cache", local_file)
+
+                        app.title = u"Download update..."
+                        ok = True
+                        try:
+                            urllib.urlretrieve( file_url, local_file )
+                        except:
+                            note(u"Impossible to download the update %s" % file_url,"error")
+                            ok = False
+
+                        if ok:
+                            app.title = u"Installing..."
+                            viewer = Content_handler( lambda: None )
+                            try:
+                                viewer.open_standalone( local_file )
+                            except:
+                                note(u"Impossible to open %s" % local_file,"error")
+            else:
+                note(u"Missing upgrade information","error")
+
+        app.title = t
+        BaseTabWin.restore_tabs()
+        BaseTabWin.tabs['TABS'][0].refresh()
+        
     def run(self):
         old_title = app.title
         BaseTabWin.tabs['TABS'][0].refresh()
