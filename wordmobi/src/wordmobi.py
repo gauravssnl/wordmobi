@@ -13,7 +13,7 @@ from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.0"
+__version__ = "0.3.0.1"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -565,6 +565,7 @@ class CommentTab(BaseTabWin):
                 return False                
             else:
                 self.headlines = []
+                WordMobi.comments = []
                 for c in all_comments:
                     (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
                     line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']),utf8_to_unicode( c['author'] ))
@@ -593,6 +594,7 @@ class CommentTab(BaseTabWin):
                 return False
             else:
                 self.headlines = []
+                WordMobi.comments = []
                 for c in comments:
                     (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
                     line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']),utf8_to_unicode( c['author'] ))
