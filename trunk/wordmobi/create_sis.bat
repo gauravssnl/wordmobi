@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 IF "%1" EQU "" GOTO error
 
