@@ -1066,9 +1066,7 @@ class WordMobi(object):
             note(u"Proxy authentication not supported for this feature","info")
             return
 
-        t = app.title
-        app.menu = []
-        BaseTabWin.disable_tabs()
+        BaseTabWin.tabs['TABS'][0].lock_ui()
         
         url = "http://code.google.com/p/wordmobi/wiki/LatestVersion"
         local_file = "web_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
@@ -1122,8 +1120,7 @@ class WordMobi(object):
             else:
                 note(u"Upgrade information missing.","error")
 
-        app.title = t
-        BaseTabWin.restore_tabs()
+        BaseTabWin.tabs['TABS'][0].unlock_ui()
         BaseTabWin.tabs['TABS'][0].refresh()
         
     def run(self):
