@@ -2,6 +2,10 @@
 
 = Change log =
 
+== 0.3.3 - 2008/12/08 ==
+
+ * Adding a note related to proxy authentication before downloading the update (About->Check upgrade). urllib does not support authentication for python 2.2.
+
 == 0.3.2 - 2008/12/08 ==
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=12 12]
