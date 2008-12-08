@@ -2,6 +2,10 @@
 
 = Change log =
 
+== 0.3.2 - 2008/12/08 ==
+
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=12 12]
+ * New versions can be download now using About->Check upgrade. The sis file is stored in e:\wordmobi\updates
 
 == 0.3.0.1 - 2008/12/07 ==
 
