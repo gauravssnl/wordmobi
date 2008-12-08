@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-APPNAME="wordmobi"
+APPNAME="Wordmobi"
 CAPBLS="NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment"
 SRCDIR="src"
 TXTFILE="README"
