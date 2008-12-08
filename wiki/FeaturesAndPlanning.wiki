@@ -21,3 +21,5 @@ There is a problem related to categories with accents:
  * Icons in all list views
  * TAGs support
  * multiples blogs support
+ * upload to flickr or other providers with xmlrpc support
+ * video support
