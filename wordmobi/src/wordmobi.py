@@ -13,8 +13,10 @@ from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime
 import urllib, time
 
+viewer = None
+
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -1091,28 +1093,22 @@ class WordMobi(object):
 
             if version and file_url:
                 version = version[version.rfind("/")+1:]
-                yn = popup_menu( [ u"Yes", u"No"], "Download %s ?" % (version) )
-                if yn is not None:
-                    if yn == 0:
-                        sis_name = file_url[file_url.rfind("/")+1:]
-                        local_file = os.path.join(DEFDIR, "updates", sis_name)
-
-                        app.title = u"Downloading ..."
-                        ok = True
-                        try:
-                            urllib.urlretrieve( file_url, local_file )
-                        except:
-                            note(u"Impossible to download %s" % sis_name, "error")
-                            ok = False
-
-                        if ok:
-                            note(u"%s downloaded in e:\\wordmobi\\updates. Please, install it." % sis_name, "info")
-                            #app.title = u"Installing..."
-                            #viewer = Content_handler( lambda: None )
-                            #try:
-                            #    viewer.open_standalone( local_file )
-                            #except:
-                            #    note(u"Impossible to open %s" % local_file,"error")
+                html = "<html><title>Wordmoby upgrade</title><body>" + \
+                       ("Your current version is %s.<br/>" % __version__) + \
+                       ("<a href=\"%s\">Download wordmobi version %s</a>." % (file_url,version))+ \
+                       "</body></html>"
+                local_file = "upd_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
+                local_file = os.path.join(DEFDIR, "cache", local_file)
+                f = open(local_file,'wt')
+                f.write(html)
+                f.close()
+                app.title = u"Installing..."
+                global viewer
+                viewer = Content_handler( lambda: None )
+                try:
+                    viewer.open( local_file )
+                except:
+                    note(u"Impossible to open %s. " % local_file,"error")
             else:
                 note(u"Missing upgrade information","error")
 
