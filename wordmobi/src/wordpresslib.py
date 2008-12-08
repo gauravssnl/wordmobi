@@ -161,7 +161,6 @@ class WordPressPost:
         self.textMore = ''
         self.excerpt = ''
         self.link = ''
-        self.categories = []
         self.user = ''
         self.allowPings = False
         self.allowComments = False
@@ -176,7 +175,6 @@ class WordPressClient:
         self.user = user
         self.password = password
         self.blogId = 0
-        self.categories = None
         self.transport = transport
         self._server = xmlrpclib.ServerProxy(self.url,self.transport)
 
@@ -405,17 +403,16 @@ class WordPressClient:
     def getCategoryList(self):
         """Get blog's categories list
         """
+        categories = []        
         try:
-            if not self.categories:
-                self.categories = []
-                categories = self._server.mt.getCategoryList(self.blogId, 
-                                                self.user, self.password)               
-                for cat in categories:
-                    self.categories.append(self._filterCategory(cat))   
-
-            return self.categories
+            cats = self._server.mt.getCategoryList(self.blogId, self.user, self.password) 
         except xmlrpclib.Fault, fault:
-            raise WordPressException(fault)     
+            raise WordPressException(fault)
+
+        for cat in cats:
+            categories.append(self._filterCategory(cat))
+            
+        return categories
 
     def getCategoryIdFromName(self, name):
         """Get category id from category name
