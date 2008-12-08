@@ -3,7 +3,7 @@
 IF "%1" EQU "" GOTO error
 
 SET PYTHON=C:\Python25\python
-SET APPNAME=wordmobi
+SET APPNAME=Wordmobi
 SET CAPBLS=NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment
 SET SRCDIR=src
 SET TXTFILE=README
