@@ -14,7 +14,7 @@ from xmlrpclib import DateTime
 import urllib, time
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.1.3"
+__version__ = "0.3.2"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -833,11 +833,17 @@ class CategoryTab(BaseTabWin):
                 cat_id = WordMobi.categories[item]['categoryId']
                 self.lock_ui(u"Deleting category %s ..." % cat_name)
                 try:
-                    WordMobi.blog.deleteCategory(cat_id)
-                    del self.headlines[item]
-                    del WordMobi.categories[item]
+                    res = WordMobi.blog.deleteCategory(cat_id)
                 except:
                     note(u"Impossible to delete category %s." % cat_name,"error")
+                    
+                if res == True:
+                    del self.headlines[item]
+                    del WordMobi.categories[item]
+                    note(u"Category %s deleted." % cat_name,"info")
+                else:
+                    note(u"Impossible to delete category %s." % cat_name,"error")
+                    
                 self.unlock_ui()
             
         self.refresh()
@@ -909,13 +915,16 @@ class WordMobi(object):
         self.refresh()
 
     def check_dirs(self):
-        if not os.path.exists(DEFDIR):
-            try:
-                os.makedirs(DEFDIR)
-                os.makedirs(os.path.join(DEFDIR,"cache"))
-                os.makedirs(os.path.join(DEFDIR,"images"))
-            except:
-                note(u"Could't create wordmobi directory %s" % DEFDIR,"error")
+        dirs = (DEFDIR,
+                os.path.join(DEFDIR,"cache"),
+                os.path.join(DEFDIR,"images"),
+                os.path.join(DEFDIR,"updates"))
+        for d in dirs:
+            if not os.path.exists(d):
+                try:
+                    os.makedirs(d)
+                except:
+                    note(u"Could't create directory %s" % d,"error")
 
     def sel_access_point(self):
         aps = access_points()
@@ -982,11 +991,13 @@ class WordMobi(object):
             
             WordMobi.db.save()
             self.set_blog_url()
-            
+
+        BaseTabWin.restore_tabs()
         BaseTabWin.tabs['TABS'][0].refresh()
         return True
             
     def config_wordmobi(self):
+        BaseTabWin.disable_tabs()    
         self.dlg = BlogSettings( self.config_wordmobi_cbk,\
                                  WordMobi.db["blog"], \
                                  WordMobi.db["user"], \
@@ -1004,10 +1015,12 @@ class WordMobi(object):
             WordMobi.db["proxy_port"] = utf8_to_unicode( str(port) )
             WordMobi.db.save()
             self.set_blog_url()
+        BaseTabWin.restore_tabs()
         BaseTabWin.tabs['TABS'][0].refresh()
         return True
     
     def config_network(self):
+        BaseTabWin.disable_tabs()
         self.dlg = ProxySettings( self.config_network_cbk,\
                                   WordMobi.db["proxy_enabled"], \
                                   WordMobi.db["proxy_addr"], \
@@ -1078,27 +1091,28 @@ class WordMobi(object):
 
             if version and file_url:
                 version = version[version.rfind("/")+1:]
-                yn = popup_menu( [ u"Yes", u"No"], "Upgrade to %s ?" % (version) )
+                yn = popup_menu( [ u"Yes", u"No"], "Download %s ?" % (version) )
                 if yn is not None:
                     if yn == 0:
-                        local_file = file_url[file_url.rfind("/")+1:]
-                        local_file = os.path.join(DEFDIR, "cache", local_file)
+                        sis_name = file_url[file_url.rfind("/")+1:]
+                        local_file = os.path.join(DEFDIR, "updates", sis_name)
 
-                        app.title = u"Download update..."
+                        app.title = u"Downloading ..."
                         ok = True
                         try:
                             urllib.urlretrieve( file_url, local_file )
                         except:
-                            note(u"Impossible to download the update %s" % file_url,"error")
+                            note(u"Impossible to download %s" % sis_name, "error")
                             ok = False
 
                         if ok:
-                            app.title = u"Installing..."
-                            viewer = Content_handler( lambda: None )
-                            try:
-                                viewer.open_standalone( local_file )
-                            except:
-                                note(u"Impossible to open %s" % local_file,"error")
+                            note(u"%s downloaded in e:\\wordmobi\\updates. Please, install it." % sis_name, "info")
+                            #app.title = u"Installing..."
+                            #viewer = Content_handler( lambda: None )
+                            #try:
+                            #    viewer.open_standalone( local_file )
+                            #except:
+                            #    note(u"Impossible to open %s" % local_file,"error")
             else:
                 note(u"Missing upgrade information","error")
 
