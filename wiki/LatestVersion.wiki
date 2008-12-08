@@ -1,4 +1,4 @@
-#summary latest
+#summary Latest Version Page
 
 [http://0.3.3 latest_wordmobi_version]
 
