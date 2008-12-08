@@ -11,6 +11,7 @@
   * Post status, allowing to post but not publish and to approve for publishing when desired
  * Comments management (new, delete, edit, moderation) 
  * Categories management (new, delete) 
+ * upgrade support
  
 There is a problem related to categories with accents:
  * [http://code.google.com/p/wordmobi/issues/detail?id=5&can=1 Issue 5]
@@ -20,4 +21,3 @@ There is a problem related to categories with accents:
  * Icons in all list views
  * TAGs support
  * multiples blogs support
- * upgrade support
