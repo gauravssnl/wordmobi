@@ -15,7 +15,7 @@ import urllib, time
 
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.3"
+__version__ = "0.3.4"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -233,7 +233,7 @@ class PostTab(BaseTabWin):
                 return (c['categoryId'], c['parentId'])
 
     def categoryNamesList(self):
-        return map( lambda x: decode_html( x['categoryName'] ), WordMobi.categories)
+        return map( lambda x:  x['categoryName'] , WordMobi.categories)
             
     def upload_new_post(self, title, contents, categories, publish):
         """ Uplaod a new or edited post. For new post, use post_id as None
@@ -814,7 +814,13 @@ class CategoryTab(BaseTabWin):
 
         self.headlines = []
         for c in WordMobi.categories:
-            c['categoryName'] = decode_html(c['categoryName'])
+            # WP may return html with scape codes like &#nn;
+            # or utf-8, when ascii can not represent accents.
+            # so, the only way I found to make this work was this:
+            try:
+                c['categoryName'] = decode_html(c['categoryName'])
+            except:
+                c['categoryName'] = utf8_to_unicode(c['categoryName'])
             self.headlines.append( c['categoryName'] )
 
         self.unlock_ui()
