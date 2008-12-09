@@ -17,4 +17,4 @@ Afterward, do the following:
  # Copy wordmobi.py into e:\python\
  # Run wordmoby.py via python shell, opening Python and selecting "Option->Run script"
 
-This way, it will be possible to see the error messages or to add logs and alerts during execution. Please, collect these log messages and send to developers.
+This way, it will be possible to see the error messages or to add logs and alerts during execution. Please, collect these log messages and send them to developers.
