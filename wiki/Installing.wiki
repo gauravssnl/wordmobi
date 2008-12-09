@@ -18,4 +18,7 @@ Wordmobi saves all relevant data in memory card. So, do not forget to insert one
 
 Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. It is important to fill up all fields, like your email and full name. They will be used when you add a new comment. Proxy is supported, even if using  authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
 
+Wordmobi was designed to support any domain running wordpress with compatible xmlrpc API. In fact, the only think Wormobi needs is the file xmlrpc.php. It uses the url you set (for instance, http://www.mydomain.com) and add 'xmlrpc.php' to it, so http://www.mydomain.com/xmlrpc.php is the key for the access.
+
+
 [http://media.share.ovi.com/m1/medium/0516/3fe35acf02a441e6884d01dde82c33b9.jpg]
