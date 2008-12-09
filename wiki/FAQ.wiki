@@ -1,0 +1,22 @@
+#summary FAQ
+
+= FAQ =
+
+== Debug ==
+
+=== 1) Wordmobi is not running, unexpectedly closing or got stuck in some point ===
+
+The best thing to do in such situation is running the scripts. Download the source code for your version e run wormobi from scripts. The download may be done [http://code.google.com/p/wordmobi/source/checkout using subversion] or file by file, using the [http://code.google.com/p/wordmobi/source/browse/#svn/trunk/wordmobi/src source code browser]. 
+
+Afterward, do the following:
+
+1) Install python and python shell, version 1.4.5
+2) In our memory card, create directories 
+   e:\python  
+   e:\python\lib
+3) Remove or comment the line at the end of wordmobi.py with the folowwing text: "app.set_exit()". For commenting, just put # at the beginning, like #app.set_exit().
+4) Copy all files into e:\python\lib, except wordmobi.py
+5) Copy wordmobi.py into e:\python\
+6) Run wordmoby.py via python shell, opening Python and selecting "Option->Run script"
+
+This way, it will be possible to see the error messages or to add logs and alerts during execution. 
