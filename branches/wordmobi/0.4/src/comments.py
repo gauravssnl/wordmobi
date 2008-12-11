@@ -5,6 +5,7 @@ from wmutil import *
 import wordpresslib as wp
 from xmlrpclib import DateTime
 import time
+from window import Dialog
 
 class CommentContents(object):
 
@@ -381,3 +382,16 @@ class Comments(object):
         
     def run(self):
         self.refresh()
+
+class Comments(Dialog):
+    def __init__(self,cbk):
+        items = [ ( u"",u"") ]
+        Dialog.__init__(self, cbk, u"Comments", Listbox( items, self.check_popup_menu ) )
+
+    def check_popup_menu(self):
+        if not self.ui_is_locked():
+            self.popup_menu()
+
+    def popup_menu(self):
+        pass
+    
