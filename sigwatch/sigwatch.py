@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import appuifw as gui
+# (c) Marcelo Barros de Almeida
+# marcelobarrosalmeida@gmail.com
+from appuifw import *
 import e32
 import time
 import sysinfo
@@ -13,29 +15,49 @@ class SigWatch:
     YELLOW = (255,255,102)
 
     def __init__(self):
-        self.inbox_results = ()
+        self.screen = None
+        self.samples = []
+        self.sampling_time = 2
+        self.filename = "e:\\sigwatch.txt"
+        self.sampling = False        
+        app.title = u"Signal Watch"
+        app.screen = "full"        
+        app.menu = [( u"Start", self.start ),
+                    ( u"Stop", self.stop),
+                    ( u"Config", self.config),
+                    ( u"About", self.about ),
+                    ( u"Exit", self.quit_app )]
+
+        self.canvas = Canvas( redraw_callback = self.redraw, \
+                                  event_callback = self.event )
+
+        app.body = self.canvas
+        self.width, self.height = self.canvas.size
+        self.screen = graphics.Image.new( (self.width, self.height) )
+        self.screen.clear( SigWatch.BLACK )
+        self.draw_grid()
+        self.screen.text((5,15),u"Signal Watch - Press Start", fill = SigWatch.BLUE1)
+        self.canvas.blit( self.screen )        
+        app.exit_key_handler = self.quit_app        
 
     def quit_app(self):
         self.stop()
-        e32.ao_sleep(2)
         self.app_lock.signal()
 
     def about(self):
-        gui.note( u"Signal Watch\nMarcelo Barros\nmarcelobarrosalmeida@gmail.com", "info" )
+        note( u"Signal Watch by\nMarcelo Barros\nmarcelobarrosalmeida@gmail.com", "info" )
 
     def start(self):
         self.file = open(self.filename,"wt")
         self.samples = []
         self.sampling = True
         while self.sampling:
-            t = time.time()
             b = sysinfo.signal_bars()
-            d = sysinfo.signal_dbm()
-            self.samples.insert( 0, (t,b,d) )
-            self.file.write( "%f, %d, %f\n" % (t,b,d))
+            self.samples.insert( 0, b )
+            self.file.write( "%d; %s\n" % (b,time.asctime()))
             self.file.flush()
             self.redraw( (self.width, self.height) )
-            e32.ao_sleep(2)
+            e32.ao_sleep( self.sampling_time )
         self.file.close()
         
     def stop(self):
@@ -60,30 +82,19 @@ class SigWatch:
         maxdbm = 105
         if ns >= 2:
             line_bar = []
-            line_dbm = []
             n = int( self.width / step )
             for i in range(ns):
                 
-                ybar = h  - int(h*(self.samples[i][1]/7.0))
+                ybar = h  - int(h*(self.samples[i]/7.0))
                 xbar = (n-i)*step
                 
-                if xbar < 0: # only points that fit to screen
+                if xbar < 0: # only points that fit into screen
                     break
-
-                ydbm = h  - int(h*(float(self.samples[i][2] - mindbm)/float(maxdbm - mindbm)))
-
-                #print (xbar, ydbm), self.samples[i][2]
+                
                 line_bar.append( (xbar, ybar) )
-                line_dbm.append( (xbar, ydbm) )
                 
             self.draw_lines(line_bar,SigWatch.BLUE1)
-            self.screen.text((5,15),u"Signal bar: %d   [0,7]" % self.samples[0][1], fill = SigWatch.BLUE1)
-
-            self.draw_lines(line_dbm,SigWatch.YELLOW)
-            self.screen.text((5,30),u"dBm: %d   [%d,%d]" % \
-                             (self.samples[0][2],mindbm,maxdbm), fill = SigWatch.YELLOW)
-
-             
+            self.screen.text((5,15),u"Signal bar: %d   [0,7]" % self.samples[0], fill = SigWatch.BLUE1)
 
     def draw_lines(self,lines,color_name):
         for p in range(len(lines) - 1):
@@ -99,34 +110,19 @@ class SigWatch:
 
     def event(self,event):
         pass
+
+    def config(self):
+        sampling = query(u"Sampling time ?", "number", self.sampling_time)
+        if sampling is not None:
+            self.sampling_time = max(1,sampling)
         
-    def main(self):
-        self.screen = None
-        self.samples = []
-        self.filename = "e:\\sigwatch.txt"
-        self.sampling = False        
-        gui.app.title = u"Signal Watch"
-        gui.app.screen = "full"        
-        gui.app.menu = [( u"Start", self.start ),
-                        ( u"Stop", self.stop),
-                        ( u"About", self.about ),
-                        ( u"Exit", self.quit_app )]
-
-        self.canvas = gui.Canvas( redraw_callback = self.redraw, \
-                                  event_callback = self.event )
-
-        gui.app.body = self.canvas
-        self.width, self.height = self.canvas.size
-        self.screen = graphics.Image.new( (self.width, self.height) )
-        self.screen.clear( SigWatch.BLACK )
-        self.draw_grid()
-        self.screen.text((5,15),u"Signal Watch - Press Start", fill = SigWatch.BLUE1)
-        self.canvas.blit( self.screen )        
-        gui.app.exit_key_handler = self.quit_app        
+    def run(self):
         self.app_lock = e32.Ao_lock()
         self.app_lock.wait()
+        app.set_exit()
 
 if __name__ == "__main__":
 
-    app = SigWatch()
-    app.main()
+    sw = SigWatch()
+    sw.run()
+    
