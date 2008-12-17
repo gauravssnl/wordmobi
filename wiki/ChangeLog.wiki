@@ -4,7 +4,7 @@
 
 == 0.3.5 - 2008/12/16 ==
 
- * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=16 16]. Categories with accents were blocking wordmobi during post upload.
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=16 16]. Categories with accents were blocking wordmobi when uploading post.
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=15 15]. Categories mis-spelled on one menu option (thanks to [http://code.google.com/u/captainjim/ captainjim])
 
 == 0.3.4 - 2008/12/08 ==
