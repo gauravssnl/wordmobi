@@ -553,8 +553,8 @@ class Posts(Dialog):
     def __init__(self,cbk):
         self.last_idx = 0
         self.headlines = []
-        self.tooltip = InfoPopup()
-        body = Listbox( [ u"" ], self.check_popup_menu )
+        #self.tooltip = InfoPopup()
+        body = Listbox( [ (u"", u"") ], self.check_popup_menu )
         self.menu_items = [( u"Update", self.update ),
                            ( u"View/Edit", self.contents ),
                            ( u"Delete", self.delete ),
@@ -565,13 +565,17 @@ class Posts(Dialog):
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
         self.bind(key_codes.EKeyDownArrow, self.key_down)
-        self.bind(key_codes.EKeyLeftArrow, self.close)
+        self.bind(key_codes.EKeyLeftArrow, self.key_left)
         self.bind(key_codes.EKeyRightArrow, self.key_right)
 
     def cancel_app(self):
         self.cancel = True
         self.close()
 
+    def key_left(self):
+        if not self.ui_is_locked():
+            self.close()
+            
     def key_up(self):
         if not self.ui_is_locked():
             p = app.body.current() - 1
@@ -579,7 +583,7 @@ class Posts(Dialog):
             if p < 0:
                 p = m - 1
             self.set_title( u"[%d/%d] Posts" % (p+1,m) )
-            self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
+            #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
 
     def key_down(self):
         if not self.ui_is_locked():
@@ -588,7 +592,7 @@ class Posts(Dialog):
             if p >= m:
                 p = 0
             self.set_title( u"[%d/%d] Posts" % (p+1,m) )
-            self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
+            #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
 
     def key_right(self):
         self.contents()
@@ -684,10 +688,10 @@ class Posts(Dialog):
             self.headlines = []
             for p in wordmobi.BLOG.posts:
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
-                line1 = u"%d/%s  %02d:%02d " % (d,MONTHS[mo-1],h,m) + utf8_to_unicode( p['title'] )[:30]
+                line1 = u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
                 line2 = utf8_to_unicode( p['title'] )
                 self.headlines.append( ( line1 , line2 ) )
                                
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
-        app.body.set_list( map( lambda x: x[0], self.headlines), self.last_idx )
+        app.body.set_list( self.headlines, self.last_idx )
 
