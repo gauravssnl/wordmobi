@@ -15,7 +15,7 @@ import urllib, time
 
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 __copyright__ = "Copyright (c) 2008- Marcelo Barros de Almeida"
 __license__ = "GPLv3"
 
@@ -254,7 +254,7 @@ class PostTab(BaseTabWin):
         post.description = contents + PROMO_PHRASE
                       
         post.title = unicode_to_utf8( title )
-        post.categories = [ self.categoryName2Id( unicode_to_utf8(c) )[0] for c in categories ]
+        post.categories = [ self.categoryName2Id( c )[0] for c in categories ]
         post.allowComments = True
 
         try:
@@ -345,7 +345,7 @@ class PostTab(BaseTabWin):
             post.id = post_orig['postid']
             post.title = unicode_to_utf8( title )
             post.description = contents
-            post.categories = [ self.categoryName2Id( unicode_to_utf8(c) )[0] for c in categories ]
+            post.categories = [ self.categoryName2Id( c )[0] for c in categories ]
             post.allowComments = True
             post.permaLink = post_orig['permaLink']
             post.textMore = post_orig['mt_text_more']
@@ -781,7 +781,7 @@ class CategoryTab(BaseTabWin):
             self.popup()
             
     def popup(self):
-        idx = popup_menu( [ u"Update", u"Delete", u"Create new"], u"Catebories:")
+        idx = popup_menu( [ u"Update", u"Delete", u"Create new"], u"Categories:")
         if idx is not None:
             [ self.update, self.delete, self.new ][idx]()
 
@@ -821,7 +821,7 @@ class CategoryTab(BaseTabWin):
                 c['categoryName'] = decode_html(c['categoryName'])
             except:
                 c['categoryName'] = utf8_to_unicode(c['categoryName'])
-            self.headlines.append( c['categoryName'] )
+            self.headlines.append( c['categoryName'] ) # storing categories in unicode
 
         self.unlock_ui()
         self.set_title(u"Categories")
