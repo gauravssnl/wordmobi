@@ -17,11 +17,15 @@ class Categories(Dialog):
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
         self.bind(key_codes.EKeyDownArrow, self.key_down)
-        self.bind(key_codes.EKeyLeftArrow, self.close)
+        self.bind(key_codes.EKeyLeftArrow, self.key_left)
         
     def cancel_app(self):
         self.cancel = True
         self.close()
+
+    def key_left(self):
+        if not self.ui_is_locked():
+            self.close()
 
     def key_up(self):
         if not self.ui_is_locked():

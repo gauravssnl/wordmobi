@@ -6,6 +6,7 @@ from window import Dialog
 from socket import select_access_point, access_point, access_points, set_default_access_point
 import wordmobi
 from wmutil import *
+import key_codes
 
 def sel_access_point():
     """ Select the default access point. Return True if the selection was
