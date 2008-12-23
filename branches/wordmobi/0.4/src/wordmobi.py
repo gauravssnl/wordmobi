@@ -1,4 +1,12 @@
 import os
+import time
+import urllib
+from beautifulsoup import BeautifulSoup
+from xmlrpclib import DateTime
+
+import e32
+import e32dbm
+import key_codes
 from appuifw import *
 from window import Application
 from about import About
@@ -7,12 +15,10 @@ from posts import Posts
 from comments import Comments
 from categories import Categories
 import wordpresslib as wp
-import e32, e32dbm
 from wmutil import *
 from wmproxy import UrllibTransport
-import urllib, time
-from beautifulsoup import BeautifulSoup
-import key_codes
+
+__all__ = [ "VERSION", "DEFDIR", "DB", "BLOG", "WordPressWrapper", "WordMobi" ]
 
 VERSION = "0.4.0"
 
@@ -113,7 +119,7 @@ class WordPressWrapper(object):
                 self.categories[i]['categoryName'] = utf8_to_unicode( self.categories[i]['categoryName'] )
 
         # categories *never* may be empty
-        if len( self.categories ) == 0:
+        if not self.categories:
             self.categories = [ { 'categoryName':u"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
             
         return True
@@ -128,7 +134,7 @@ class WordPressWrapper(object):
         except:
             note(u"Impossible to delete category %s." % cat_name,"error")
             
-        if res == True:
+        if res:
             del self.categories[item]
             note(u"Category %s deleted." % cat_name,"info")
             retval = True
@@ -136,7 +142,7 @@ class WordPressWrapper(object):
             note(u"Impossible to delete category %s." % cat_name,"error")
 
         # categories *never* may be empty
-        if len( self.categories ) == 0:
+        if not self.categories:
             self.categories = [ { 'categoryName':u"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
             
         return retval
@@ -161,7 +167,8 @@ class WordPressWrapper(object):
         except:
             note(u"Impossible to update posts.","error")
             return False
-        return True
+
+        return self.update_categories()
 
     def get_post(self,item):
         try:
@@ -182,7 +189,7 @@ class WordPressWrapper(object):
         
         return img_src
     
-    def upload_new_post(self, title, contents, categories, publish):
+    def new_post(self, title, contents, categories, publish):
         """ Uplaod a new post
         """
         app.title = u"Uploading post contents..." 
@@ -267,7 +274,117 @@ class WordPressWrapper(object):
                     break
 
         return ret
+
+    def delete_post(self, idx):
+        try:
+            self.blog.deletePost(self.posts[idx]['postid'])
+        except:
+            return False
         
+        del self.posts[idx]
+        return True
+
+
+    def get_comment(self, post_idx, comment_status):
+        post_id = self.posts[post_idx]['postid']
+        comm_info = wp.WordPressComment()
+        comm_info.post_id = post_id
+        comm_info.status = comment_status
+        comm_info.number = DB['num_comments']
+        try:
+            comments = self.blog.getComments( comm_info )
+        except:
+            note(u"Impossible to download comments. Try again.","error")
+            return False
+
+        self.comments = self.comments + comments
+        
+        return True
+
+    def edit_comment(self, idx, email, realname, website, contents):
+        
+        comment_id = self.comments[idx]['comment_id']
+        comment = wp.WordPressEditComment()
+        comment.status = 'approve'
+        comment.content = unicode_to_utf8( contents )
+        comment.author = unicode_to_utf8( realname )
+        comment.author_url = unicode_to_utf8( website )
+        comment.author_email = unicode_to_utf8( email )
+        comment.date_created_gmt = DateTime( time.mktime(time.gmtime()) ) # gmt time required
+    
+        try:
+            self.blog.editComment(comment_id, comment)
+        except:
+            note(u"Impossible to update the comment. Try again.","error")
+            return False
+
+        try:
+            c = self.blog.getComment( comment_id )
+        except:
+            note(u"Impossible to update the comment list. Try again.","error")
+            c = None
+
+        if c:
+            self.comments[idx] = c
+
+        return True
+
+    def new_comment(self, post_id, email, realname, website, contents):
+
+        comment = wp.WordPressNewComment()
+        comment.status = 'approve'
+        comment.content = unicode_to_utf8( contents )
+        comment.author = unicode_to_utf8( realname )
+        comment.author_url = unicode_to_utf8( website )
+        comment.author_email = unicode_to_utf8( email )
+
+        try:
+            comment_id = self.blog.newComment( post_id, comment )
+        except:
+            note(u"Impossible to send the comment. Try again.","error")
+            return False
+
+        try:
+            c = self.blog.getComment( comment_id )
+        except:
+            note(u"Impossible to update the comment list. Try again.","error")
+            c = None
+
+        if c:
+            self.comments.insert(0,c)
+        
+        return True
+
+    def approve_comment(self, idx):
+        comment = wp.WordPressEditComment()
+        comment.status = 'approve'
+        comment.date_created_gmt = self.comments[idx]['date_created_gmt']
+        comment.content = self.comments[idx]['content']
+        comment.author = self.comments[idx]['author']
+        comment.author_url = self.comments[idx]['author_url']
+        comment.author_email = self.comments[idx]['author_email']
+        comment_id = self.comments[idx]['comment_id']
+
+        try:
+            self.blog.editComment(comment_id, comment)
+        except:
+            note(u"Impossible to approve the comment. Try again.","error")
+            return False
+
+        note(u"Comment approved.","info")
+        self.comments[idx]['status'] = 'approve'
+
+        return True
+
+    def delete_comment(self,idx):
+        try:
+            self.blog.deleteComment( self.comments[idx]['comment_id'] )
+        except:
+            note(u"Impossible to delete the comment. Try again.","error")
+            return False
+        
+        del self.comments[idx]
+            
     def set_blog(self):
         if DB["proxy_enabled"] == u"True":
             user = unicode_to_utf8( DB["proxy_user"] )
@@ -276,7 +393,7 @@ class WordPressWrapper(object):
             user = unicode_to_utf8( DB["proxy_user"] )
             pwrd = unicode_to_utf8( DB["proxy_pass"] )
             
-            if len(user) > 0:
+            if user:
                 proxy = "http://%s:%s@%s:%s" % (user,pwrd,addr,port)
             else:
                 proxy = "http://%s:%s" % (addr,port)
@@ -319,7 +436,7 @@ class WordMobi(Application):
         BLOG.set_blog()
 
         self.bind(key_codes.EKeyRightArrow, self.check_update_value)
-        self.bind(key_codes.EKeyLeftArrow, self.close)
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
         
     def check_dirs(self):
         dirs = (DEFDIR,
@@ -423,12 +540,12 @@ class WordMobi(Application):
         self.unlock_ui()
         self.refresh()
 
-    def close(self):
+    def close_app(self):
         ny = popup_menu( [u"Yes", u"No"], u"Exit ?" )
         if ny is not None:
             if ny == 0:
                 self.clear_cache()
-                Application.close(self)
+                Application.close_app(self)
 
     def clear_cache(self):
         not_all = False

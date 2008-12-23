@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
-import e32, key_codes
-from appuifw import *
-from filesel import FileSel
-import os, re
+import os
+import re
+import time
+
+import urllib
 from beautifulsoup import BeautifulSoup
-from wmutil import *
-import camera, graphics
-import time, urllib
-from window import Dialog
-import wordmobi
+
+import e32
 import key_codes
-from appuifw import InfoPopup
+import camera
+import graphics
+import key_codes
+from appuifw import *
+from wmutil import *
+from filesel import FileSel
+from window import Dialog
+from comments import Comments
+import wordmobi
+from appuifw import InfoPopup # "from appuifw import *" above does not working properly ...
+
+__all__ = [ "NewPost", "EditPost", "Posts" ]
 
 DEFDIR = "e:\\wordmobi\\"
 
@@ -78,7 +87,6 @@ class TakePhoto(Dialog):
 class PostContents(Dialog):
     
     PARAGRAPH_SEPARATOR = u"\u2029"
-
     
     def __init__(self, cbk, contents=u""):
         body = Text( self.html_to_text(contents) )
@@ -242,10 +250,6 @@ class PostContents(Dialog):
                     ( u"Cancel", self.cancel_app )]
 
         Dialog.refresh(self)
-        
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
 
     def insert_img(self, closing):
         txt =  u""
@@ -265,7 +269,7 @@ class PostContents(Dialog):
                 if url is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (url,url)
 
-        if len(txt) > 0:                    
+        if txt:                    
             self.body.add( txt )
 
         self.refresh()
@@ -279,7 +283,7 @@ class PostContents(Dialog):
             if url is not None:
                 txt = u"<a href=\"%s\" target=\"_blank\" />" % (url)
 
-        if len(txt) > 0: 
+        if txt: 
             self.text_snippets["LINK"]["MENU_STATE"] = not self.text_snippets["LINK"]["MENU_STATE"]
             self.body.add( txt )
             self.refresh()
@@ -358,7 +362,8 @@ class NewPost(Dialog):
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ ( u"Cancel", self.cancel_app ) ]
         Dialog.__init__(self, cbk, u"New Post", body, menu)
-        self.bind(key_codes.EKeyLeftArrow, self.close)
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
         
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
@@ -370,19 +375,15 @@ class NewPost(Dialog):
         else:
             pub = u"No (draft)"
 
-        self.lst_values = [ (u"Title", self.post_title ), \
-                            (u"Contents", self.contents[:50]), \
-                            (u"Categories", cat), \
-                            (u"Images", img ), \
-                            (u"Publish", pub) ]
+        lst_values = [ (u"Title", self.post_title ), \
+                       (u"Contents", self.contents[:50]), \
+                       (u"Categories", cat), \
+                       (u"Images", img ), \
+                       (u"Publish", pub) ]
 
-        app.body.set_list( self.lst_values, self.last_idx )   
+        app.body.set_list( lst_values, self.last_idx )   
         
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
-        
-    def close(self):
+    def close_app(self):
         if not self.cancel:
             ny = popup_menu( [u"Yes", u"No"], u"Send post ?")
             if ny is None:
@@ -390,7 +391,7 @@ class NewPost(Dialog):
             if ny == 1:
                 self.cancel = True
 
-        Dialog.close(self)
+        Dialog.close_app(self)
                 
     def update_post_title(self):
         post_title = query(u"Post title:","text", self.post_title)
@@ -410,10 +411,10 @@ class NewPost(Dialog):
 
     def update_categories(self):
         sel = multi_selection_list( self.blog_categories, style='checkbox', search_field=1 )
-        if len(sel) == 0:
-            self.categories = [u"Uncategorized"]
-        else:
+        if sel:
             self.categories = [ self.blog_categories[idx] for idx in sel ]
+        else:
+            self.categories = [u"Uncategorized"]            
         self.refresh()
         
     def update_images(self):
@@ -434,7 +435,7 @@ class NewPost(Dialog):
                                     u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
                                     (sel,os.path.basename( sel ))
             else:
-                if len(self.images) > 0:
+                if self.images:
                     item = selection_list(self.images, search_field=1) 
                     if item is not None:
                         if ir == 2:
@@ -530,7 +531,6 @@ class EditPost(NewPost):
         self.original_state = publish
         self.set_title(u"Edit Post")
         self.post = post
-        self.bind(key_codes.EKeyLeftArrow, self.cancel_app)
         self.find_images()
 
     def update_publish(self):
@@ -540,14 +540,14 @@ class EditPost(NewPost):
         else:
             note(u"Post already published.","info")
             
-    def close(self):
+    def close_app(self):
         if not self.cancel:
             ny = popup_menu( [u"No", u"Yes"], u"Update post ?")
             if ny is None:
                 return
             if ny == 0:
                 self.cancel = True
-        Dialog.close(self)
+        Dialog.close_app(self)
             
 class Posts(Dialog):
     def __init__(self,cbk):
@@ -560,7 +560,8 @@ class Posts(Dialog):
                            ( u"Delete", self.delete ),
                            ( u"List Comments", self.comments ),
                            ( u"Create new", self.new ) ]
-        menu = self.menu_items + [( u"Cancel", self.cancel_app )]
+        menu = self.menu_items + [( u"Close", self.close_app )]
+        
         Dialog.__init__(self, cbk, u"Posts", body, menu)
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
@@ -568,13 +569,9 @@ class Posts(Dialog):
         self.bind(key_codes.EKeyLeftArrow, self.key_left)
         self.bind(key_codes.EKeyRightArrow, self.key_right)
 
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
-
     def key_left(self):
         if not self.ui_is_locked():
-            self.close()
+            self.close_app()
             
     def key_up(self):
         if not self.ui_is_locked():
@@ -595,7 +592,8 @@ class Posts(Dialog):
             #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
 
     def key_right(self):
-        self.contents()
+        if not self.ui_is_locked():
+            self.contents()
         
     def check_popup_menu(self):
         if not self.ui_is_locked():
@@ -608,30 +606,48 @@ class Posts(Dialog):
             map( lambda x: x[1], self.menu_items )[op]()
     
     def comments(self):
-        pass
+        def cbk():
+            self.refresh()
+            return True            
+        self.dlg = Comments(cbk)
+        self.dlg.run()
+        if wordmobi.BLOG.posts:
+            self.dlg.update( self.body.current() )  # update comments for current post
     
     def update(self):
         self.lock_ui(u"Downloading post titles..." )
-        if wordmobi.BLOG.update_posts():
-            self.set_title(u"Updating categories...")
-            wordmobi.BLOG.update_categories()
+        wordmobi.BLOG.update_posts()
+        #if wordmobi.BLOG.update_posts():
+        #    self.set_title(u"Updating categories...")
+        #wordmobi.BLOG.update_categories()
         self.unlock_ui()            
 
-        if len(wordmobi.BLOG.posts) == 0:
+        if not wordmobi.BLOG.posts:
             note( u"No posts available.", "info" )
         
         self.refresh()
     
     def delete(self):
-        pass
+        if wordmobi.BLOG.posts:
+            ny = popup_menu( [u"No", u"Yes"], u"Delete post ?" )
+            if ny is not None:
+                if ny == 1:
+                    self.lock_ui(u"Deleting post...")
+                    idx = app.body.current()
+                    if not wordmobi.BLOG.delete_post(idx):
+                        note(u"Impossible to delete the post.","error")
+                    else:
+                        note(u"Post deleted.","info")                        
+                    self.unlock_ui() 
+                    self.refresh()            
 
     def new_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui()
-            np = wordmobi.BLOG.upload_new_post(self.dlg.post_title,
-                                               self.dlg.contents,
-                                               self.dlg.categories,
-                                               self.dlg.publish)
+            np = wordmobi.BLOG.new_post(self.dlg.post_title,
+                                        self.dlg.contents,
+                                        self.dlg.categories,
+                                        self.dlg.publish)
             self.unlock_ui()
             
             if np == -1:
@@ -662,7 +678,7 @@ class Posts(Dialog):
 
     def contents(self):
         idx = self.body.current()
-        if len( wordmobi.BLOG.posts ) == 0:
+        if not wordmobi.BLOG.posts:
             note( u"Please, update the post list.", "info" )
             return
         
@@ -682,7 +698,7 @@ class Posts(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
 
-        if len( wordmobi.BLOG.posts ) == 0:
+        if not wordmobi.BLOG.posts:
             self.headlines = [ (u"<empty>", u"Please, update the post list") ]
         else:
             self.headlines = []

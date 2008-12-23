@@ -1,8 +1,10 @@
 from window import Dialog
-from wordmobi import * #__version__
+from wordmobi import * 
 from appuifw import Listbox
 import wordmobi
 import key_codes
+
+__all__ = [ "About" ]
 
 class About(Dialog):
     def __init__(self,cbk):
@@ -15,8 +17,11 @@ class About(Dialog):
                        ( u"Warning", u"Use at your own risk" ) ]
 
         values = map( lambda x: (x[0], x[1]), self.items )
+        
         Dialog.__init__(self, cbk, u"About", Listbox( values, self.show_info ) )
-        self.bind(key_codes.EKeyLeftArrow, self.close)
+        
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        self.bind(key_codes.EKeyRightArrow, self.show_info)
 
     def show_info(self):
         idx = app.body.current()

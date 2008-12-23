@@ -5,6 +5,8 @@ import wordmobi
 from wmutil import *
 import key_codes
 
+__all__ = [ "Categories" ]
+
 class Categories(Dialog):
     def __init__(self,cbk):
         self.last_idx = 0
@@ -12,20 +14,16 @@ class Categories(Dialog):
         self.menu_items = [( u"Update", self.update ),
                            ( u"Delete", self.delete ),
                            ( u"Create new", self.new ) ]
-        menu = self.menu_items + [( u"Cancel", self.cancel_app )]
+        menu = self.menu_items + [( u"Close", self.close_app )]
         Dialog.__init__(self, cbk, u"Categories", body, menu)
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
         self.bind(key_codes.EKeyDownArrow, self.key_down)
         self.bind(key_codes.EKeyLeftArrow, self.key_left)
-        
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
 
     def key_left(self):
         if not self.ui_is_locked():
-            self.close()
+            self.close_app()
 
     def key_up(self):
         if not self.ui_is_locked():
