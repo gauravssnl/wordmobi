@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import e32
-import types
+from types import StringTypes
 from appuifw import *
 from window import Dialog
 from socket import select_access_point, access_point, access_points, set_default_access_point
@@ -8,18 +8,20 @@ import wordmobi
 from wmutil import *
 import key_codes
 
+__all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
+
 def sel_access_point():
     """ Select the default access point. Return True if the selection was
         done or False if not
     """
     aps = access_points()
-    if len(aps) == 0:
+    if not aps:
         note(u"Could't find any access point.","error")
         return False
     
     ap_labels = map( lambda x: x['name'], aps )
     item = popup_menu( ap_labels, u"Access points:" )
-    if item == None:
+    if item is None:
         note(u"At least one access point is required.","error")
         return False
     
@@ -43,7 +45,8 @@ class BlogSettings(Dialog):
         
         Dialog.__init__(self, cbk, u"Blog settings", body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.cancel_app)        
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        self.bind(key_codes.EKeyRightArrow, self.update_value)
             
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
@@ -56,10 +59,6 @@ class BlogSettings(Dialog):
                    (u"Number of comments per post:", unicode( self.num_comments )) ]
 
         app.body.set_list( values, self.last_idx )
-        
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
 
     def update_value(self):
         idx = app.body.current()
@@ -72,7 +71,7 @@ class BlogSettings(Dialog):
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
-            if type(val) in ( types.UnicodeType , types.StringType ):
+            if isinstance(val, StringTypes):
                 val = val.strip()
             self.__setattr__( vars[idx],val )
             
@@ -88,11 +87,12 @@ class ProxySettings(Dialog):
 
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
-        menu = [( u"Cancel", self.cancel_app )]
+        menu = [( u"Cancel", self.close_app )]
         
         Dialog.__init__(self, cbk, u"Proxy settings", body,  menu)
 
         self.bind(key_codes.EKeyLeftArrow, self.cancel_app)
+        self.bind(key_codes.EKeyRightArrow, self.update_value)
         
     def refresh(self):
         Dialog.refresh(self)
@@ -102,11 +102,7 @@ class ProxySettings(Dialog):
                    (u"Username", self.proxy_user), \
                    (u"Password", u"*"*len( self.proxy_password ) ) ]
 
-        app.body.set_list( values, self.last_idx )    
-
-    def cancel_app(self):
-        self.cancel = True
-        self.close()
+        app.body.set_list( values, self.last_idx )
 
     def update_value(self):
         idx = app.body.current()
@@ -150,7 +146,7 @@ class Settings(Dialog):
         Dialog.__init__(self, cbk, u"Settings", Listbox( items, self.update_value ) )
 
         self.bind(key_codes.EKeyRightArrow, self.update_value)
-        self.bind(key_codes.EKeyLeftArrow, self.close)        
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)        
 
     def update_value(self):
         idx = self.body.current()

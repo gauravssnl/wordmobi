@@ -1,5 +1,8 @@
 from appuifw import *
-import e32, key_codes
+import e32
+import key_codes
+
+__all__ = [ "Application", "Dialog" ]
 
 class Window(object):
     
@@ -10,11 +13,11 @@ class Window(object):
         self.title = title
         self.body = body
     
-        if menu == None:
-            menu = [(u"Exit", self.close)]
+        if menu is None:
+            menu = [(u"Exit", self.close_app)]
 
-        if exit_handler == None:
-            exit_handler = self.close
+        if exit_handler is None:
+            exit_handler = self.close_app
 
         self.menu =  menu
         self.exit_handler = exit_handler
@@ -56,7 +59,7 @@ class Application(Window):
     
     def __init__(self, title, body, menu = None, exit_handler = None):
         """ Only one application is allowed. It is resposible for starting and finishing the program.
-            close() and run() are overrided for controling this behavior.
+            run() is overrided for controling this behavior.
         """
         if Application.__highlander:
             raise Application.__highlander
@@ -67,7 +70,7 @@ class Application(Window):
 
         Window.__init__(self, title, body, menu, exit_handler)
 
-    def close(self):
+    def close_app(self):
         Application.__lock.signal()
             
     def run(self):
@@ -91,7 +94,7 @@ class Dialog(Window):
         self.cancel = False        
         Window.__init__(self, title, body, menu, exit_handler)
 
-    def close(self):
+    def close_app(self):
         """ When closing the dialog, a call do self.cbk() is done. If this function returns True
             the dialog is not refreshed and the latest dialog/window takes control. If something fails
             during calback execution, callback function should return False and does not call refresh().
@@ -99,3 +102,9 @@ class Dialog(Window):
         """
         if self.cbk() == False:
             self.refresh()
+
+    def cancel_app(self):
+        """ Close the dialog but turn the cancel flag on.
+        """
+        self.cancel = True
+        self.close_app()
