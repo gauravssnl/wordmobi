@@ -43,6 +43,7 @@ class Window(object):
     def lock_ui(self,title = u""):
         Window.__ui_lock = True
         app.menu = []
+        app.exit_key_handler = lambda: None
         if title:
             app.title = title
 
