@@ -20,7 +20,7 @@ from wmproxy import UrllibTransport
 
 __all__ = [ "VERSION", "DEFDIR", "DB", "BLOG", "WordPressWrapper", "WordMobi" ]
 
-VERSION = "0.4.0"
+VERSION = "0.4.0RC1"
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
 __version__ = VERSION
@@ -422,7 +422,7 @@ class WordMobi(Application):
                   ( u"Tags", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16386,16386) ),
                   ( u"Settings", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16394,16394) ),
                   ( u"Upgrade", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16396,16396) ),
-                  ( u"About", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16384,16384) )]
+                  ( u"About", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16396,16396) )] # 16384
         
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
 
