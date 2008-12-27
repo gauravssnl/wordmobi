@@ -83,7 +83,7 @@ class Application(Window):
         app.title = old_title
         app.menu = []
         app.body = None
-        #app.set_exit()        
+        app.set_exit()        
 
 class Dialog(Window):
     def __init__(self, cbk, title, body, menu = None, exit_handler = None):

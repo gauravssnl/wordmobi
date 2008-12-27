@@ -416,13 +416,20 @@ class WordMobi(Application):
 
         global DB, BLOG
         
-        items = [ ( u"Posts", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16392,16392) ),
-                  ( u"Comments", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16390,16390) ),
-                  ( u"Categories", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16388,16388) ),
-                  ( u"Tags", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16386,16386) ),
-                  ( u"Settings", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16394,16394) ),
-                  ( u"Upgrade", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16396,16396) ),
-                  ( u"About", u"", Icon(u"e:\\Python\\lib\\wordmobi.mif",16396,16396) )] # 16384
+        #items = [ ( u"Posts", u"", Icon(u"wordmobi.mif",16392,16392) ),
+        #          ( u"Comments", u"", Icon(u"wordmobi.mif",16390,16390) ),
+        #          ( u"Categories", u"", Icon(u"wordmobi.mif",16388,16388) ),
+        #          ( u"Tags", u"", Icon(u"wordmobi.mif",16386,16386) ),
+        #          ( u"Settings", u"", Icon(u"wordmobi.mif",16394,16394) ),
+        #          ( u"Upgrade", u"", Icon(u"wordmobi.mif",16396,16396) ),
+        #          ( u"About", u"", Icon(u"wordmobi.mif",16384,16384) )]
+        items = [ ( u"Posts", u""),
+                  ( u"Comments", u"" ),
+                  ( u"Categories", u"" ),
+                  ( u"Tags", u"" ),
+                  ( u"Settings", u""),
+                  ( u"Upgrade", u"" ),
+                  ( u"About", u"" )]         
         
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
 
