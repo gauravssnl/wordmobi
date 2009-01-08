@@ -2,7 +2,7 @@
 
 IF "%1" EQU "" GOTO error
 
-SET PYTHON=C:\Python25\python
+SET PYTHON=C:\Python25\python.exe
 SET APPNAME=Wordmobi
 SET CAPBLS=NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment
 SET SRCDIR=src
@@ -16,12 +16,12 @@ copy  %SRCDIR%\*.py  %TMPDIR%
 
 copy %SRCDIR%\wordmobi.py %TMPDIR%\default.py
 
-%PYTHON% .\ensymble.py py2sis --uid=0xefefefef --version="%1" --appname="%APPNAME%" --textfile="%TXTFILE%" --icon="%ICON%" --caps="%CAPBLS%" "%TMPDIR%" "%APPNAME%-%1.sis"
+%PYTHON% ensymble.py py2sis --uid=0xefefefef --version="%1" --appname="%APPNAME%" --textfile="%TXTFILE%" --icon="%ICON%" --caps="%CAPBLS%" "%TMPDIR%" "%APPNAME%-%1.sis"
 
 goto end
 
 :error
-echo "Sintaxe: " $0 " version"
+echo Sintaxe: %0 version
 
 :end
 
