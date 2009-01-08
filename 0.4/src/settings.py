@@ -91,7 +91,7 @@ class ProxySettings(Dialog):
         
         Dialog.__init__(self, cbk, u"Proxy settings", body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.cancel_app)
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.update_value)
         
     def refresh(self):
