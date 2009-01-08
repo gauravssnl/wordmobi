@@ -33,18 +33,22 @@ class CommentContents(Dialog):
 class NewComment(Dialog):
     def __init__(self,
                  cbk,
+                 comment_idx,
                  post_id,
+                 post_title,
                  realname=u"",
                  email=u"",
                  website=u"http://",                 
                  contents=u""):
-        
+
+        self.comment_idx = comment_idx
         self.post_id = post_id
+        self.post_title = post_title
         self.realname = realname
         self.email = email
         self.website = website
         self.contents = contents
-        self.last_idx = 0
+        self.last_idx = 1
         
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ ( u"Cancel", self.cancel_app ) ]
@@ -55,7 +59,8 @@ class NewComment(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
 
-        lst_values = [ (u"Contents", self.contents[:50]), \
+        lst_values = [ (u"Post title", self.post_title), \
+                       (u"Contents", self.contents[:50]), \
                        (u"Name", self.realname ), \
                        (u"Email", self.email), \
                        (u"Website", self.website) ]
@@ -72,6 +77,9 @@ class NewComment(Dialog):
 
         Dialog.close_app(self)    
 
+    def show_post_title(self):
+        note( self.post_title, "info" )
+        
     def update_contents(self):
         def cbk():
             if not self.dlg.cancel :
@@ -105,21 +113,22 @@ class NewComment(Dialog):
             
     def update(self,idx):
         self.last_idx = idx
-        updates = ( self.update_contents, self.update_name, self.update_email, self.update_website )
+        updates = ( self.show_post_title, self.update_contents, self.update_name, self.update_email, self.update_website )
         if idx < len(updates):
             updates[idx]()
 
 class EditComment(NewComment):
     def __init__(self,
                  cbk,
-                 idx,
+                 comment_idx,
+                 post_id,
+                 post_title,
                  realname=u"",
                  email=u"",
                  website=u"http://",                 
                  contents=u""):
 
-        self.idx = idx
-        NewComment.__init__(self, cbk, 0, realname, email, website, contents)
+        NewComment.__init__(self, cbk, comment_idx, post_id, post_title, realname, email, website, contents)
         self.set_title(u"Edit Comment")
 
     def close_app(self):
@@ -273,6 +282,7 @@ class Comments(Dialog):
             idx = app.body.current()
             self.lock_ui(u"Deleting comment %s" % utf8_to_unicode( wordmobi.BLOG.comments[idx]['content'][:15] ))
             wordmobi.BLOG.delete_comment(idx)
+            
             self.unlock_ui()
             self.refresh()
             
@@ -310,12 +320,16 @@ class Comments(Dialog):
             if post_idx is None or post_idx == -1:
                 return False
             post_id = wordmobi.BLOG.posts[post_idx]['postid']
+            post_title = wordmobi.BLOG.posts[post_idx]['title']
         else:
             comment_idx = self.body.current()
             post_id = wordmobi.BLOG.comments[comment_idx]['post_id']
+            post_title = wordmobi.BLOG.comments[comment_idx]['post_title']
             
         self.dlg = NewComment( self.new_cbk,
+                               0,
                                post_id,
+                               utf8_to_unicode(post_title),
                                wordmobi.DB['realname'],
                                wordmobi.DB['email'],
                                wordmobi.DB['blog'],
@@ -325,7 +339,7 @@ class Comments(Dialog):
     def contents_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui(u"Updating comment ..." )
-            ok = wordmobi.BLOG.edit_comment(self.dlg.post_id,
+            ok = wordmobi.BLOG.edit_comment(self.dlg.comment_idx,
                                             self.dlg.email,
                                             self.dlg.realname,
                                             self.dlg.website,
@@ -342,13 +356,15 @@ class Comments(Dialog):
         if not wordmobi.BLOG.comments:
             note( u"Please, update the comment list.", "info" )
             return
-        
         idx = self.body.current()
-        self.dlg = EditComment( self.contents_cbk, idx, \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author'] ), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_email'] ), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_url'] ), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['content'] ))
+        self.dlg = EditComment( self.contents_cbk, \
+                                idx, \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['post_id']), \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['post_title']), \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author']), \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_email']), \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_url']), \
+                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['content']))
         self.dlg.run()        
 
     def translate_status(self, status):
