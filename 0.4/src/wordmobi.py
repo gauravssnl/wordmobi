@@ -20,7 +20,7 @@ from wmproxy import UrllibTransport
 
 __all__ = [ "VERSION", "DEFDIR", "DB", "BLOG", "WordPressWrapper", "WordMobi" ]
 
-VERSION = "0.4.0RC1"
+VERSION = "0.4.0" # always 3 numbers with two digits each maximum, e.g. 3.44.2, 4.2.33 ...
 
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
 __version__ = VERSION
@@ -201,7 +201,7 @@ class WordPressWrapper(object):
                 if url is not None:
                     img['src'] = url
 
-        contents = soup.prettify().replace("\n","")
+        contents = soup.prettify().replace("\n"," ")
         app.title = u"Uploading post contents..." 
 
         post = wp.WordPressPost()
@@ -237,7 +237,7 @@ class WordPressWrapper(object):
                 if url is not None:
                     img['src'] = url
 
-        contents = soup.prettify().replace("\n","")
+        contents = soup.prettify().replace("\n"," ")
         app.title = u"Uploading post contents..."
 
         post = wp.WordPressPost()
@@ -384,6 +384,9 @@ class WordPressWrapper(object):
             return False
         
         del self.comments[idx]
+        note(u"Comment deleted.","info")
+        
+        return True
             
     def set_blog(self):
         if DB["proxy_enabled"] == u"True":
@@ -403,7 +406,7 @@ class WordPressWrapper(object):
             os.environ["http_proxy"] = proxy # for urllib
         else:
             transp = None
-            os.environ["http_proxy"] = {}
+            os.environ["http_proxy"] = ""
             del os.environ["http_proxy"]
             
         blog_url = unicode_to_utf8( DB["blog"] ) + "/xmlrpc.php"
@@ -489,6 +492,10 @@ class WordMobi(Application):
         self.dlg = Settings(self.default_cbk)
         self.dlg.run()
 
+    def ver2num(self,ver):
+        a,b,c = map(lambda x,y: x*y, [10000,100,1],[int(v) for v in ver.split(".")])
+        return a+b+c
+        
     def upgrade(self):
         if DB["proxy_enabled"] == u"True" and len(DB["proxy_user"]) > 0:
             note(u"Proxy authentication not supported for this feature","info")
@@ -523,22 +530,27 @@ class WordMobi(Application):
 
             if version and file_url:
                 version = version[version.rfind("/")+1:]
-                yn = popup_menu( [ u"Yes", u"No"], "Download %s ?" % (version) )
-                if yn is not None:
-                    if yn == 0:
-                        sis_name = file_url[file_url.rfind("/")+1:]
-                        local_file = os.path.join(DEFDIR, "updates", sis_name)
+                num_rem_ver = self.ver2num(version)
+                num_loc_ver = self.ver2num(VERSION)
+                if num_loc_ver >= num_rem_ver:
+                    note(u"Your version is already updated", "info")
+                else:
+                    yn = popup_menu( [ u"Yes", u"No"], "Download %s ?" % (version) )
+                    if yn is not None:
+                        if yn == 0:
+                            sis_name = file_url[file_url.rfind("/")+1:]
+                            local_file = os.path.join(DEFDIR, "updates", sis_name)
 
-                        self.set_title( u"Downloading ..." )
-                        ok = True
-                        try:
-                            urllib.urlretrieve( file_url, local_file )
-                        except:
-                            note(u"Impossible to download %s" % sis_name, "error")
-                            ok = False
+                            self.set_title( u"Downloading ..." )
+                            ok = True
+                            try:
+                                urllib.urlretrieve( file_url, local_file )
+                            except:
+                                note(u"Impossible to download %s" % sis_name, "error")
+                                ok = False
 
-                        if ok:
-                            note(u"%s downloaded in e:\\wordmobi\\updates. Please, install it." % sis_name, "info")
+                            if ok:
+                                note(u"%s downloaded in e:\\wordmobi\\updates. Please, install it." % sis_name, "info")
 
             else:
                 note(u"Upgrade information missing.","error")
