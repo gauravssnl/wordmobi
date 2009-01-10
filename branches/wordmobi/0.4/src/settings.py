@@ -6,7 +6,8 @@ from window import Dialog
 from socket import select_access_point, access_point, access_points, set_default_access_point
 from wmutil import *
 import key_codes
-from wmglobals import BLOG, DB
+from persist import DB
+from wpwrapper import BLOG
 
 __all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
 
@@ -50,13 +51,13 @@ class BlogSettings(Dialog):
             
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
-        values = [ (u"Blog URL:", self.blog ), \
-                   (u"Username:", self.user ), \
-                   (u"Password:", u"*"*len( self.passw )), \
-                   (u"Email (for comments):",  self.email ), \
-                   (u"Real name (for comments):",  self.realname ), \
+        values = [ (u"Blog URL:", self.blog ),
+                   (u"Username:", self.user ),
+                   (u"Password:", u"*"*len( self.passw )),
                    (u"Number of posts:", unicode( self.num_posts )),
-                   (u"Number of comments per post:", unicode( self.num_comments )) ]
+                   (u"Number of comments per post:", unicode( self.num_comments )),
+                   (u"Email (for comments):",  self.email ),
+                   (u"Real name (for comments):",  self.realname ) ]
 
         app.body.set_list( values, self.last_idx )
 
@@ -64,10 +65,10 @@ class BlogSettings(Dialog):
         idx = app.body.current()
         self.last_idx = idx
         
-        vars = ( "blog", "user", "passw", "email", "realname", "num_posts", "num_comments" )
-        labels = ( u"Blog URL:", u"Username:", u"Password:", u"Email (for comments):", \
-                   u"Real name (for comments):", u"Number of posts:", u"Number of comments per post" )
-        formats = ( "text", "text", "code", "text", "text", "number", "number" )
+        vars = ( "blog", "user", "passw", "num_posts", "num_comments", "email", "realname" )
+        labels = ( u"Blog URL:", u"Username:", u"Password:", u"Number of posts:", \
+                   u"Number of comments per post",  u"Email (for comments):", u"Real name (for comments):" )
+        formats = ( "text", "text", "code", "number", "number", "text", "text" )
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
@@ -87,7 +88,7 @@ class ProxySettings(Dialog):
 
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
-        menu = [( u"Cancel", self.close_app )]
+        menu = [( u"Cancel", self.cancel_app )]
         
         Dialog.__init__(self, cbk, u"Proxy settings", body,  menu)
 
@@ -155,7 +156,7 @@ class Settings(Dialog):
     def blog_cbk(self):
         self.lock_ui()
         if not self.dlg.cancel:
-            DB["blog"]= self.dlg.blog
+            DB["blog"] = self.dlg.blog
             DB["user"] = self.dlg.user
             DB["pass"] = self.dlg.passw
             DB["email"] = self.dlg.email
