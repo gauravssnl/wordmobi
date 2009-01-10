@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import e32
 import os
 import e32dbm
 from wmglobals import DEFDIR
+from wmutil import *
+
+__all__ = [ "Persist", "DB" ]
 
 class Persist(dict):
-    __highlander = None
-    DBNAME = os.path.join(DEFDIR,"wordmobi")
+    DBNAME = unicode(os.path.join(DEFDIR,"wordmobi"))
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
@@ -22,29 +23,27 @@ class Persist(dict):
                "proxy_enabled":u"False"}
     
     def __init__(self):
-        if Persist.__highlander:
-            raise Persist.__highlander
-        Persist.__highlander = self
-        
         dict.__init__(self)
-        
         self.load()
             
     def save(self):
         db = e32dbm.open(Persist.DBNAME,"c")
-        for k in Persist.DEFVALS.iterkeys():
+        for k in self.DEFVALS.iterkeys():
             db[k] = self.__getitem__(k)
         db.close()
 
     def load(self):
         try:
-            db = e32dbm.open(Persist.DBNAME,"w")
+            db = e32dbm.open(self.DBNAME,"w")
         except:
-            db = e32dbm.open(Persist.DBNAME,"n")
+            db = e32dbm.open(self.DBNAME,"n")
             
-        for k in Persist.DEFVALS.iterkeys():
+        for k in self.DEFVALS.iterkeys():
             try:
                 self.__setitem__(k,utf8_to_unicode( db[k] ))
             except:
-                self.__setitem__(k,Persist.DEFVALS[k])
+                self.__setitem__(k,self.DEFVALS[k])
         db.close()
+
+DB = Persist()
+
