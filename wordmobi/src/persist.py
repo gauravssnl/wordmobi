@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
-import e32
 import os
 import e32dbm
-from appuifw import *
+from wmglobals import DEFDIR
+from wmutil import *
 
-DEFDIR = "e:\\wordmobi\\"
+__all__ = [ "Persist", "DB" ]
 
 class Persist(dict):
-    
-    DBNAME = os.path.join(DEFDIR,"wordmobi")
+    DBNAME = unicode(os.path.join(DEFDIR,"wordmobi"))
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
-               "email":u"@",
+               "email":u"",
                "realname":u"",
                "num_posts":u"10",
                "num_comments":u"20",
+               "categories":u"",
                "proxy_user":u"",
                "proxy_pass":u"",
                "proxy_addr":u"",
@@ -23,27 +23,27 @@ class Persist(dict):
                "proxy_enabled":u"False"}
     
     def __init__(self):
-        # make me singleton !
-        super(Persist,self).__init__()
+        dict.__init__(self)
         self.load()
             
     def save(self):
         db = e32dbm.open(Persist.DBNAME,"c")
-        for k in Persist.DEFVALS.iterkeys():
+        for k in self.DEFVALS.iterkeys():
             db[k] = self.__getitem__(k)
         db.close()
 
     def load(self):
         try:
-            db = e32dbm.open(Persist.DBNAME,"w")
+            db = e32dbm.open(self.DBNAME,"w")
         except:
-            db = e32dbm.open(Persist.DBNAME,"n")
+            db = e32dbm.open(self.DBNAME,"n")
             
-        for k in Persist.DEFVALS.iterkeys():
+        for k in self.DEFVALS.iterkeys():
             try:
-                self.__setitem__(k,unicode(db[k]))
+                self.__setitem__(k,utf8_to_unicode( db[k] ))
             except:
-                self.__setitem__(k,Persist.DEFVALS[k])
+                self.__setitem__(k,self.DEFVALS[k])
         db.close()
 
-    
+DB = Persist()
+
