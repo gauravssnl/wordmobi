@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import time
 import urllib
@@ -17,9 +18,8 @@ from categories import Categories
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
-from wmglobals import VERSION, DEFDIR, DB, BLOG
-from wpwrapper import WordPressWrapper
-from persist import Persist
+from wmglobals import VERSION, DEFDIR
+from wpwrapper import BLOG
 
 __all__ = [ "WordMobi" ]
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
@@ -30,9 +30,6 @@ __license__ = "GPLv3"
 class WordMobi(Application):
     
     def __init__(self):
-
-        global DB, BLOG
-        
         #items = [ ( u"Posts", u"", Icon(u"wordmobi.mif",16392,16392) ),
         #          ( u"Comments", u"", Icon(u"wordmobi.mif",16390,16390) ),
         #          ( u"Categories", u"", Icon(u"wordmobi.mif",16388,16388) ),
@@ -53,9 +50,6 @@ class WordMobi(Application):
         self.dlg = None
         
         self.check_dirs()
-        DB = Persist()
-        DB.load()
-        BLOG = WordPressWrapper()
         sel_access_point()
         BLOG.set_blog()
 

@@ -7,7 +7,8 @@ from xmlrpclib import DateTime
 from appuifw import *
 from wmutil import *
 from window import Dialog
-from wmglobals import BLOG, DB
+from persist import DB
+from wpwrapper import BLOG
 
 __all__ = [ "NewComment", "EditComment", "Comments" ]
 

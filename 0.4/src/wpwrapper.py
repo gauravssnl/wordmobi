@@ -7,7 +7,7 @@ from appuifw import *
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
-from wmglobals import DB
+from persist import DB
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 
