@@ -26,7 +26,7 @@ class FileSel(object):
     def run(self):
         while True:
             item = selection_list(self.items, search_field=1)
-            if item == None:
+            if item is None:
                 return None
             f = self.items[item]
             d = os.path.abspath( os.path.join(self.cur_dir,f) )
