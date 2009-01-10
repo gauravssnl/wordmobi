@@ -20,6 +20,7 @@ from wmutil import *
 from wmproxy import UrllibTransport
 from wmglobals import VERSION, DEFDIR
 from wpwrapper import BLOG
+from persist import DB
 
 __all__ = [ "WordMobi" ]
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
