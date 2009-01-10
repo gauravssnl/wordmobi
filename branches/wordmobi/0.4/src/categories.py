@@ -3,7 +3,7 @@ from appuifw import *
 from window import Dialog
 from wmutil import *
 import key_codes
-from wmglobals import BLOG
+from wpwrapper import BLOG
 
 __all__ = [ "Categories" ]
 

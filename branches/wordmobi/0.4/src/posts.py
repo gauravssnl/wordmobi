@@ -17,9 +17,10 @@ from filesel import FileSel
 from window import Dialog
 from comments import Comments
 
-from appuifw import InfoPopup # "from appuifw import *" above does not working properly ...
+from appuifw import InfoPopup # "from appuifw import *" above does not working properly ... missing in __all__
 
-from wmglobals import DEFDIR, BLOG
+from persist import DB
+from wpwrapper import BLOG
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
