@@ -2,20 +2,19 @@
 import e32
 import os
 import e32dbm
-from appuifw import *
-
-DEFDIR = "e:\\wordmobi\\"
+from wmglobals import DEFDIR
 
 class Persist(dict):
-    
+    __highlander = None
     DBNAME = os.path.join(DEFDIR,"wordmobi")
     DEFVALS = {"user":u"username",
                "pass":u"password",
                "blog":u"http://blogname.wordpress.com",
-               "email":u"@",
+               "email":u"",
                "realname":u"",
                "num_posts":u"10",
                "num_comments":u"20",
+               "categories":u"",
                "proxy_user":u"",
                "proxy_pass":u"",
                "proxy_addr":u"",
@@ -23,8 +22,12 @@ class Persist(dict):
                "proxy_enabled":u"False"}
     
     def __init__(self):
-        # make me singleton !
-        super(Persist,self).__init__()
+        if Persist.__highlander:
+            raise Persist.__highlander
+        Persist.__highlander = self
+        
+        dict.__init__(self)
+        
         self.load()
             
     def save(self):
@@ -41,9 +44,7 @@ class Persist(dict):
             
         for k in Persist.DEFVALS.iterkeys():
             try:
-                self.__setitem__(k,unicode(db[k]))
+                self.__setitem__(k,utf8_to_unicode( db[k] ))
             except:
                 self.__setitem__(k,Persist.DEFVALS[k])
         db.close()
-
-    

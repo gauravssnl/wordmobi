@@ -7,7 +7,7 @@ from xmlrpclib import DateTime
 from appuifw import *
 from wmutil import *
 from window import Dialog
-import wordmobi
+from wmglobals import BLOG, DB
 
 __all__ = [ "NewComment", "EditComment", "Comments" ]
 
@@ -191,8 +191,8 @@ class Comments(Dialog):
     def popup_menu(self):
         menu = map( lambda x: x[0], self.menu_items )
         cbk = map( lambda x: x[1], self.menu_items )
-        if wordmobi.BLOG.comments:
-            if wordmobi.BLOG.comments[app.body.current()]['status'] != 'approve':
+        if BLOG.comments:
+            if BLOG.comments[app.body.current()]['status'] != 'approve':
                 menu.append( u"Approve" )
                 cbk.append( self.moderate )            
         op = popup_menu( menu , u"Comments:")
@@ -203,8 +203,8 @@ class Comments(Dialog):
     def moderate(self):
         t = self.get_title()
         idx = app.body.current()
-        self.lock_ui(u"Approving comment %s" % utf8_to_unicode( wordmobi.BLOG.comments[idx]['content'][:15] ))
-        wordmobi.BLOG.approve_comment(idx)
+        self.lock_ui(u"Approving comment %s" % utf8_to_unicode( BLOG.comments[idx]['content'][:15] ))
+        BLOG.approve_comment(idx)
         self.unlock_ui()
         self.set_title( t )
         self.refresh()
@@ -217,9 +217,9 @@ class Comments(Dialog):
         comment_status = k[item]
 
         t = self.get_title()
-        if not wordmobi.BLOG.posts:
+        if not BLOG.posts:
             self.lock_ui(u"Downloading post titles..." )
-            upd = wordmobi.BLOG.update_posts()
+            upd = BLOG.update_posts()
             self.set_title( t )
             self.unlock_ui()
             if not upd:
@@ -232,7 +232,7 @@ class Comments(Dialog):
             
             if comment_set == 0:
                 self.set_title( u"Which post?" )
-                post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in wordmobi.BLOG.posts ], search_field=1)
+                post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in BLOG.posts ], search_field=1)
                 self.set_title( t )
                 if post_idx is None or post_idx == -1:
                     return False
@@ -250,12 +250,12 @@ class Comments(Dialog):
         return upd
 
     def update_comment(self, post_idx, comment_status):
-        wordmobi.BLOG.comments = []        
+        BLOG.comments = []        
         if post_idx == -1:
-            np = len(wordmobi.BLOG.posts)
+            np = len(BLOG.posts)
             for n in range(np):
                 self.set_title(u"[%d/%d] Downloading comments ..." % (n+1,np))
-                if not wordmobi.BLOG.get_comment(n, self.status_list[comment_status]):
+                if not BLOG.get_comment(n, self.status_list[comment_status]):
                     yn = popup_menu( [ u"Yes", u"No" ], u"Downl. Failed ! Continue?")
                     if yn is not None:
                         if yn == 0:
@@ -263,25 +263,25 @@ class Comments(Dialog):
                     return False
         else:
             self.set_title(u"Downloading comments ...")
-            if not wordmobi.BLOG.get_comment(post_idx, self.status_list[comment_status]):
+            if not BLOG.get_comment(post_idx, self.status_list[comment_status]):
                 return False
 
-        if not wordmobi.BLOG.comments:
+        if not BLOG.comments:
             note(u"No comments with status %s." % comment_status,"info")
             return False
   
         return True        
             
     def delete(self):
-        if not wordmobi.BLOG.comments:
+        if not BLOG.comments:
             note( u"Please, update the comment list.", "info" )
             return
         
         ny = popup_menu( [u"No", u"Yes"], u"Delete comment ?")
         if ny == 1:
             idx = app.body.current()
-            self.lock_ui(u"Deleting comment %s" % utf8_to_unicode( wordmobi.BLOG.comments[idx]['content'][:15] ))
-            wordmobi.BLOG.delete_comment(idx)
+            self.lock_ui(u"Deleting comment %s" % utf8_to_unicode( BLOG.comments[idx]['content'][:15] ))
+            BLOG.delete_comment(idx)
             
             self.unlock_ui()
             self.refresh()
@@ -289,7 +289,7 @@ class Comments(Dialog):
     def new_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui(u"Uploading comment ..." )
-            ok = wordmobi.BLOG.new_comment(self.dlg.post_id,
+            ok = BLOG.new_comment(self.dlg.post_id,
                                            self.dlg.email,
                                            self.dlg.realname,
                                            self.dlg.website,
@@ -304,42 +304,42 @@ class Comments(Dialog):
     
     def new(self):
         t = self.get_title()
-        if not wordmobi.BLOG.comments:
+        if not BLOG.comments:
             # no comments ... user need to select a post to add the comment
-            if not wordmobi.BLOG.posts:
+            if not BLOG.posts:
                 self.lock_ui(u"Downloading post titles..." )
-                upd = wordmobi.BLOG.update_posts()
+                upd = BLOG.update_posts()
                 self.set_title( t )
                 self.unlock_ui()
                 if not upd:
                     return False
         
             self.set_title(u"For which post?")
-            post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in wordmobi.BLOG.posts ], search_field=1)
+            post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in BLOG.posts ], search_field=1)
             # idx may be -1 if list is empty and user press OK... strange ... why not None ?
             if post_idx is None or post_idx == -1:
                 return False
-            post_id = wordmobi.BLOG.posts[post_idx]['postid']
-            post_title = wordmobi.BLOG.posts[post_idx]['title']
+            post_id = BLOG.posts[post_idx]['postid']
+            post_title = BLOG.posts[post_idx]['title']
         else:
             comment_idx = self.body.current()
-            post_id = wordmobi.BLOG.comments[comment_idx]['post_id']
-            post_title = wordmobi.BLOG.comments[comment_idx]['post_title']
+            post_id = BLOG.comments[comment_idx]['post_id']
+            post_title = BLOG.comments[comment_idx]['post_title']
             
         self.dlg = NewComment( self.new_cbk,
                                0,
                                post_id,
                                utf8_to_unicode(post_title),
-                               wordmobi.DB['realname'],
-                               wordmobi.DB['email'],
-                               wordmobi.DB['blog'],
+                               DB['realname'],
+                               DB['email'],
+                               DB['blog'],
                                u"")
         self.dlg.run()
             
     def contents_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui(u"Updating comment ..." )
-            ok = wordmobi.BLOG.edit_comment(self.dlg.comment_idx,
+            ok = BLOG.edit_comment(self.dlg.comment_idx,
                                             self.dlg.email,
                                             self.dlg.realname,
                                             self.dlg.website,
@@ -353,18 +353,18 @@ class Comments(Dialog):
         return True
     
     def contents(self):
-        if not wordmobi.BLOG.comments:
+        if not BLOG.comments:
             note( u"Please, update the comment list.", "info" )
             return
         idx = self.body.current()
         self.dlg = EditComment( self.contents_cbk, \
                                 idx, \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['post_id']), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['post_title']), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author']), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_email']), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['author_url']), \
-                                utf8_to_unicode( wordmobi.BLOG.comments[idx]['content']))
+                                utf8_to_unicode( BLOG.comments[idx]['post_id']), \
+                                utf8_to_unicode( BLOG.comments[idx]['post_title']), \
+                                utf8_to_unicode( BLOG.comments[idx]['author']), \
+                                utf8_to_unicode( BLOG.comments[idx]['author_email']), \
+                                utf8_to_unicode( BLOG.comments[idx]['author_url']), \
+                                utf8_to_unicode( BLOG.comments[idx]['content']))
         self.dlg.run()        
 
     def translate_status(self, status):
@@ -378,11 +378,11 @@ class Comments(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
 
-        if not wordmobi.BLOG.comments:
+        if not BLOG.comments:
             self.headlines = [ (u"<empty>", u"Please, update the comment list") ]
         else:
             self.headlines = []
-            for c in wordmobi.BLOG.comments:
+            for c in BLOG.comments:
                 (y, mo, d, h, m, s) = parse_iso8601( c['date_created_gmt'].value )
                 line1 = u"%d/%s %02d:%02d %s (%s)" % (d,MONTHS[mo-1],h,m,self.translate_status(c['status']),\
                                                       utf8_to_unicode( c['author'] ))

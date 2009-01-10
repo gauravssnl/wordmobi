@@ -4,9 +4,9 @@ from types import StringTypes
 from appuifw import *
 from window import Dialog
 from socket import select_access_point, access_point, access_points, set_default_access_point
-import wordmobi
 from wmutil import *
 import key_codes
+from wmglobals import BLOG, DB
 
 __all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
 
@@ -32,13 +32,13 @@ def sel_access_point():
 
 class BlogSettings(Dialog):
     def __init__(self, cbk):
-        self.user = wordmobi.DB["user"]
-        self.passw = wordmobi.DB["pass"]
-        self.blog = wordmobi.DB["blog"]
-        self.num_posts = int(wordmobi.DB["num_posts"])
-        self.num_comments = int(wordmobi.DB["num_comments"])
-        self.email = wordmobi.DB["email"]
-        self.realname = wordmobi.DB["realname"]
+        self.user = DB["user"]
+        self.passw = DB["pass"]
+        self.blog = DB["blog"]
+        self.num_posts = int(DB["num_posts"])
+        self.num_comments = int(DB["num_comments"])
+        self.email = DB["email"]
+        self.realname = DB["realname"]
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
         menu = [( u"Cancel", self.cancel_app )]
@@ -79,11 +79,11 @@ class BlogSettings(Dialog):
 
 class ProxySettings(Dialog):
     def __init__(self, cbk):
-        self.proxy_enabled = wordmobi.DB["proxy_enabled"]
-        self.proxy_address = wordmobi.DB["proxy_addr"]
-        self.proxy_port = int(wordmobi.DB["proxy_port"])
-        self.proxy_user = wordmobi.DB["proxy_user"]             
-        self.proxy_password = wordmobi.DB["proxy_pass"]
+        self.proxy_enabled = DB["proxy_enabled"]
+        self.proxy_address = DB["proxy_addr"]
+        self.proxy_port = int(DB["proxy_port"])
+        self.proxy_user = DB["proxy_user"]             
+        self.proxy_password = DB["proxy_pass"]
 
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
@@ -155,15 +155,15 @@ class Settings(Dialog):
     def blog_cbk(self):
         self.lock_ui()
         if not self.dlg.cancel:
-            wordmobi.DB["blog"]= self.dlg.blog
-            wordmobi.DB["user"] = self.dlg.user
-            wordmobi.DB["pass"] = self.dlg.passw
-            wordmobi.DB["email"] = self.dlg.email
-            wordmobi.DB["realname"] = self.dlg.realname
-            wordmobi.DB["num_posts"] = utf8_to_unicode( str(self.dlg.num_posts) )
-            wordmobi.DB["num_comments"] = utf8_to_unicode( str(self.dlg.num_comments) )
-            wordmobi.DB.save()
-            wordmobi.BLOG.set_blog()
+            DB["blog"]= self.dlg.blog
+            DB["user"] = self.dlg.user
+            DB["pass"] = self.dlg.passw
+            DB["email"] = self.dlg.email
+            DB["realname"] = self.dlg.realname
+            DB["num_posts"] = utf8_to_unicode( str(self.dlg.num_posts) )
+            DB["num_comments"] = utf8_to_unicode( str(self.dlg.num_comments) )
+            DB.save()
+            BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
@@ -175,13 +175,13 @@ class Settings(Dialog):
     def proxy_cbk(self):
         self.lock_ui()
         if not self.dlg.cancel:
-            wordmobi.DB["proxy_enabled"]= self.dlg.proxy_enabled
-            wordmobi.DB["proxy_addr"] = self.dlg.proxy_address
-            wordmobi.DB["proxy_user"] = self.dlg.proxy_user
-            wordmobi.DB["proxy_pass"] = self.dlg.proxy_password
-            wordmobi.DB["proxy_port"] = utf8_to_unicode( str(self.dlg.proxy_port) )
-            wordmobi.DB.save()
-            wordmobi.BLOG.set_blog()
+            DB["proxy_enabled"]= self.dlg.proxy_enabled
+            DB["proxy_addr"] = self.dlg.proxy_address
+            DB["proxy_user"] = self.dlg.proxy_user
+            DB["proxy_pass"] = self.dlg.proxy_password
+            DB["proxy_port"] = utf8_to_unicode( str(self.dlg.proxy_port) )
+            DB.save()
+            BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
@@ -192,5 +192,5 @@ class Settings(Dialog):
 
     def access_point(self):
         if sel_access_point():
-            wordmobi.BLOG.set_blog()
+            BLOG.set_blog()
     

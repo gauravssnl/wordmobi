@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from appuifw import *
 from window import Dialog
-import wordmobi
 from wmutil import *
 import key_codes
+from wmglobals import BLOG
 
 __all__ = [ "Categories" ]
 
@@ -53,7 +53,7 @@ class Categories(Dialog):
 
     def update(self):
         self.lock_ui(u"Downloading categories...")
-        wordmobi.BLOG.update_categories()
+        BLOG.update_categories()
         self.unlock_ui()
 
         self.refresh()
@@ -65,7 +65,7 @@ class Categories(Dialog):
         if ny is not None:
             if ny == 1:
                 self.lock_ui(u"Deleting category %s ..." % cat_name)
-                wordmobi.BLOG.delete_category(item)
+                BLOG.delete_category(item)
                 self.unlock_ui()
                 self.refresh()
 
@@ -73,7 +73,7 @@ class Categories(Dialog):
         cat_name = query(u"Category name:", "text", u"" )
         if cat_name is not None:
             self.lock_ui(u"Creating category %s ..." % cat_name)
-            ret = wordmobi.BLOG.new_category( cat_name )
+            ret = BLOG.new_category( cat_name )
             self.unlock_ui()
             if ret:
                 self.update()        
@@ -81,7 +81,7 @@ class Categories(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
         
-        self.headlines = wordmobi.BLOG.categoryNamesList()
+        self.headlines = BLOG.categoryNamesList()
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
         self.set_title( u"[%d/%d] Categories" % ( app.body.current()+1,len(self.headlines) ) )
 
