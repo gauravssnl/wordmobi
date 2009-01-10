@@ -1,14 +1,14 @@
 from window import Dialog
-from wordmobi import * 
 from appuifw import Listbox
-import wordmobi
 import key_codes
+
+from wmglobals import VERSION
 
 __all__ = [ "About" ]
 
 class About(Dialog):
     def __init__(self,cbk):
-        self.items = [ ( u"Wordmobi %s" % wordmobi.VERSION, u"A Wordpress client" ),
+        self.items = [ ( u"Wordmobi %s" % VERSION, u"A Wordpress client" ),
                        ( u"Author", u"Marcelo Barros de Almeida" ),
                        ( u"Email", u"marcelobarrosalmeida@gmail.com" ),
                        ( u"Source code", u"http://wordmobi.googlecode.com" ),

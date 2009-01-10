@@ -16,12 +16,13 @@ from wmutil import *
 from filesel import FileSel
 from window import Dialog
 from comments import Comments
-import wordmobi
+
 from appuifw import InfoPopup # "from appuifw import *" above does not working properly ...
+
+from wmglobals import DEFDIR, BLOG
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
-DEFDIR = "e:\\wordmobi\\"
 
 class TakePhoto(Dialog):
     def __init__(self):
@@ -611,30 +612,30 @@ class Posts(Dialog):
             return True            
         self.dlg = Comments(cbk)
         self.dlg.run()
-        if wordmobi.BLOG.posts:
+        if BLOG.posts:
             self.dlg.update( self.body.current() )  # update comments for current post
     
     def update(self):
         self.lock_ui(u"Downloading post titles..." )
-        wordmobi.BLOG.update_posts()
-        #if wordmobi.BLOG.update_posts():
+        BLOG.update_posts()
+        #if BLOG.update_posts():
         #    self.set_title(u"Updating categories...")
-        #wordmobi.BLOG.update_categories()
+        #BLOG.update_categories()
         self.unlock_ui()            
 
-        if not wordmobi.BLOG.posts:
+        if not BLOG.posts:
             note( u"No posts available.", "info" )
         
         self.refresh()
     
     def delete(self):
-        if wordmobi.BLOG.posts:
+        if BLOG.posts:
             ny = popup_menu( [u"No", u"Yes"], u"Delete post ?" )
             if ny is not None:
                 if ny == 1:
                     self.lock_ui(u"Deleting post...")
                     idx = app.body.current()
-                    if not wordmobi.BLOG.delete_post(idx):
+                    if not BLOG.delete_post(idx):
                         note(u"Impossible to delete the post.","error")
                     else:
                         note(u"Post deleted.","info")                        
@@ -644,7 +645,7 @@ class Posts(Dialog):
     def new_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui()
-            np = wordmobi.BLOG.new_post(self.dlg.post_title,
+            np = BLOG.new_post(self.dlg.post_title,
                                         self.dlg.contents,
                                         self.dlg.categories,
                                         self.dlg.publish)
@@ -657,13 +658,13 @@ class Posts(Dialog):
         return True
     
     def new(self):
-        self.dlg = NewPost( self.new_cbk, u"", u"", wordmobi.BLOG.categoryNamesList(), [], True )
+        self.dlg = NewPost( self.new_cbk, u"", u"", BLOG.categoryNamesList(), [], True )
         self.dlg.run()
 
     def contents_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui()
-            ok = wordmobi.BLOG.edit_post(self.dlg.post_title,
+            ok = BLOG.edit_post(self.dlg.post_title,
                                          self.dlg.contents,
                                          self.dlg.categories,
                                          self.dlg.post,
@@ -678,31 +679,31 @@ class Posts(Dialog):
 
     def contents(self):
         idx = self.body.current()
-        if not wordmobi.BLOG.posts:
+        if not BLOG.posts:
             note( u"Please, update the post list.", "info" )
             return
         
         # if post was not totally retrieved yet, fetch all data
-        if wordmobi.BLOG.posts[idx].has_key('description') == False:
+        if BLOG.posts[idx].has_key('description') == False:
             self.lock_ui(u"Downloading post...")
-            ok = wordmobi.BLOG.get_post(idx)
+            ok = BLOG.get_post(idx)
             self.unlock_ui()
             if not ok:
                 return
             
-        publish = wordmobi.BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
+        publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
 
-        self.dlg = EditPost( self.contents_cbk, wordmobi.BLOG.categoryNamesList(), wordmobi.BLOG.posts[idx], publish )
+        self.dlg = EditPost( self.contents_cbk, BLOG.categoryNamesList(), BLOG.posts[idx], publish )
         self.dlg.run()
     
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
 
-        if not wordmobi.BLOG.posts:
+        if not BLOG.posts:
             self.headlines = [ (u"<empty>", u"Please, update the post list") ]
         else:
             self.headlines = []
-            for p in wordmobi.BLOG.posts:
+            for p in BLOG.posts:
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
                 line1 = u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
                 line2 = utf8_to_unicode( p['title'] )
