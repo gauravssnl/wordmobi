@@ -13,8 +13,6 @@
  * Categories management (new, delete) 
  * upgrade support
  
-There is a problem related to categories with accents:
- * [http://code.google.com/p/wordmobi/issues/detail?id=5&can=1 Issue 5]
 
 = Future enhancements =
 
