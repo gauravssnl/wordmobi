@@ -11,6 +11,7 @@
  * Icons added to the main list box. More are following in future versions for indicating comment\post status, for instance. 
  * (Much) better code organization. 
  * Sorry, no tag support yet.
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=19 19]
 
 == 0.3.5 - 2008/12/16 ==
 
