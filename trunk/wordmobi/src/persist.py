@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import e32dbm
-from wmglobals import DEFDIR
+from wmglobals import DEFDIR, MIFFILE
 from wmutil import *
 
 __all__ = [ "Persist", "DB" ]
@@ -24,6 +24,7 @@ class Persist(dict):
     
     def __init__(self):
         dict.__init__(self)
+        self.check_dirs()
         self.load()
             
     def save(self):
@@ -45,5 +46,35 @@ class Persist(dict):
                 self.__setitem__(k,self.DEFVALS[k])
         db.close()
 
+    def check_dirs(self):
+        dirs = (DEFDIR,
+                os.path.join(DEFDIR,"cache"),
+                os.path.join(DEFDIR,"images"),
+                os.path.join(DEFDIR,"updates"))
+        for d in dirs:
+            if not os.path.exists(d):
+                try:
+                    os.makedirs(d)
+                except:
+                    note(u"Could't create directory %s" % d,"error")
+
+        mif = os.path.join(DEFDIR,MIFFILE)
+        if not os.path.exists(mif):
+            from icons import ICONS
+            import zlib
+            
+            fo = open(mif,'wb')
+
+            data = "".join(ICONS.split("\n"))
+            data = [ "%c" % chr(int(data[p:p+2],16)) for p in range(0,len(data),2) ]
+            data = "".join(data)
+            fo.write( zlib.decompress(data) )
+            fo.close()
+
+            del ICONS
+            del zlib
+
+
+        
 DB = Persist()
 
