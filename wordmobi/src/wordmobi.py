@@ -18,7 +18,7 @@ from categories import Categories
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
-from wmglobals import VERSION, DEFDIR
+from wmglobals import VERSION, DEFDIR, MIFFILE
 from wpwrapper import BLOG
 from persist import DB
 
@@ -31,43 +31,31 @@ __license__ = "GPLv3"
 class WordMobi(Application):
     
     def __init__(self):
-        #items = [ ( u"Posts", u"", Icon(u"wordmobi.mif",16392,16392) ),
-        #          ( u"Comments", u"", Icon(u"wordmobi.mif",16390,16390) ),
-        #          ( u"Categories", u"", Icon(u"wordmobi.mif",16388,16388) ),
-        #          ( u"Tags", u"", Icon(u"wordmobi.mif",16386,16386) ),
-        #          ( u"Settings", u"", Icon(u"wordmobi.mif",16394,16394) ),
-        #          ( u"Upgrade", u"", Icon(u"wordmobi.mif",16396,16396) ),
-        #          ( u"About", u"", Icon(u"wordmobi.mif",16384,16384) )]
-        items = [ ( u"Posts", u""),
-                  ( u"Comments", u"" ),
-                  ( u"Categories", u"" ),
-                  ( u"Tags", u"" ),
-                  ( u"Settings", u""),
-                  ( u"Upgrade", u"" ),
-                  ( u"About", u"" )]         
+        mif = unicode(os.path.join(DEFDIR,MIFFILE))
+        items = [ ( u"Posts", u"", Icon(mif,16392,16392) ),
+                  ( u"Comments", u"", Icon(mif,16390,16390) ),
+                  ( u"Categories", u"", Icon(mif,16388,16388) ),
+                  ( u"Tags", u"", Icon(mif,16386,16386) ),
+                  ( u"Settings", u"", Icon(mif,16394,16394) ),
+                  ( u"Upgrade", u"", Icon(mif,16396,16396) ),
+                  ( u"About", u"", Icon(mif,16384,16384) )]
+        #items = [ ( u"Posts", u""),
+        #          ( u"Comments", u"" ),
+        #          ( u"Categories", u"" ),
+        #          ( u"Tags", u"" ),
+        #          ( u"Settings", u""),
+        #          ( u"Upgrade", u"" ),
+        #          ( u"About", u"" )]         
         
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
 
         self.dlg = None
-        
-        self.check_dirs()
+
         sel_access_point()
         BLOG.set_blog()
 
         self.bind(key_codes.EKeyRightArrow, self.check_update_value)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        
-    def check_dirs(self):
-        dirs = (DEFDIR,
-                os.path.join(DEFDIR,"cache"),
-                os.path.join(DEFDIR,"images"),
-                os.path.join(DEFDIR,"updates"))
-        for d in dirs:
-            if not os.path.exists(d):
-                try:
-                    os.makedirs(d)
-                except:
-                    note(u"Could't create directory %s" % d,"error")
 
     def check_update_value(self):
         if not self.ui_is_locked():
