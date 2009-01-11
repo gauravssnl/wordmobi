@@ -1,3 +1,42 @@
+'''
+The API for writing applications using Python for S60 is really straightforward.
+Since you have decided what kind of body your  application will use
+(canvas, listbox, or text), you need to define your main menu, application title
+and default callback handler for exiting. The user interface (UI) is based on events
+and there is a special mechanism that relies on a semaphore for indicating that the
+application is closing. The user must obtain the semaphore and wait for any signal on it.
+Once signalized, the application may close properly. The UI allows tabs as well but in
+this case a body must be defined for each tab. An routine for handling tabs changing is
+required in such situation. 
+However, if your application has more than one window, I mean, more than a set of body,
+menu and exit handler, you will need exchanging these elements each time a new windows is
+displayed, giving to the user the impression that he is using a multiple windows application.
+Although this solution is possible, some problems arise:
+
+* the strategy for exiting, based on semaphores, must be unique across your application.
+* you may not commit any mistake when switching UI, that is, the set body+menu+exit
+  handler must be consistently changed   
+* an unified strategy for blocking UI when a time consuming operation is pending is necessary.
+  For instance, when downloading a file, you may want to disable all menu options.
+  Otherwise they will be available for the user during the download operation. 
+
+For unifying this process, three additional classes are suggested in this article.
+
+The first, called Window, is responsible for holding UI contents like menu, body
+and exit handler and exchanging properly all UI elements for the derived classes.
+Moreover, it may lock/unlock the UI when necessary.
+
+The second class is named Application. It represents the running application itself
+and it is responsible for handling the termination semaphore. Only one Application
+class must be instantiated per application.
+
+Finally, the third class is called Dialog. As its name suggests, it is in the charge
+of showing/hiding dialogs when necessary. Many dialogs are allowed, each one with
+their own set of body+menu+exit handler.  
+
+Application and Dialog inherit from Window the content handler ability while each one
+has different ways for finishing itself (finishing application or just the dialog).
+'''
 from appuifw import *
 import e32
 import key_codes
