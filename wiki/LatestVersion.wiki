@@ -1,5 +1,5 @@
 #summary Latest Version Page
 
-[http://0.3.5 latest_wordmobi_version]
+[http://0.4.0 latest_wordmobi_version]
 
-[http://wordmobi.googlecode.com/files/Wordmobi-0.3.5.sis wordmobi_sis_url]
+[http://wordmobi.googlecode.com/files/Wordmobi-0.4.0.sis wordmobi_sis_url]
