@@ -3,6 +3,8 @@
 
 == Using wordmobi (version 0.3.0 or superior) ==
 
+[http://br.youtube.com/watch?v=Pp7csKKxp7I 0.4.0 release candidate video]
+
 Wormobi 0.3.0 is similar to previous versions. However, the new user interface is based on tabs. A new tutorial is coming soon.
 
 == Using wordmobi (before version 0.3.0) ==
