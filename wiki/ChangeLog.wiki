@@ -2,6 +2,16 @@
 
 = Change log =
 
+== 0.4.0 - 2009/01/11 ==
+
+ * Navigation based on left\right keys.
+ * New UI, based on list boxes instead tabs. 
+ * Smarter update routine, only downloading when a new version is available.
+ * Comment dialog now showing post title.
+ * Icons added to the main list box. More are following in future versions for indicating comment\post status, for instance. 
+ * (Much) better code organization. 
+ * Sorry, no tag support yet.
+
 == 0.3.5 - 2008/12/16 ==
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=16 16]. Categories with accents were blocking wordmobi when uploading post.
