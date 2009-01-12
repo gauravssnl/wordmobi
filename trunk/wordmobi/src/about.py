@@ -1,5 +1,5 @@
 from window import Dialog
-from appuifw import Listbox
+from appuifw import *
 import key_codes
 
 from wmglobals import VERSION
