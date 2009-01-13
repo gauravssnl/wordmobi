@@ -2,6 +2,12 @@
 
 = Change log =
 
+== 0.4.2 - 2009/01/13 ==
+
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=20 20] - Preview is not working on 0.4.0 .
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=21 21] -  	 UI is not indicating when the updating finishes.
+ * Preview now using the correct encoding for HTML (UTF-8)
+
 == 0.4.0 - 2009/01/11 ==
 
  * Navigation based on left\right keys.
