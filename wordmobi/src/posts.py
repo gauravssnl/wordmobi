@@ -330,9 +330,11 @@ class PostContents(Dialog):
 
         try:
             fp = open(name,"wt")
-            fp.write(r"<html><body>")
+            fp.write("<html>\n")
+            fp.write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>\n')
+            fp.write("<body>\n")
             fp.write(html)
-            fp.write(r"</body></html>")
+            fp.write("</body></html>")
             fp.close()
         except:
             note(u"Could not generate preview file.","error")
