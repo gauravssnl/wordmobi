@@ -139,16 +139,13 @@ class WordMobi(Application):
                             local_file = os.path.join(DEFDIR, "updates", sis_name)
 
                             self.set_title( u"Downloading ..." )
-                            ok = True
                             try:
                                 urllib.urlretrieve( file_url, local_file )
                             except:
                                 note(u"Impossible to download %s" % sis_name, "error")
-                                ok = False
-
-                            if ok:
-                                note(u"%s downloaded in " + unicode(DEFDIR) + \
-                                     "updates. Please, install it." % sis_name, "info")
+                            else:
+                                msg = u"%s downloaded in %supdates. Please, install it." % (sis_name,DEFDIR)
+                                note( msg , "info")
 
             else:
                 note(u"Upgrade information missing.","error")
