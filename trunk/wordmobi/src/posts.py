@@ -21,6 +21,7 @@ from appuifw import InfoPopup # "from appuifw import *" above does not working p
 
 from persist import DB
 from wpwrapper import BLOG
+from wmglobals import DEFDIR
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
