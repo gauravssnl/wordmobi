@@ -1,3 +1,18 @@
+"""
+Open a selection file dialog. Returns the file selected or None.
+Initial path and regular expression for filtering file list may be provided.
+
+Examples:
+sel = FileSel().run()
+if sel is not None:
+    ...
+
+sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+if sel is not None:
+    ...
+
+"""
+
 import os
 import e32
 from appuifw import *
@@ -13,11 +28,17 @@ class FileSel(object):
         if self.cur_dir == u"":
             self.items = [ unicode(d + "\\") for d in e32.drive_list() ]
         else:
-            entries = [ e.decode('utf-8') for e in os.listdir( self.cur_dir.encode('utf-8') ) ]
+            entries = [ e.decode('utf-8')
+                        for e in os.listdir( self.cur_dir.encode('utf-8') ) ]
             d = self.cur_dir
-            dirs  = [ e.upper() for e in entries if os.path.isdir(os.path.join(d,e).encode('utf-8'))  ]
-            files = [ e.lower() for e in entries if os.path.isfile(os.path.join(d,e).encode('utf-8')) ]
-            files = [ f for f in files if re.match(self.mask,f) ]
+            dirs  = [ e.upper() for e in entries
+                      if os.path.isdir(os.path.join(d,e).encode('utf-8'))  ]
+            
+            files = [ e.lower() for e in entries
+                      if os.path.isfile(os.path.join(d,e).encode('utf-8')) ]
+            
+            files = [ f for f in files
+                      if re.match(self.mask,f) ]
             dirs.sort()
             files.sort()
             dirs.insert( 0, u".." )
