@@ -38,14 +38,7 @@ class WordMobi(Application):
                   ( u"Tags", u"", Icon(mif,16386,16386) ),
                   ( u"Settings", u"", Icon(mif,16394,16394) ),
                   ( u"Upgrade", u"", Icon(mif,16396,16396) ),
-                  ( u"About", u"", Icon(mif,16384,16384) )]
-        #items = [ ( u"Posts", u""),
-        #          ( u"Comments", u"" ),
-        #          ( u"Categories", u"" ),
-        #          ( u"Tags", u"" ),
-        #          ( u"Settings", u""),
-        #          ( u"Upgrade", u"" ),
-        #          ( u"About", u"" )]         
+                  ( u"About", u"", Icon(mif,16384,16384) )]        
         
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
 
@@ -66,7 +59,6 @@ class WordMobi(Application):
         ( self.posts, self.comments, self.categories, self.tags, self.settings, self.upgrade, self.about)[idx]()
 
     def default_cbk(self):
-        #self.unlock_ui()
         self.refresh()
         return True
 
@@ -104,14 +96,13 @@ class WordMobi(Application):
         local_file = "web_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
         local_file = os.path.join(DEFDIR, "cache", local_file)
 
-        #title = self.get_title() 
-        #self.set_title( u"Checking update page..." )
-        ok = True
         try:
             urllib.urlretrieve( url, local_file )
         except:
             note(u"Impossible to access update page %s" % url,"error")
             ok = False
+        else:
+            ok = True
 
         if ok:
             html = open(local_file).read()
