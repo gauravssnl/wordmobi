@@ -8,6 +8,7 @@ import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
 from persist import DB
+from wmglobals import PROMO_PHRASE
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 
