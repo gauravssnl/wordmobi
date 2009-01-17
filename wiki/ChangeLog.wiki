@@ -2,6 +2,10 @@
 
 = Change log =
 
+== 0.4.3 - 2009/01/17 ==
+
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=23 23] -   	 Impossible to send posts in version 0.4.2
+
 == 0.4.2 - 2009/01/13 ==
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=20 20] - Preview is not working on 0.4.0 .
