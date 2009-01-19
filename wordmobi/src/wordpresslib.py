@@ -283,7 +283,7 @@ class WordPressClient:
             bo.name = blog['blogName']
             bo.isAdmin = blog['isAdmin']
             bo.url = blog['url']
-            blogObj.append(b)
+            blogObj.append(bo)
 
         return blogObj
 
