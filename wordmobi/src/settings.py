@@ -130,7 +130,7 @@ class ProxySettings(Dialog):
                 else:
                     self.proxy_user = u""
             elif idx == 4:
-                password = query(u"Proxy username:","code", self.proxy_password)
+                password = query(u"Proxy password:","code", self.proxy_password)
                 if password is not None:
                     self.proxy_password = password
                 else:
