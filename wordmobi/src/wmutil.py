@@ -3,12 +3,27 @@ import time
 
 MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
+def safe_unicode(value):
+    "http://aspyplayer.googlecode.com/svn/trunk/src/aspyplayer.py"
+    if type(value) == type(unicode("unicode")):
+        return value
+
+    result = ""
+    for enc in ['utf8', 'latin1']:
+        try:
+            result = value.decode(enc)
+            break
+        except:
+            pass
+			
+    return unicode(result)
+
 def decode_html(line):
     "http://mail.python.org/pipermail/python-list/2006-April/378536.html"
     pat = re.compile(r'&#(\d+);')
     def sub(mo):
         return unichr(int(mo.group(1)))
-    return pat.sub(sub, unicode(line))
+    return pat.sub(sub, safe_unicode(line))
 
 def parse_iso8601(val):
     "Returns a tupple with (yyyy, mm, dd, hh, mm, ss). Argument is provided by xmlrpc DateTime.value"
