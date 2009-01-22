@@ -26,6 +26,7 @@ class WordPressWrapper(object):
         for c in self.categories:
             if c['categoryName'] == cat:
                 return (c['categoryId'], c['parentId'])
+        return ( '0', '0' )
             
     def update_categories(self):
         """ Update categories. Return True or False.
