@@ -417,9 +417,7 @@ class NewPost(Dialog):
     def update_categories(self):
         sel = multi_selection_list( self.blog_categories, style='checkbox', search_field=1 )
         if sel:
-            self.categories = [ self.blog_categories[idx] for idx in sel ]
-        #else:
-        #    self.categories = [u"Uncategorized"]            
+            self.categories = [ self.blog_categories[idx] for idx in sel ]        
         self.refresh()
         
     def update_images(self):
