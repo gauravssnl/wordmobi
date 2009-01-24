@@ -1,0 +1,6 @@
+#summary Locale demo
+
+= Instructions =
+
+Download [http://wordmobi.googlecode.com/files/wm_locale_demo_1.zip locale demo], unpack and copy all files into e:\python (phone memory card). After, run wm_locale_demo.py
+
