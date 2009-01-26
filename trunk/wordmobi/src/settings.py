@@ -8,6 +8,7 @@ from wmutil import *
 import key_codes
 from persist import DB
 from wpwrapper import BLOG
+from wmlocale import LABELS
 
 __all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
 
@@ -142,7 +143,8 @@ class Settings(Dialog):
         self.dlg = None
         items = [ ( u"Blog",u""),
                   ( u"Proxy", u""),
-                  ( u"Access Point", u"") ]
+                  ( u"Access Point", u""),
+                  ( u"Language", u"")]
 
         Dialog.__init__(self, cbk, u"Settings", Listbox( items, self.update_value ) )
 
@@ -151,7 +153,7 @@ class Settings(Dialog):
 
     def update_value(self):
         idx = self.body.current()
-        ( self.blog, self.proxy, self.access_point)[idx]()
+        ( self.blog, self.proxy, self.access_point, self.language)[idx]()
 
     def blog_cbk(self):
         self.lock_ui()
@@ -194,4 +196,15 @@ class Settings(Dialog):
     def access_point(self):
         if sel_access_point():
             BLOG.set_blog()
-    
+
+    def language(self):
+        langs = [ (u"English (USA)", u"en_us"),
+                  (u"Portuguese", u"pt_br") ]
+        item = popup_menu(map(lambda x:x[0], langs), u"Language:" )
+        if item is not None:
+            loc = langs[item][1]
+            if DB["language"] != loc:
+                LABELS.set_locale(loc)
+                DB["language"] = loc
+                DB.save()
+
