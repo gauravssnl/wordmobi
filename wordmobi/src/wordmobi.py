@@ -21,6 +21,7 @@ from wmproxy import UrllibTransport
 from wmglobals import VERSION, DEFDIR, MIFFILE
 from wpwrapper import BLOG
 from persist import DB
+from wmlocale import LABELS
 
 __all__ = [ "WordMobi" ]
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
@@ -31,16 +32,17 @@ __license__ = "GPLv3"
 class WordMobi(Application):
     
     def __init__(self):
-        mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        items = [ ( u"Posts", u"", Icon(mif,16392,16392) ),
-                  ( u"Comments", u"", Icon(mif,16390,16390) ),
-                  ( u"Categories", u"", Icon(mif,16388,16388) ),
-                  ( u"Tags", u"", Icon(mif,16386,16386) ),
-                  ( u"Settings", u"", Icon(mif,16394,16394) ),
-                  ( u"Upgrade", u"", Icon(mif,16396,16396) ),
-                  ( u"About", u"", Icon(mif,16384,16384) )]        
-        
-        Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
+        LABELS.set_locale(DB["language"])
+        menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
+        self.mif = unicode(os.path.join(DEFDIR,MIFFILE))
+        items = [ ( LABELS.loc.wm_menu_post, u"", Icon(self.mif,16392,16392) ),
+                  ( LABELS.loc.wm_menu_comm, u"", Icon(self.mif,16390,16390) ),
+                  ( LABELS.loc.wm_menu_cats, u"", Icon(self.mif,16388,16388) ),
+                  ( LABELS.loc.wm_menu_tags, u"", Icon(self.mif,16386,16386) ),
+                  ( LABELS.loc.wm_menu_sets, u"", Icon(self.mif,16394,16394) ),
+                  ( LABELS.loc.wm_menu_upgr, u"", Icon(self.mif,16396,16396) ),
+                  ( LABELS.loc.wm_menu_abou, u"", Icon(self.mif,16384,16384) )]
+        Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ), menu)
 
         self.dlg = None
 
@@ -50,6 +52,19 @@ class WordMobi(Application):
         self.bind(key_codes.EKeyRightArrow, self.check_update_value)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
 
+    def refresh(self):
+        Application.refresh(self)
+        idx = self.body.current()
+        app.menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
+        items = [ ( LABELS.loc.wm_menu_post, u"", Icon(self.mif,16392,16392) ),
+                  ( LABELS.loc.wm_menu_comm, u"", Icon(self.mif,16390,16390) ),
+                  ( LABELS.loc.wm_menu_cats, u"", Icon(self.mif,16388,16388) ),
+                  ( LABELS.loc.wm_menu_tags, u"", Icon(self.mif,16386,16386) ),
+                  ( LABELS.loc.wm_menu_sets, u"", Icon(self.mif,16394,16394) ),
+                  ( LABELS.loc.wm_menu_upgr, u"", Icon(self.mif,16396,16396) ),
+                  ( LABELS.loc.wm_menu_abou, u"", Icon(self.mif,16384,16384) )]
+        app.body.set_list( items, idx )
+        
     def check_update_value(self):
         if not self.ui_is_locked():
             self.update_value()
@@ -63,7 +78,7 @@ class WordMobi(Application):
         return True
 
     def tags(self):
-        note(u"Not supported yet","info")
+        note(LABELS.loc.wm_err_not_supp,"info")
         
     def posts(self):
         self.dlg = Posts(self.default_cbk)
@@ -87,10 +102,10 @@ class WordMobi(Application):
         
     def upgrade(self):
         if DB["proxy_enabled"] == u"True" and len(DB["proxy_user"]) > 0:
-            note(u"Proxy authentication not supported for this feature","info")
+            note(LABELS.loc.wm_err_no_proxy,"info")
             return
 
-        self.lock_ui(u"Checking update page...")
+        self.lock_ui(LABELS.loc.wm_info_check_updt)
         
         url = "http://code.google.com/p/wordmobi/wiki/LatestVersion"
         local_file = "web_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
@@ -99,7 +114,7 @@ class WordMobi(Application):
         try:
             urllib.urlretrieve( url, local_file )
         except:
-            note(u"Impossible to access update page %s" % url,"error")
+            note(LABELS.loc.wm_err_upd_page % url,"error")
             ok = False
         else:
             ok = True
@@ -121,32 +136,32 @@ class WordMobi(Application):
                 num_rem_ver = self.ver2num(version)
                 num_loc_ver = self.ver2num(VERSION)
                 if num_loc_ver >= num_rem_ver:
-                    note(u"Your version is already updated", "info")
+                    note(LABELS.loc.wm_info_ver_is_updt, "info")
                 else:
-                    yn = popup_menu( [ u"Yes", u"No"], "Download %s ?" % (version) )
+                    yn = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no], LABELS.loc.wm_pmenu_download % (version) )
                     if yn is not None:
                         if yn == 0:
                             sis_name = file_url[file_url.rfind("/")+1:]
                             local_file = os.path.join(DEFDIR, "updates", sis_name)
 
-                            self.set_title( u"Downloading ..." )
+                            self.set_title( LABELS.loc.wm_info_downloading )
                             try:
                                 urllib.urlretrieve( file_url, local_file )
                             except:
-                                note(u"Impossible to download %s" % sis_name, "error")
+                                note(LABELS.loc.wm_err_downld_fail % sis_name, "error")
                             else:
-                                msg = u"%s downloaded in %supdates. Please, install it." % (sis_name,DEFDIR)
+                                msg = LABELS.loc.wm_info_downld_ok % (sis_name,DEFDIR)
                                 note( msg , "info")
 
             else:
-                note(u"Upgrade information missing.","error")
+                note(LABELS.loc.wm_err_upd_info,"error")
                 
         self.set_title( u"Wordmobi" )
         self.unlock_ui()
         self.refresh()
 
     def close_app(self):
-        ny = popup_menu( [u"Yes", u"No"], u"Exit ?" )
+        ny = popup_menu( [LABELS.loc.gm_yes, LABELS.loc.gm_no], LABELS.loc.wm_pmenu_exit )
         if ny is not None:
             if ny == 0:
                 self.clear_cache()
@@ -164,7 +179,7 @@ class WordMobi(Application):
                 except:
                     not_all = True
         if not_all:
-            note(u"Not all files in %s could be removed. Try to remove them later." % cache,"error")
+            note(LABELS.loc.wm_err_cache_cleanup % cache,"error")
             
     def about(self):
         self.dlg = About(self.default_cbk)
