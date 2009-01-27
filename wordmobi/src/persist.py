@@ -74,8 +74,6 @@ class Persist(dict):
 
             del ICONS
             del zlib
-
-
         
 DB = Persist()
 

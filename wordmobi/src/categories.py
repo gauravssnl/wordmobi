@@ -17,7 +17,7 @@ class Categories(Dialog):
         self.menu_items = [( LABELS.loc.ca_menu_updt, self.update ),
                            ( LABELS.loc.ca_menu_dele, self.delete ),
                            ( LABELS.loc.ca_menu_cnew, self.new ) ]
-        menu = self.menu_items + [( LABELS.loc.ca_menu_close, self.close_app )]
+        menu = self.menu_items + [( LABELS.loc.ca_menu_clos, self.close_app )]
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_cats, body, menu)
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
