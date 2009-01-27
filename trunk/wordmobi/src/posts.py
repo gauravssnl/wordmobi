@@ -22,6 +22,7 @@ from appuifw import InfoPopup # "from appuifw import *" above does not working p
 from persist import DB
 from wpwrapper import BLOG
 from wmglobals import DEFDIR
+from wmlocale import LABELS
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
@@ -31,8 +32,9 @@ class TakePhoto(Dialog):
         self.taken = False
         self.filename = ""
         body = Canvas()
-        menu = [ ( u"Take a photo", self.take_photo ),( u"Cancel", self.cancel_app ) ]
-        Dialog.__init__(self, lambda: True, u"Take a Photo Contents", body, menu)
+        menu = [ ( LABELS.loc.pt_menu_pict, self.take_photo ),
+                 ( LABELS.loc.pt_menu_canc, self.cancel_app ) ]
+        Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu)
         self.bind(key_codes.EKeySelect, self.take_photo)
         
     def cancel_app(self):
@@ -42,12 +44,17 @@ class TakePhoto(Dialog):
     def get_options(self):
         res = None
         while res is None:
-            res = popup_menu( [u"(320x240)", u"(640x480)" ], u"Resolution ?")
+            res = popup_menu([LABELS.loc.pt_list_320x240,
+                              LABELS.loc.pt_list_640x480],
+                             LABELS.loc.pt_pmenu_res)
         self.res = ( (320,240), (640,480) )[res]
         
         flash = None
         while flash is None:
-            flash = popup_menu( [u"Auto", u"None", u"Forced" ], u"Flash ?")
+            flash = popup_menu( [LABELS.loc.pt_list_fsh_auto,
+                                 LABELS.loc.pt_list_fsh_none,
+                                 LABELS.loc.pt_list_fsh_forc],
+                                LABELS.loc.pt_pmenu_flash)
         self.flash = ( "auto", "none", "forced" )[flash]            
     
     def run(self):
@@ -58,7 +65,7 @@ class TakePhoto(Dialog):
         try:
             camera.start_finder( self.redraw )
         except:
-            note(u"Could not start the view finder.","error")
+            note(LABELS.loc.pt_err_cant_start_viewf,"error")
             return None
         
         while (not self.taken) and (not self.cancel):
@@ -67,7 +74,7 @@ class TakePhoto(Dialog):
         try:
             camera.stop_finder()
         except:
-            note(u"Could not stop the view finder.","error")
+            note(LABELS.loc.pt_err_cant_stop_viewf,"error")
         
         return self.filename
 
@@ -78,7 +85,7 @@ class TakePhoto(Dialog):
             self.filename = os.path.join(DEFDIR, "images", self.filename)
             img.save( self.filename )            
         except:
-            note(u"Could not take any photo.","error")
+            note(LABELS.loc.pt_err_cant_take_pic,"error")
             self.cancel_app()
             return
         
@@ -96,7 +103,8 @@ class PostContents(Dialog):
         body.focus = True
         body.set_pos( 0 )
 
-        Dialog.__init__(self, cbk, u"Post Contents", body, [(u"Cancel", self.cancel_app)])
+        Dialog.__init__(self, cbk, LABELS.loc.pt_info_post_contents, body,
+                        [(LABELS.loc.pt_menu_canc, self.cancel_app)])
         
         self.text_snippets = {}
         # [ 0: menu name,
@@ -228,7 +236,7 @@ class PostContents(Dialog):
                 else:
                     return self.text_snippets[menu]["CLOSE_FUNC"]                
                     
-        self.menu = [(u"Text",(
+        self.menu = [(LABELS.loc.pt_menu_text,(
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
@@ -236,28 +244,30 @@ class PostContents(Dialog):
                        (gen_label("SPACE"), gen_ckb("SPACE")))
                        #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests 
                      ),
-                    (u"Links/images",(
+                    (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
                         (gen_label("LINK"), gen_ckb("LINK")))
                      ),
-                    (u"List",(
+                    (LABELS.loc.pt_menu_lsts,(
                         (gen_label("OLIST"), gen_ckb("OLIST")),
                         (gen_label("ULIST"), gen_ckb("ULIST")),
                         (gen_label("ILIST"), gen_ckb("ILIST")))
                      ),                     
-                    (u"Revision", (
+                    (LABELS.loc.pt_menu_revs, (
                         (gen_label("INS"), gen_ckb("INS")),
                         (gen_label("DEL"), gen_ckb("DEL")))
                      ),
-                    ( u"Preview", self.preview_html ),
-                    ( u"Cancel", self.cancel_app )]
+                    (LABELS.loc.pt_menu_prvw, self.preview_html ),
+                    (LABELS.loc.pt_menu_canc, self.cancel_app )]
 
         Dialog.refresh(self)
 
     def insert_img(self, closing):
         txt =  u""
-
-        ir = popup_menu( [u"Local file", u"Take a photo", u"URL"], u"Image from:")
+        ir = popup_menu( [LABELS.loc.pt_list_loc_file,
+                          LABELS.loc.pt_list_take_img,
+                          LABELS.loc.pt_list_url],
+                         LABELS.loc.pt_pmenu_img_src)
         if ir is not None:
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
@@ -268,7 +278,7 @@ class PostContents(Dialog):
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
             else:
-                url = query(u"Image URL:","text", u"http://")
+                url = query(LABELS.loc.pt_pmenu_img_url, "text", u"http://")
                 if url is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (url,url)
 
@@ -282,7 +292,7 @@ class PostContents(Dialog):
         if closing:
             txt = u"</a>"
         else:
-            url = query(u"Link URL:","text", u"http://")
+            url = query(LABELS.loc.pt_pmenu_link_url, "text", u"http://")
             if url is not None:
                 txt = u"<a href=\"%s\" target=\"_blank\" />" % (url)
 
@@ -337,14 +347,14 @@ class PostContents(Dialog):
             fp.write("</body></html>")
             fp.close()
         except:
-            note(u"Could not generate preview file.","error")
+            note(LABELS.loc.pt_err_cant_gen_prvw,"error")
             return
         
         viewer = Content_handler( self.refresh )
         try:
             viewer.open( name )
         except:
-            note(u"Impossible to preview." ,"error")
+            note(LABELS.loc.pt_err_cant_prvw,"error")
             
 class NewPost(Dialog):
     def __init__(self,
@@ -365,8 +375,8 @@ class NewPost(Dialog):
         self.last_idx = 0
 
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
-        menu = [ ( u"Cancel", self.cancel_app ) ]
-        Dialog.__init__(self, cbk, u"New Post", body, menu)
+        menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app ) ]
+        Dialog.__init__(self, cbk, LABELS.loc.pt_info_new_post, body, menu)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
         
@@ -376,21 +386,21 @@ class NewPost(Dialog):
         img = unicode(",".join(self.images))
         cat = unicode(",".join(self.categories))
         if self.publish:
-            pub = u"Yes"
+            pub = LABELS.loc.pt_info_no_pub
         else:
-            pub = u"No (draft)"
+            pub = LABELS.loc.pt_info_draft
 
-        lst_values = [ (u"Title", self.post_title ), \
-                       (u"Contents", self.contents[:50]), \
-                       (u"Categories", cat), \
-                       (u"Images", img ), \
-                       (u"Publish", pub) ]
+        lst_values = [ (LABELS.loc.pt_menu_titl, self.post_title ),
+                       (LABELS.loc.pt_menu_cont, self.contents[:50]),
+                       (LABELS.loc.pt_menu_cats, cat),
+                       (LABELS.loc.pt_menu_imgs, img ),
+                       (LABELS.loc.pt_menu_pubs, pub) ]
 
         app.body.set_list( lst_values, self.last_idx )   
         
     def close_app(self):
         if not self.cancel:
-            ny = popup_menu( [u"Yes", u"No"], u"Send post ?")
+            ny = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no], LABELS.loc.pt_pmenu_send_post)
             if ny is None:
                 return
             if ny == 1:
@@ -399,7 +409,7 @@ class NewPost(Dialog):
         Dialog.close_app(self)
                 
     def update_post_title(self):
-        post_title = query(u"Post title:","text", self.post_title)
+        post_title = query(LABELS.loc.pt_pmenu_post_title, "text", self.post_title)
         if post_title is not None:
             self.post_title = post_title
         self.refresh()
@@ -421,7 +431,11 @@ class NewPost(Dialog):
         self.refresh()
         
     def update_images(self):
-        ir = popup_menu( [u"Insert", u"Take a photo", u"View/List", u"Remove"], u"Images")
+        ir = popup_menu( [LABELS.loc.pt_list_ins_img,
+                          LABELS.loc.pt_list_take_img,
+                          LABELS.loc.pt_list_view_img,
+                          LABELS.loc.pt_list_rem_img],
+                         LABELS.loc.pt_pmenu_images)
         if ir is not None:
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
@@ -447,7 +461,7 @@ class NewPost(Dialog):
                             self.remove_image( self.images[item].encode('utf-8') )
                             del self.images[item]
                 else:
-                    note(u"No images selected.","info")
+                    note(LABELS.loc.pt_info_no_imgs_sel,"info")
         self.refresh()
 
     def update_publish(self):
@@ -477,7 +491,7 @@ class NewPost(Dialog):
             try:
                 viewer.open( img )
             except:
-                note(u"Impossible to open %s" % img,"error") 
+                note(LABELS.loc.pt_err_cant_open % img,"error") 
         else:
             # urllib seems not to support proxy authentication
             # so, download will fail in these cases
@@ -486,11 +500,11 @@ class NewPost(Dialog):
             d = img.rfind(".")
             if d >= 0:
                 local_file = local_file + img[d:]
-                self.lock_ui(u"Downloading %s" % img)
+                self.lock_ui(LABELS.loc.pt_info_downld_img % img)
                 try:
                     urllib.urlretrieve( img, local_file )
                 except:
-                    note(u"Impossible to download %s" % img,"error")
+                    note(LABELS.loc.pt_err_cant_downld % img,"error")
                     self.unlock_ui()
                     return
                 self.unlock_ui()
@@ -498,9 +512,9 @@ class NewPost(Dialog):
                 try:
                     viewer.open( local_file )
                 except:
-                    note(u"Impossible to open %s" % img,"error") 
+                    note(LABELS.loc.pt_err_cant_open % img,"error") 
             else:
-                note(u"Unkown externsion for %s" % img,"error")
+                note(LABELS.loc.pt_err_unknown_ext % img,"error")
                 
     def run(self):
         self.refresh()
@@ -532,7 +546,7 @@ class EditPost(NewPost):
                           [ decode_html(c) for c in post['categories'] ],
                           publish )
         self.original_state = publish
-        self.set_title(u"Edit Post")
+        self.set_title(LABELS.loc.pt_info_edit_post)
         self.post = post
         self.find_images()
 
@@ -541,11 +555,11 @@ class EditPost(NewPost):
         if self.original_state == False:
             NewPost.update_publish(self)
         else:
-            note(u"Post already published.","info")
+            note(LABELS.loc.pt_info_alrd_pub,"info")
             
     def close_app(self):
         if not self.cancel:
-            ny = popup_menu( [u"No", u"Yes"], u"Update post ?")
+            ny = popup_menu( [LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.pt_pmenu_updt_post)
             if ny is None:
                 return
             if ny == 0:
@@ -554,18 +568,19 @@ class EditPost(NewPost):
             
 class Posts(Dialog):
     def __init__(self,cbk):
+        LABELS.set_locale(DB["language"])
         self.last_idx = 0
         self.headlines = []
         #self.tooltip = InfoPopup()
         body = Listbox( [ (u"", u"") ], self.check_popup_menu )
-        self.menu_items = [( u"Update", self.update ),
-                           ( u"View/Edit", self.contents ),
-                           ( u"Delete", self.delete ),
-                           ( u"List Comments", self.comments ),
-                           ( u"Create new", self.new ) ]
-        menu = self.menu_items + [( u"Close", self.close_app )]
+        self.menu_items = [( LABELS.loc.pt_menu_updt, self.update ),
+                           ( LABELS.loc.pt_menu_view, self.contents ),
+                           ( LABELS.loc.pt_menu_dele, self.delete ),
+                           ( LABELS.loc.pt_menu_lstc, self.comments ),
+                           ( LABELS.loc.pt_menu_cnew, self.new ) ]
+        menu = self.menu_items + [(LABELS.loc.pt_menu_clos, self.close_app )]
         
-        Dialog.__init__(self, cbk, u"Posts", body, menu)
+        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_post, body, menu)
 
         self.bind(key_codes.EKeyUpArrow, self.key_up)
         self.bind(key_codes.EKeyDownArrow, self.key_down)
@@ -582,7 +597,7 @@ class Posts(Dialog):
             m = len( self.headlines )
             if p < 0:
                 p = m - 1
-            self.set_title( u"[%d/%d] Posts" % (p+1,m) )
+            self.set_title( LABELS.loc.pt_info_pst_pos % (p+1,m) )
             #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
 
     def key_down(self):
@@ -591,7 +606,7 @@ class Posts(Dialog):
             m = len( self.headlines )
             if p >= m:
                 p = 0
-            self.set_title( u"[%d/%d] Posts" % (p+1,m) )
+            self.set_title( LABELS.loc.pt_info_pst_pos % (p+1,m) )
             #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
 
     def key_right(self):
@@ -603,7 +618,7 @@ class Posts(Dialog):
             self.popup_menu()
 
     def popup_menu(self):
-        op = popup_menu( map( lambda x: x[0], self.menu_items ) , u"Posts:")
+        op = popup_menu( map( lambda x: x[0], self.menu_items ) , LABELS.loc.pt_pmenu_posts)
         if op is not None:
             self.last_idx = app.body.current()
             map( lambda x: x[1], self.menu_items )[op]()
@@ -618,7 +633,7 @@ class Posts(Dialog):
             self.dlg.update( self.body.current() )  # update comments for current post
     
     def update(self):
-        self.lock_ui(u"Downloading post titles..." )
+        self.lock_ui(LABELS.loc.pt_info_downld_pt)
         BLOG.update_posts()
         #if BLOG.update_posts():
         #    self.set_title(u"Updating categories...")
@@ -626,21 +641,21 @@ class Posts(Dialog):
         self.unlock_ui()            
 
         if not BLOG.posts:
-            note( u"No posts available.", "info" )
+            note( LABELS.loc.pt_info_no_posts, "info" )
         
         self.refresh()
     
     def delete(self):
         if BLOG.posts:
-            ny = popup_menu( [u"No", u"Yes"], u"Delete post ?" )
+            ny = popup_menu( [LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.pt_pmenu_del_post )
             if ny is not None:
                 if ny == 1:
-                    self.lock_ui(u"Deleting post...")
+                    self.lock_ui(LABELS.loc.pt_info_del_post)
                     idx = app.body.current()
                     if not BLOG.delete_post(idx):
-                        note(u"Impossible to delete the post.","error")
+                        note(LABELS.loc.pt_err_cant_del_pt,"error")
                     else:
-                        note(u"Post deleted.","info")                        
+                        note(LABELS.loc.pt_info_post_del,"info")                        
                     self.unlock_ui() 
                     self.refresh()            
 
@@ -682,12 +697,12 @@ class Posts(Dialog):
     def contents(self):
         idx = self.body.current()
         if not BLOG.posts:
-            note( u"Please, update the post list.", "info" )
+            note(LABELS.loc.pt_info_updt_pst_lst, "info" )
             return
         
         # if post was not totally retrieved yet, fetch all data
         if BLOG.posts[idx].has_key('description') == False:
-            self.lock_ui(u"Downloading post...")
+            self.lock_ui(LABELS.loc.pt_info_downld_post)
             ok = BLOG.get_post(idx)
             self.unlock_ui()
             if not ok:
@@ -702,7 +717,7 @@ class Posts(Dialog):
         Dialog.refresh(self) # must be called *before* 
 
         if not BLOG.posts:
-            self.headlines = [ (u"<empty>", u"Please, update the post list") ]
+            self.headlines = [ (LABELS.loc.pt_info_empty, LABELS.loc.pt_info_updt_pst_lst) ]
         else:
             self.headlines = []
             for p in BLOG.posts:
