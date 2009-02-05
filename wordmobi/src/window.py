@@ -485,7 +485,7 @@ class Window(object):
         self.body = body
     
         if menu is None:
-            menu = [(LABEL.loc.wi_info_exit, self.close_app)]
+            menu = [(LABELS.loc.wi_info_exit, self.close_app)]
 
         if exit_handler is None:
             exit_handler = self.close_app
