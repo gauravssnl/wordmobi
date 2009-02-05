@@ -361,7 +361,7 @@ class NewPost(Dialog):
                  cbk,
                  post_title=u"",
                  contents=u"",
-                 blog_categories = [u"Uncategorized"],                 
+                 blog_categories = [LABELS.loc.wp_list_uncategorized],                 
                  categories = [],
                  publish = True):
         

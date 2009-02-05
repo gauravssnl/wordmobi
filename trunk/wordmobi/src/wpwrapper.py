@@ -9,6 +9,7 @@ from wmutil import *
 from wmproxy import UrllibTransport
 from persist import DB
 from wmglobals import PROMO_PHRASE
+from wmlocale import LABELS
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 
@@ -16,7 +17,10 @@ class WordPressWrapper(object):
     def __init__(self):
         self.posts = []
         self.comments = []
-        self.categories = [ { 'categoryName':u"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]    
+        self.cat_default = [ { 'categoryName':LABELS.loc.wp_list_uncategorized,
+                               'categoryId':'1',
+                               'parentId':'0' } ]
+        self.categories = self.cat_default   
         self.blog = None
 
     def categoryNamesList(self):
@@ -48,7 +52,7 @@ class WordPressWrapper(object):
 
         # categories *never* may be empty
         if not self.categories:
-            self.categories = [ { 'categoryName':u"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
+            self.categories = self.cat_default
             
         return True
 
@@ -60,18 +64,18 @@ class WordPressWrapper(object):
         try:
             res = self.blog.deleteCategory(cat_id)
         except:
-            note(u"Impossible to delete category %s." % cat_name,"error")
+            note(LABEL.loc.wp_err_cant_del_cat % cat_name,"error")
             
         if res:
             del self.categories[item]
-            note(u"Category %s deleted." % cat_name,"info")
+            note(LABELS.loc.wp_info_cat_del % cat_name,"info")
             retval = True
         else:
-            note(u"Impossible to delete category %s." % cat_name,"error")
+            note(LABEL.loc.wp_err_cant_del_cat % cat_name,"error")
 
         # categories *never* may be empty
         if not self.categories:
-            self.categories = [ { 'categoryName':u"Uncategorized", 'categoryId':'1', 'parentId':'0' } ]
+            self.categories = self.cat_default
             
         return retval
 
@@ -85,7 +89,7 @@ class WordPressWrapper(object):
         try:
             cat_id = self.blog.newCategory(wpc)
         except:
-            note(u"Impossible to create category %s." % cat_name,"error")
+            note(LABELS.loc.wp_err_cant_create_cat % cat_name,"error")
             return False
         return True
 
@@ -93,7 +97,7 @@ class WordPressWrapper(object):
         try:
             self.posts = self.blog.getRecentPostTitles( int(DB["num_posts"]) )
         except:
-            note(u"Impossible to update posts.","error")
+            note(LABELS.loc.wp_err_cant_updt_post,"error")
             return False
 
         return self.update_categories()
@@ -102,17 +106,17 @@ class WordPressWrapper(object):
         try:
             self.posts[item] = self.blog.getPost( self.posts[item]['postid'] )
         except:
-            note(u"Impossible to download the post. Try again.","error")
+            note(LABELS.loc.wp_err_cant_downl_post,"error")
             return False
         
         return True
 
     def upload_images(self, fname):
-        app.title = u"Uploading %s..." % ( os.path.basename(fname) ) 
+        app.title = LABELS.loc.wp_info_upld_img % ( os.path.basename(fname) ) 
         try:
             img_src = self.blog.newMediaObject(fname)
         except:
-            note(u"Impossible to upload %s. Try again." % fname,"error")
+            note(LABELS.loc.wp_err_cant_upld_img % fname,"error")
             return None
         
         return img_src
@@ -120,7 +124,7 @@ class WordPressWrapper(object):
     def new_post(self, title, contents, categories, publish):
         """ Uplaod a new post
         """
-        app.title = u"Uploading post contents..." 
+        app.title = LABELS.loc.wp_info_upld_post_cont
                       
         soup = BeautifulSoup( unicode_to_utf8(contents) )
         for img in soup.findAll('img'):
@@ -130,7 +134,7 @@ class WordPressWrapper(object):
                     img['src'] = url
 
         contents = soup.prettify().replace("\n"," ")
-        app.title = u"Uploading post contents..." 
+        app.title = LABELS.loc.wp_info_upld_post_cont 
 
         post = wp.WordPressPost()
         post.description = contents + PROMO_PHRASE
@@ -142,21 +146,21 @@ class WordPressWrapper(object):
         try:
             npost = self.blog.newPost(post, publish)
         except:
-            note(u"Impossible to publish the post. Try again.","error")
+            note(LABELS.loc.wp_err_cant_pub_post,"error")
             npost = -1
 
         if npost >= 0:
-            app.title =  u"Updating post list..." 
+            app.title =  LABELS.loc.wp_info_updt_post_list 
             try:
                 p = self.blog.getLastPostTitle( )
                 self.posts.insert( 0, p )
             except:
-                note(u"Impossible to update post title. Try again.","error")
+                note(LABELS.loc.wp_err_cant_updt_post_list,"error")
 
         return npost
 
     def edit_post(self, title, contents, categories, post_orig, publish):
-        app.title = u"Uploading post contents..."
+        app.title = LABELS.loc.wp_info_upld_post_cont
 
         soup = BeautifulSoup( unicode_to_utf8(contents) )
         for img in soup.findAll('img'):
@@ -166,7 +170,7 @@ class WordPressWrapper(object):
                     img['src'] = url
 
         contents = soup.prettify().replace("\n"," ")
-        app.title = u"Uploading post contents..."
+        app.title = LABELS.loc.wp_info_upld_post_cont
 
         post = wp.WordPressPost()
         post.id = post_orig['postid']
@@ -182,17 +186,17 @@ class WordPressWrapper(object):
         try:
             npost = self.blog.editPost( post.id, post, publish)
         except:
-            note(u"Impossible to update the post. Try again.","error")
+            note(LABELS.loc.wp_err_cant_updt_the_post,"error")
             ret = False
 
         upd_ok = False
         if ret:
-            app.title = u"Uploading post list..."
+            app.title = LABELS.loc.wp_info_updt_post_list
             try:
                 upd_post = self.blog.getPost(post.id)
                 upd_ok = True
             except:
-                note(u"Impossible to update post title. Try again.","error")
+                note(LABELS.loc.wp_err_cant_updt_post_list,"error")
 
         if upd_ok:
             # update the list !
@@ -222,7 +226,7 @@ class WordPressWrapper(object):
         try:
             comments = self.blog.getComments( comm_info )
         except:
-            note(u"Impossible to download comments. Try again.","error")
+            note(LABELS.loc.wp_err_cant_downl_cmt,"error")
             return False
 
         self.comments = self.comments + comments
@@ -243,13 +247,13 @@ class WordPressWrapper(object):
         try:
             self.blog.editComment(comment_id, comment)
         except:
-            note(u"Impossible to update the comment. Try again.","error")
+            note(LABELS.loc.wp_err_cant_updt_cmt,"error")
             return False
 
         try:
             c = self.blog.getComment( comment_id )
         except:
-            note(u"Impossible to update the comment list. Try again.","error")
+            note(LABELS.loc.wp_err_cant_updt_cmt_list,"error")
             c = None
 
         if c:
@@ -269,13 +273,13 @@ class WordPressWrapper(object):
         try:
             comment_id = self.blog.newComment( post_id, comment )
         except:
-            note(u"Impossible to send the comment. Try again.","error")
+            note(LABELS.loc.wp_err_cant_pub_cmt,"error")
             return False
 
         try:
             c = self.blog.getComment( comment_id )
         except:
-            note(u"Impossible to update the comment list. Try again.","error")
+            note(LABELS.loc.wp_err_cant_updt_cmt_list,"error")
             c = None
 
         if c:
@@ -296,10 +300,10 @@ class WordPressWrapper(object):
         try:
             self.blog.editComment(comment_id, comment)
         except:
-            note(u"Impossible to approve the comment. Try again.","error")
+            note(LABELS.loc.wp_err_cant_appr_cmt,"error")
             return False
 
-        note(u"Comment approved.","info")
+        note(LABELS.loc.wp_info_cmt_approved,"info")
         self.comments[idx]['status'] = 'approve'
 
         return True
@@ -308,11 +312,11 @@ class WordPressWrapper(object):
         try:
             self.blog.deleteComment( self.comments[idx]['comment_id'] )
         except:
-            note(u"Impossible to delete the comment. Try again.","error")
+            note(LABELS.loc.wp_err_cant_del_cmt,"error")
             return False
         
         del self.comments[idx]
-        note(u"Comment deleted.","info")
+        note(LABELS.loc.wp_info_cmt_del,"info")
         
         return True
             

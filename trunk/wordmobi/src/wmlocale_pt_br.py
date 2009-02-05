@@ -185,3 +185,76 @@ pt_pmenu_send_post = u"Enviar post ?"
 pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
 pt_pmenu_updt_post = u"Atualizar post ?"
+
+# Settings info
+st_info_blog_set = u"Configurações do blog"
+st_info_proxy_set = u"Configurações do proxy"
+        
+# Settings error
+st_err_no_access_point = u"Nenhum  ponto de acesso encontrado."
+st_err_one_ap_req = u"É necessário pelo menos um ponto de acesso."
+        
+# Settings query
+st_query_access_points = u"Pontos de acesso:"
+st_query_proxy_add = u"Endereço do proxy:"
+st_query_proxy_prt = u"Porta do proxy:"
+st_query_proxy_usr = u"Usuário do proxy:"
+st_query_proxy_pwd = u"Senha do proxy:"
+        
+# Settings menu
+st_menu_canc = u"Cancelar"
+st_menu_blog = u"Blog"
+st_menu_proxy = u"Proxy"
+st_menu_access_point = u"Ponto de acesso"
+st_menu_lang = u"Idioma"
+st_menu_blog_url = u"URL do blog:"
+st_menu_blog_usr = u"Usuario:"
+st_menu_blog_pwd = u"Senha:"
+st_menu_blog_npt = u"Número de posts:"
+st_menu_blog_cpp = u"Número de comentários por post:"
+st_menu_blog_eml = u"Email (para comentários):"
+st_menu_blog_rnm = u"Nome real (para comentários):"
+st_menu_proxy_ena = u"Habilitado"
+st_menu_proxy_add = u"Endereço"
+st_menu_proxy_prt = u"Porta"
+st_menu_proxy_usr = u"Usuário"
+st_menu_proxy_pwd = u"Senha"
+st_menu_proxy_on = u"Sim"
+st_menu_proxy_off = u"Não"
+
+# languages support
+st_menu_en_us = u"Inglês (USA)"
+st_menu_pt_br = u"Português"
+        
+# Setting popup menu
+st_pmenu_lang = u"Idioma:"
+
+# Window
+wi_info_exit = u"Sair"
+
+# Wpwrapper error
+wp_err_cant_del_cat = u"Impossível apagar categoria %s."
+wp_err_cant_create_cat = u"Impossible to create category %s."
+wp_err_cant_updt_post = u"Impossible to update posts."
+wp_err_cant_downl_post = u"Impossible to download the post. Try again."
+wp_err_cant_upld_img = u"Impossible to upload %s. Try again."
+wp_err_cant_pub_post = u"Impossible to publish the post. Try again."
+wp_err_cant_updt_post_list = u"Impossible to update post title list. Try again."
+wp_err_cant_updt_the_post = u"Impossible to update the post. Try again."
+wp_err_cant_downl_cmt = u"Impossible to download comments. Try again."
+wp_err_cant_updt_cmt = u"Impossible to update the comment. Try again."
+wp_err_cant_updt_cmt_list = u"Impossible to update the comment list. Try again."
+wp_err_cant_pub_cmt = u"Impossible to publish the comment. Try again."
+wp_err_cant_appr_cmt = u"Impossible to approve the comment. Try again."
+wp_err_cant_del_cmt = u"Impossible to delete the comment. Try again."
+
+# Wpwrapper info
+wp_info_cat_del = u"Category %s deleted."
+wp_info_upld_img = u"Uploading %s..."
+wp_info_upld_post_cont = u"Uploading post contents..."
+wp_info_updt_post_list = u"Updating post list..."
+wp_info_cmt_approved = u"Comment approved."
+wp_info_cmt_del = u"Comment deleted."
+        
+# Wpwrapper list
+wp_list_uncategorized = u"Uncategorized"

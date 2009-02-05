@@ -205,8 +205,12 @@ class Default(object):
         self.loc.st_err_one_ap_req = u"At least one access point is required."
         
         # Settings query
-        self.loc.st_query_aaccess_points = u"Access points:"
-
+        self.loc.st_query_access_points = u"Access points:"
+        self.loc.st_query_proxy_add = u"Proxy address:"
+        self.loc.st_query_proxy_prt = u"Proxy port:"
+        self.loc.st_query_proxy_usr = u"Proxy username:"
+        self.loc.st_query_proxy_pwd = u"Proxy password:"
+        
         # Settings menu
         self.loc.st_menu_canc = u"Cancel"
         self.loc.st_menu_blog = u"Blog"
@@ -224,13 +228,45 @@ class Default(object):
         self.loc.st_menu_proxy_add = u"Address"
         self.loc.st_menu_proxy_prt = u"Port"
         self.loc.st_menu_proxy_usr = u"Username"
-        self.loc.st_menu_proxy_pwd = u"Password" 
+        self.loc.st_menu_proxy_pwd = u"Password"
+        self.loc.st_menu_proxy_on = u"Enabled"
+        self.loc.st_menu_proxy_off = u"Disabled"
         # languages support
         self.loc.st_menu_en_us = u"English (USA)"
         self.loc.st_menu_pt_br = u"Portuguese"
         
         # Setting popup menu
         self.loc.st_pmenu_lang = u"Language:"
+
+        # Window
+        self.loc.wi_info_exit = u"Exit"
+
+        # Wpwrapper error
+        self.loc.wp_err_cant_del_cat = u"Impossible to delete category %s."
+        self.loc.wp_err_cant_create_cat = u"Impossible to create category %s."
+        self.loc.wp_err_cant_updt_post = u"Impossible to update posts."
+        self.loc.wp_err_cant_downl_post = u"Impossible to download the post. Try again."
+        self.loc.wp_err_cant_upld_img = u"Impossible to upload %s. Try again."
+        self.loc.wp_err_cant_pub_post = u"Impossible to publish the post. Try again."
+        self.loc.wp_err_cant_updt_post_list = u"Impossible to update post title list. Try again."
+        self.loc.wp_err_cant_updt_the_post = u"Impossible to update the post. Try again."
+        self.loc.wp_err_cant_downl_cmt = u"Impossible to download comments. Try again."
+        self.loc.wp_err_cant_updt_cmt = u"Impossible to update the comment. Try again."
+        self.loc.wp_err_cant_updt_cmt_list = u"Impossible to update the comment list. Try again."
+        self.loc.wp_err_cant_pub_cmt = u"Impossible to publish the comment. Try again."
+        self.loc.wp_err_cant_appr_cmt = u"Impossible to approve the comment. Try again."
+        self.loc.wp_err_cant_del_cmt = u"Impossible to delete the comment. Try again."
+
+        # Wpwrapper info
+        self.loc.wp_info_cat_del = u"Category %s deleted."
+        self.loc.wp_info_upld_img = u"Uploading %s..."
+        self.loc.wp_info_upld_post_cont = u"Uploading post contents..."
+        self.loc.wp_info_updt_post_list = u"Updating post list..."
+        self.loc.wp_info_cmt_approved = u"Comment approved."
+        self.loc.wp_info_cmt_del = u"Comment deleted."
+        
+        # Wpwrapper list
+        self.loc.wp_list_uncategorized = u"Uncategorized"
         
 class Locale(Default):
     "Multiple language support class"
