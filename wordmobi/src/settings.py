@@ -9,6 +9,7 @@ import key_codes
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
+from wmlocale import LABELS
 
 __all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
 
@@ -18,13 +19,13 @@ def sel_access_point():
     """
     aps = access_points()
     if not aps:
-        note(u"Could't find any access point.","error")
+        note(LABELS.loc.st_err_no_access_point,"error")
         return False
     
     ap_labels = map( lambda x: x['name'], aps )
-    item = popup_menu( ap_labels, u"Access points:" )
+    item = popup_menu( ap_labels, LABELS.loc.st_query_aaccess_points )
     if item is None:
-        note(u"At least one access point is required.","error")
+        note(LABELS.loc.st_err_one_ap_req,"error")
         return False
     
     apo = access_point( aps[item]['iapid'] )
@@ -43,22 +44,22 @@ class BlogSettings(Dialog):
         self.realname = DB["realname"]
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
-        menu = [( u"Cancel", self.cancel_app )]
+        menu = [( LABELS.loc.st_menu_canc, self.cancel_app )]
         
-        Dialog.__init__(self, cbk, u"Blog settings", body,  menu)
+        Dialog.__init__(self, cbk, LABELS.loc.st_info_blog_set, body,  menu)
 
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.update_value)
             
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
-        values = [ (u"Blog URL:", self.blog ),
-                   (u"Username:", self.user ),
-                   (u"Password:", u"*"*len( self.passw )),
-                   (u"Number of posts:", unicode( self.num_posts )),
-                   (u"Number of comments per post:", unicode( self.num_comments )),
-                   (u"Email (for comments):",  self.email ),
-                   (u"Real name (for comments):",  self.realname ) ]
+        values = [ (LABELS.loc.st_menu_blog_url, self.blog ),
+                   (LABELS.loc.st_menu_blog_usr, self.user ),
+                   (LABELS.loc.st_menu_blog_pwd, u"*"*len( self.passw )),
+                   (LABELS.loc.st_menu_blog_npt, unicode( self.num_posts )),
+                   (LABELS.loc.st_menu_blog_cpp, unicode( self.num_comments )),
+                   (LABELS.loc.st_menu_blog_eml, self.email ),
+                   (LABELS.loc.st_menu_blog_rnm, self.realname ) ]
 
         app.body.set_list( values, self.last_idx )
 
@@ -66,10 +67,29 @@ class BlogSettings(Dialog):
         idx = app.body.current()
         self.last_idx = idx
         
-        vars = ( "blog", "user", "passw", "num_posts", "num_comments", "email", "realname" )
-        labels = ( u"Blog URL:", u"Username:", u"Password:", u"Number of posts:", \
-                   u"Number of comments per post",  u"Email (for comments):", u"Real name (for comments):" )
-        formats = ( "text", "text", "code", "number", "number", "text", "text" )
+        vars = ( "blog",
+                 "user",
+                 "passw",
+                 "num_posts",
+                 "num_comments",
+                 "email",
+                 "realname" )
+        
+        labels = ( LABELS.loc.st_menu_blog_url,
+                   LABELS.loc.st_menu_blog_usr,
+                   LABELS.loc.st_menu_blog_pwd,
+                   LABELS.loc.st_menu_blog_npt,
+                   LABELS.loc.st_menu_blog_cpp,
+                   LABELS.loc.st_menu_blog_eml,
+                   LABELS.loc.st_menu_blog_rnm )
+
+        formats = ( "text",
+                    "text",
+                    "code",
+                    "number",
+                    "number",
+                    "text",
+                    "text" )
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
@@ -89,20 +109,20 @@ class ProxySettings(Dialog):
 
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
-        menu = [( u"Cancel", self.cancel_app )]
+        menu = [( LABELS.loc.st_menu_canc, self.cancel_app )]
         
-        Dialog.__init__(self, cbk, u"Proxy settings", body,  menu)
+        Dialog.__init__(self, cbk, LABELS.loc.st_info_proxy_set, body,  menu)
 
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.update_value)
         
     def refresh(self):
         Dialog.refresh(self)
-        values = [ (u"Enabled", self.proxy_enabled  ), \
-                   (u"Address", self.proxy_address ), \
-                   (u"Port", unicode( self.proxy_port ) ), \
-                   (u"Username", self.proxy_user), \
-                   (u"Password", u"*"*len( self.proxy_password ) ) ]
+        values = [ (LABELS.loc.st_menu_proxy_ena, self.proxy_enabled  ), \
+                   (LABELS.loc.st_menu_proxy_add, self.proxy_address ), \
+                   (LABELS.loc.st_menu_proxy_prt, unicode( self.proxy_port ) ), \
+                   (LABELS.loc.st_menu_proxy_usr, self.proxy_user), \
+                   (LABELS.loc.st_menu_proxy_pwd, u"*"*len( self.proxy_password ) ) ]
 
         app.body.set_list( values, self.last_idx )
 
@@ -141,12 +161,12 @@ class ProxySettings(Dialog):
 class Settings(Dialog):
     def __init__(self,cbk):
         self.dlg = None
-        items = [ ( u"Blog",u""),
-                  ( u"Proxy", u""),
-                  ( u"Access Point", u""),
-                  ( u"Language", u"")]
+        items = [ ( LABEL.loc.st_menu_blog,u""),
+                  ( LABEL.loc.st_menu_proxy, u""),
+                  ( LABEL.loc.st_menu_access_point, u""),
+                  ( LABEL.loc.st_menu_lang, u"")]
 
-        Dialog.__init__(self, cbk, u"Settings", Listbox( items, self.update_value ) )
+        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_sets, Listbox( items, self.update_value ) )
 
         self.bind(key_codes.EKeyRightArrow, self.update_value)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)        
@@ -198,9 +218,9 @@ class Settings(Dialog):
             BLOG.set_blog()
 
     def language(self):
-        langs = [ (u"English (USA)", u"en_us"),
-                  (u"Portuguese", u"pt_br") ]
-        item = popup_menu(map(lambda x:x[0], langs), u"Language:" )
+        langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
+                  (LABELS.loc.st_menu_pt_br, u"pt_br") ]
+        item = popup_menu(map(lambda x:x[0], langs), LABELS.loc.st_pmenu_lang )
         if item is not None:
             loc = langs[item][1]
             if DB["language"] != loc:

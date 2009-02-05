@@ -195,8 +195,43 @@ class Default(object):
         self.loc.pt_pmenu_post_title = u"Post title:"
         self.loc.pt_pmenu_images = u"Images"
         self.loc.pt_pmenu_updt_post = u"Update post ?"
-        
 
+        # Settings info
+        self.loc.st_info_blog_set = u"Blog settings"
+        self.loc.st_info_proxy_set = u"Proxy settings"
+        
+        # Settings error
+        self.loc.st_err_no_access_point = u"Could't find any access point."
+        self.loc.st_err_one_ap_req = u"At least one access point is required."
+        
+        # Settings query
+        self.loc.st_query_aaccess_points = u"Access points:"
+
+        # Settings menu
+        self.loc.st_menu_canc = u"Cancel"
+        self.loc.st_menu_blog = u"Blog"
+        self.loc.st_menu_proxy = u"Proxy"
+        self.loc.st_menu_access_point = u"Access Point"
+        self.loc.st_menu_lang = u"Language"
+        self.loc.st_menu_blog_url = u"Blog URL:"
+        self.loc.st_menu_blog_usr = u"Username:"
+        self.loc.st_menu_blog_pwd = u"Password:"
+        self.loc.st_menu_blog_npt = u"Number of posts:"
+        self.loc.st_menu_blog_cpp = u"Number of comments per post:"
+        self.loc.st_menu_blog_eml = u"Email (for comments):"
+        self.loc.st_menu_blog_rnm = u"Real name (for comments):"
+        self.loc.st_menu_proxy_ena = u"Enabled"
+        self.loc.st_menu_proxy_add = u"Address"
+        self.loc.st_menu_proxy_prt = u"Port"
+        self.loc.st_menu_proxy_usr = u"Username"
+        self.loc.st_menu_proxy_pwd = u"Password" 
+        # languages support
+        self.loc.st_menu_en_us = u"English (USA)"
+        self.loc.st_menu_pt_br = u"Portuguese"
+        
+        # Setting popup menu
+        self.loc.st_pmenu_lang = u"Language:"
+        
 class Locale(Default):
     "Multiple language support class"
     
