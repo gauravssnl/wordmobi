@@ -34,14 +34,15 @@ class WordMobi(Application):
     def __init__(self):
         LABELS.set_locale(DB["language"])
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
-        self.mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        items = [ ( LABELS.loc.wm_menu_post, u"", Icon(self.mif,16392,16392) ),
-                  ( LABELS.loc.wm_menu_comm, u"", Icon(self.mif,16390,16390) ),
-                  ( LABELS.loc.wm_menu_cats, u"", Icon(self.mif,16388,16388) ),
-                  ( LABELS.loc.wm_menu_tags, u"", Icon(self.mif,16386,16386) ),
-                  ( LABELS.loc.wm_menu_sets, u"", Icon(self.mif,16394,16394) ),
-                  ( LABELS.loc.wm_menu_upgr, u"", Icon(self.mif,16396,16396) ),
-                  ( LABELS.loc.wm_menu_abou, u"", Icon(self.mif,16384,16384) )]
+        mif = unicode(os.path.join(DEFDIR,MIFFILE))
+        self.icons = [Icon(mif,16392,16392),
+                      Icon(mif,16390,16390),
+                      Icon(mif,16388,16388),
+                      Icon(mif,16386,16386),
+                      Icon(mif,16394,16394),
+                      Icon(mif,16396,16396),
+                      Icon(mif,16384,16384)]
+        items = map( lambda a,b: (a,u"",b), self._get_menu_labels(), self.icons )
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ), menu)
 
         self.dlg = None
@@ -52,17 +53,21 @@ class WordMobi(Application):
         self.bind(key_codes.EKeyRightArrow, self.check_update_value)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
 
+    def _get_menu_labels(self):
+        menu_labels = [ LABELS.loc.wm_menu_post,
+                        LABELS.loc.wm_menu_comm,
+                        LABELS.loc.wm_menu_cats,
+                        LABELS.loc.wm_menu_tags,
+                        LABELS.loc.wm_menu_sets,
+                        LABELS.loc.wm_menu_upgr,
+                        LABELS.loc.wm_menu_abou ]
+        return menu_labels
+    
     def refresh(self):
         Application.refresh(self)
         idx = self.body.current()
         app.menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
-        items = [ ( LABELS.loc.wm_menu_post, u"", Icon(self.mif,16392,16392) ),
-                  ( LABELS.loc.wm_menu_comm, u"", Icon(self.mif,16390,16390) ),
-                  ( LABELS.loc.wm_menu_cats, u"", Icon(self.mif,16388,16388) ),
-                  ( LABELS.loc.wm_menu_tags, u"", Icon(self.mif,16386,16386) ),
-                  ( LABELS.loc.wm_menu_sets, u"", Icon(self.mif,16394,16394) ),
-                  ( LABELS.loc.wm_menu_upgr, u"", Icon(self.mif,16396,16396) ),
-                  ( LABELS.loc.wm_menu_abou, u"", Icon(self.mif,16384,16384) )]
+        items = map( lambda a,b: (a,u"",b), self._get_menu_labels(), self.icons )
         app.body.set_list( items, idx )
         
     def check_update_value(self):
