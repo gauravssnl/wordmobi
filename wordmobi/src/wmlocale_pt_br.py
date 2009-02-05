@@ -235,6 +235,7 @@ wi_info_exit = u"Sair"
 # Wpwrapper error
 wp_err_cant_del_cat = u"Impossível apagar a categoria %s."
 wp_err_cant_create_cat = u"Impossível criar a categoria %s."
+wp_err_cant_downl_cat =u"Impossível baixar lista de categorias."
 wp_err_cant_updt_post = u"Impossível atualizar os posts."
 wp_err_cant_downl_post = u"Impossível baixar o post. Tente de novo."
 wp_err_cant_upld_img = u"Impossível enviar %s. Tente de novo."
@@ -257,4 +258,4 @@ wp_info_cmt_approved = u"Comentário aprovado."
 wp_info_cmt_del = u"Comentário apagado."
         
 # Wpwrapper list
-wp_list_uncategorized = u"Não categotizado"
+wp_list_uncategorized = u"Sem categoria"

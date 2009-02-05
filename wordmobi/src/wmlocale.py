@@ -244,6 +244,7 @@ class Default(object):
         # Wpwrapper error
         self.loc.wp_err_cant_del_cat = u"Impossible to delete category %s."
         self.loc.wp_err_cant_create_cat = u"Impossible to create category %s."
+        self.loc.wp_err_cant_downl_cat =u"Impossible to retrieve the categories list."
         self.loc.wp_err_cant_updt_post = u"Impossible to update posts."
         self.loc.wp_err_cant_downl_post = u"Impossible to download the post. Try again."
         self.loc.wp_err_cant_upld_img = u"Impossible to upload %s. Try again."

@@ -17,12 +17,24 @@ class WordPressWrapper(object):
     def __init__(self):
         self.posts = []
         self.comments = []
+        self.categories = []
+        self.cat_default = []
+        self.refresh()
+        self.categories = self.cat_default   
+        self.blog = None
+        
+    def refresh(self):
+        """ Update variables related to multiple idioms support
+        """
+        # just use default values if categories were not retrieved yet
+        if self.categories == self.cat_default:
+            self.categories = []
         self.cat_default = [ { 'categoryName':LABELS.loc.wp_list_uncategorized,
                                'categoryId':'1',
                                'parentId':'0' } ]
-        self.categories = self.cat_default   
-        self.blog = None
-
+        if not self.categories:
+            self.categories = self.cat_default
+        
     def categoryNamesList(self):
         return map( lambda x:  x['categoryName'] , self.categories)
 
@@ -38,7 +50,7 @@ class WordPressWrapper(object):
         try:
             self.categories = self.blog.getCategories()
         except:
-            note(u"Impossible to retrieve the categories list.","error")
+            note(LABELS.loc.wp_err_cant_downl_cat,"error")
             return False
 
         for i in range(len(self.categories)):

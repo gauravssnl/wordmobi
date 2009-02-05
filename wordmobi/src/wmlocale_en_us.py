@@ -235,6 +235,7 @@ wi_info_exit = u"Exit"
 # Wpwrapper error
 wp_err_cant_del_cat = u"Impossible to delete category %s."
 wp_err_cant_create_cat = u"Impossible to create category %s."
+wp_err_cant_downl_cat =u"Impossible to retrieve the categories list."
 wp_err_cant_updt_post = u"Impossible to update posts."
 wp_err_cant_downl_post = u"Impossible to download the post. Try again."
 wp_err_cant_upld_img = u"Impossible to upload %s. Try again."
