@@ -465,6 +465,7 @@ self.set_title(u"My app")
 from appuifw import *
 import e32
 import key_codes
+from wmlocale import LABELS
 
 __all__ = [ "Application", "Dialog" ]
 
@@ -484,7 +485,7 @@ class Window(object):
         self.body = body
     
         if menu is None:
-            menu = [(u"Exit", self.close_app)]
+            menu = [(LABEL.loc.wi_info_exit, self.close_app)]
 
         if exit_handler is None:
             exit_handler = self.close_app
