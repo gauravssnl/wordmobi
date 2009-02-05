@@ -235,4 +235,5 @@ class Settings(Dialog):
                 DB["language"] = loc
                 DB.save()
                 self.refresh()
+                BLOG.refresh() # update global defines
 
