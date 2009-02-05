@@ -126,7 +126,6 @@ class ProxySettings(Dialog):
                    (LABELS.loc.st_menu_proxy_prt, unicode( self.proxy_port ) ), \
                    (LABELS.loc.st_menu_proxy_usr, self.proxy_user), \
                    (LABELS.loc.st_menu_proxy_pwd, u"*"*len( self.proxy_password ) ) ]
-
         app.body.set_list( values, self.last_idx )
 
     def update_value(self):
@@ -164,16 +163,21 @@ class ProxySettings(Dialog):
 class Settings(Dialog):
     def __init__(self,cbk):
         self.dlg = None
-        items = [ ( LABEL.loc.st_menu_blog,u""),
-                  ( LABEL.loc.st_menu_proxy, u""),
-                  ( LABEL.loc.st_menu_access_point, u""),
-                  ( LABEL.loc.st_menu_lang, u"")]
-
-        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_sets, Listbox( items, self.update_value ) )
-
+        self.body = Listbox( [(u"",u"")],self.update_value)
+        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_sets, self.body)
         self.bind(key_codes.EKeyRightArrow, self.update_value)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)        
 
+    def refresh(self):
+        Dialog.refresh(self)
+        self.set_title(LABELS.loc.wm_menu_sets)
+        idx = self.body.current()
+        items = [ ( LABELS.loc.st_menu_blog,u""),
+                  ( LABELS.loc.st_menu_proxy, u""),
+                  ( LABELS.loc.st_menu_access_point, u""),
+                  ( LABELS.loc.st_menu_lang, u"")]
+        self.body.set_list( items, idx )
+        
     def update_value(self):
         idx = self.body.current()
         ( self.blog, self.proxy, self.access_point, self.language)[idx]()
@@ -230,4 +234,5 @@ class Settings(Dialog):
                 LABELS.set_locale(loc)
                 DB["language"] = loc
                 DB.save()
+                self.refresh()
 
