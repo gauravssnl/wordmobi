@@ -9,7 +9,6 @@ import key_codes
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
-from wmlocale import LABELS
 
 __all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
 
@@ -23,7 +22,7 @@ def sel_access_point():
         return False
     
     ap_labels = map( lambda x: x['name'], aps )
-    item = popup_menu( ap_labels, LABELS.loc.st_query_aaccess_points )
+    item = popup_menu( ap_labels, LABELS.loc.st_query_access_points )
     if item is None:
         note(LABELS.loc.st_err_one_ap_req,"error")
         return False
@@ -118,7 +117,11 @@ class ProxySettings(Dialog):
         
     def refresh(self):
         Dialog.refresh(self)
-        values = [ (LABELS.loc.st_menu_proxy_ena, self.proxy_enabled  ), \
+        if self.proxy_enabled == u"True":
+            prx = LABELS.loc.st_menu_proxy_on
+        else:
+            prx = LABELS.loc.st_menu_proxy_off
+        values = [ (LABELS.loc.st_menu_proxy_ena, prx ), \
                    (LABELS.loc.st_menu_proxy_add, self.proxy_address ), \
                    (LABELS.loc.st_menu_proxy_prt, unicode( self.proxy_port ) ), \
                    (LABELS.loc.st_menu_proxy_usr, self.proxy_user), \
@@ -137,21 +140,21 @@ class ProxySettings(Dialog):
                 self.proxy_enabled = u"True"
         elif self.proxy_enabled == u"True":
             if idx == 1:
-                addr = query(u"Proxy address:","text", self.proxy_address)
+                addr = query(LABELS.loc.st_query_proxy_add,"text", self.proxy_address)
                 if addr is not None:
                     self.proxy_address = addr
             elif idx == 2:
-                port = query(u"Proxy port:","number", self.proxy_port)
+                port = query(LABELS.loc.st_query_proxy_prt,"number", self.proxy_port)
                 if port is not None:
                     self.proxy_port = port                         
             elif idx == 3:
-                user = query(u"Proxy username:","text", self.proxy_user)
+                user = query(LABELS.loc.st_query_proxy_usr,"text", self.proxy_user)
                 if user is not None:
                     self.proxy_user = user
                 else:
                     self.proxy_user = u""
             elif idx == 4:
-                password = query(u"Proxy password:","code", self.proxy_password)
+                password = query(LABELS.loc.st_query_proxy_pwd,"code", self.proxy_password)
                 if password is not None:
                     self.proxy_password = password
                 else:
