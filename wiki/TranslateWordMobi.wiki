@@ -8,7 +8,22 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 
 If you want to see your language supported, follow the steps below.
 
+== Getting latest source code and Python for S60 ==
+
  # Download the latest source code. You will see a zip file following the pattern "wordmobi-version-src.zip" in [http://code.google.com/p/wordmobi/downloads/list download tab]. Use the more recent one. If you are in doubt, please drop me an email (marcelobarrosalmeida at gmail.com).
  # Inside this zip file you will see several .py file under a src directory. Just copy all python file into e:\python\lib, in our phone memory card. Create this path if it not exists.
  # Move file default.py to e:\python. 
- # Check if you have [http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 PythonForS60 1.4.5] installed and [http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 PythonScriptShell 1.4.5] installed. If not, download them from[http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 Sourceforge]. 
+ # Check if you have [http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 PythonForS60 1.4.5] installed and [http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 PythonScriptShell 1.4.5] installed. If not, download and install them from [http://sourceforge.net/project/showfiles.php?group_id=154155&package_id=171153&release_id=644640 Sourceforge].
+
+== Creating our locale file ==
+
+You will need to choose one language for starting from. At this moment, only English and Brazilian Portuguese are available. In source files (e:\python\lib), these two translation are available as:
+
+ * wmlocale_en_us.py (English)
+ * wmlocale_pt_br.py (Brazilian Portuguese)
+
+These file names follow the nomenclature wmlocale_<[http://pt.wikipedia.org/wiki/ISO_639-1 ISO 639-1 code]>_<[http://pt.wikipedia.org/wiki/ISO_3166-1 ISO 3166-1 code]>. ISO 639-1 is a two letter code for representing language names and ISO 3166-1 is another two letter code for country name. Country name may be omitted if the language does not have any variation. 
+
+Using this pattern, copy one translation available and rename it according to your language\country (if any).
+
+Copy the desired language and save following the patter wmlocale_
