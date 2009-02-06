@@ -5,7 +5,7 @@
 
 == 0.4.4 - 2009/02/05 ==
 
- * [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 multilingual] support added. At this moment, only English and Portuguese (Brazil) are available. If you want to see your language supported, see TranslateWordMobi.
+ * [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 Multilingual] support added. At this moment, only English and Portuguese (Brazil) are available. If you want to see your language supported, see TranslateWordMobi.
 
 == 0.4.3 - 2009/01/17 ==
 
