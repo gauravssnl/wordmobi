@@ -22,13 +22,15 @@ Wordmobi was designed to support any domain running wordpress with compatible xm
 
 Usernames are case sensitive for wordpress, so take care when typing your username. Check if all fields does not have any trailer space.
 
+Also enable installation of any application in your mobile phone, not only the certificated ones. In Settings->Applications->App. Manager allow all applications and disable certification checks.
 
 I read somewhere that there is an option in wordpress for activating xmlrpc. Check 
 
 http://blogname/wp-admin/options-writing.php
 
 for enabling it.
- I couldn´t see any, however, in my wordpress version. See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]
+
+I couldn´t see any, however, in my wordpress version. See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]
 
 
 [http://media.share.ovi.com/m1/medium/0516/3fe35acf02a441e6884d01dde82c33b9.jpg]
