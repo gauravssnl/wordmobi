@@ -22,9 +22,9 @@ You will need to choose one language for starting from. At this moment, only Eng
  * *wmlocale_en_us.py* (English)
  * *wmlocale_pt_br.py* (Brazilian Portuguese)
 
-These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letter code for representing language names and ISO 3166-1 is another two letter code for country name. Country name may be omitted if the language does not have any variation. 
+These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letters code for representing language names and ISO 3166-1 is another two letters code for country names. Country name may be omitted if the language does not have any variation. 
 
-Using this pattern, copy one translation available and rename it according to your language\country (if any). For instance, a UK user could create a wmlocale_en_uk.py file.
+Using this pattern, copy one translation available and rename it according to your language\country (if any). For instance, a UK user could create the file *wmlocale_en_uk.py*.
 
 == Translating ==
 
@@ -53,11 +53,11 @@ The rules are:
 
 === For non programmers ===
 
-The simple way to test is just replacing some original locale file with yours. I mean, copy you translation contents *inside* wmlocale_en_us.py (*overwrite* original contents) and run default.py, via Python Shell. 
+The simple way to test is just replacing some original locale file with yours. I mean, copy you translation contents *inside* wmlocale_en_us.py (*overwrite* original contents) and run *default.py*, via Python Shell. Select English_EUA inside settings menu.
 
 === For programmers ===
 
-If you are comfortable for editing Python code, edit settings.py and find the following code snipper, at the end of file:
+If you are comfortable for editing Python code, edit *settings.py* and find the following code snippet, at the end of file:
 
 {{{
         langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
@@ -66,7 +66,7 @@ If you are comfortable for editing Python code, edit settings.py and find the fo
 
 Just modify this array and copy your locale file to e:\python\lib. 
 
-For instance, copy wmlocale_en_us.py to e:\python\lib and change langs as follow:
+For instance, copy *wmlocale_en_uk.py* to *e:\python\lib* and change langs as follow:
 
 {{{
         langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
