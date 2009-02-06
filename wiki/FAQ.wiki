@@ -13,8 +13,8 @@ Afterward, do the following:
  # Install python and python shell, version 1.4.5
  # In our memory card, create directories e:\python and e:\python\lib
  # Remove or comment the line at the end of window.py with the folowwing text: "app.set_exit()". For commenting, just put # at the beginning, like #app.set_exit().
- # Copy all files into e:\python\lib, except wordmobi.py
- # Copy wordmobi.py into e:\python\
- # Run wordmoby.py via python shell, opening Python and selecting "Option->Run script"
+ # Copy all files into e:\python\lib, except default.py
+ # Copy default.py into e:\python\
+ # Run default.py via python shell, opening Python and selecting "Option->Run script"
 
 This way, it will be possible to see the error messages or to add logs and alerts during execution. Please, collect these log messages and send them to developers.
