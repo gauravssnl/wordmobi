@@ -22,8 +22,28 @@ You will need to choose one language for starting from. At this moment, only Eng
  * wmlocale_en_us.py (English)
  * wmlocale_pt_br.py (Brazilian Portuguese)
 
-These file names follow the nomenclature wmlocale_<[http://pt.wikipedia.org/wiki/ISO_639-1 ISO 639-1 code]>_<[http://pt.wikipedia.org/wiki/ISO_3166-1 ISO 3166-1 code]>. ISO 639-1 is a two letter code for representing language names and ISO 3166-1 is another two letter code for country name. Country name may be omitted if the language does not have any variation. 
+These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letter code for representing language names and ISO 3166-1 is another two letter code for country name. Country name may be omitted if the language does not have any variation. 
 
-Using this pattern, copy one translation available and rename it according to your language\country (if any).
+Using this pattern, copy one translation available and rename it according to your language\country (if any). For instance, a UK user could create a wmlocale_en_uk.py file.
 
-Copy the desired language and save following the patter wmlocale_
+== Translating ==
+
+Below, we have a snippet from locale file wmlocale_en_us.py. 
+
+{{{
+# -*- coding: cp1252 -*-
+
+# Wordmobi main menu
+wm_menu_post = u"Posts"
+wm_menu_comm = u"Comments"
+wm_menu_tags = u"Tags"
+wm_menu_cats = u"Categories"
+# ...
+wm_err_upd_page = u"Impossible to access update page %s"
+wm_err_downld_fail = u"Impossible to download %s"
+}}}
+
+The rules are:
+ # Any line that starts with "#" is a comment. Do not translate or change it.
+ # Lines that need to be translated follows the pattern *variable* = *text to be shown*. Just translated the second part (text to be shown), preserving variable name and equal signal.
+ # Do not remove any *%s* or *%d* during translation.
