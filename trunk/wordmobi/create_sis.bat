@@ -9,14 +9,16 @@ SET SRCDIR=src
 SET TXTFILE=README
 SET TMPDIR=src.tmp
 SET ICON=wordmobi.svg
+SET ZIP="C:\Arquivos de programas\7-Zip\7z.exe"
 
 IF NOT EXIST %TMPDIR% mkdir %TMPDIR%
 
 copy  %SRCDIR%\*.py  %TMPDIR%
 
-copy %SRCDIR%\wordmobi.py %TMPDIR%\default.py
-
 %PYTHON% ensymble.py py2sis --verbose --uid=0xefefefef --version="%1" --appname="%APPNAME%" --textfile="%TXTFILE%" --icon="%ICON%" --caps="%CAPBLS%" "%TMPDIR%" "%APPNAME%-%1.sis"
+
+%ZIP% a -tzip %APPNAME%-%1-src.zip src\*.py
+
 
 goto end
 

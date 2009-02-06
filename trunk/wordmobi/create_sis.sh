@@ -20,8 +20,6 @@ fi
 
 cp  $SRCDIR/*.py $TMPDIR/
 
-cp $TMPDIR/wordmobi.py $TMPDIR/default.py
-
 python ./ensymble.py py2sis 	--uid=0xefefefef 	\
 				--version="$1" 		\
 				--appname="$APPNAME" 	\
