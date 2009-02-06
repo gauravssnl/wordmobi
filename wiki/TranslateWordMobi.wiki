@@ -44,6 +44,38 @@ wm_err_downld_fail = u"Impossible to download %s"
 }}}
 
 The rules are:
+
  # Any line that starts with "#" is a comment. Do not translate or change it.
- # Lines that need to be translated follows the pattern *variable* = *text to be shown*. Just translated the second part (text to be shown), preserving variable name and equal signal.
- # Do not remove any *%s* or *%d* during translation.
+ # Lines that need to be translated follows the pattern *variable* = *text to be displayed*. Just translated the second part (text to be displayed), preserving variable name and equal signal.
+ # Do not remove any *%s* or *%d* during translation. They are place holders for including additional information.
+
+== Testing ==
+
+=== For non programmers ===
+
+The simple way to test is just replacing some original locale file with yours. I mean, copy you translation contents *inside* wmlocale_en_us.py (*overwrite* original contents) and run default.py, via Python Shell. 
+
+=== For programmers ===
+
+If you are comfortable for editing Python code, edit settings.py and find the following code snipper, at the end of file:
+
+{{{
+        langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
+                  (LABELS.loc.st_menu_pt_br, u"pt_br") ]
+}}}
+
+Just modify this array and copy your locale file to e:\python\lib. 
+
+For instance, copy wmlocale_en_us.py to e:\python\lib and change langs as follow:
+
+{{{
+        langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
+                  (LABELS.loc.st_menu_pt_br, u"pt_br"),
+                  (u"English (UK)", u"en_uk") ]
+}}}
+
+*u"English (UK)"* must be unicode and will be presented at language selection menu. u"en_uk" must match with the end of your locale file.
+
+== Submitting ==
+
+Just drop me an email with your translation (marcelobarrosalmeida at gmail.com).
