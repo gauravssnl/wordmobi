@@ -2,7 +2,10 @@
 
 = Introduction =
 
+Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 multilingual] support since version 0.4.4. . At this moment, only English and Portuguese (Brazil) are available.
 
+= Translating Wordmobi =
 
+If you want to see your language supported, follow the steps below.
 
-= Details =
+ # 
