@@ -21,6 +21,9 @@ class Persist(dict):
                "proxy_addr":u"",
                "proxy_port":u"8080",
                "proxy_enabled":u"False",
+               "twitter_enabled":u"False",               
+               "twitter_user":u"",
+               "twitter_pass":u"",               
                "language":u""}
     
     def __init__(self):

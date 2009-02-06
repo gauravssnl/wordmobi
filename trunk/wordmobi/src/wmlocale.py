@@ -199,6 +199,7 @@ class Default(object):
         # Settings info
         self.loc.st_info_blog_set = u"Blog settings"
         self.loc.st_info_proxy_set = u"Proxy settings"
+        self.loc.st_info_twitter_set = u"Twitter settings"
         
         # Settings error
         self.loc.st_err_no_access_point = u"Could't find any access point."
@@ -210,6 +211,8 @@ class Default(object):
         self.loc.st_query_proxy_prt = u"Proxy port:"
         self.loc.st_query_proxy_usr = u"Proxy username:"
         self.loc.st_query_proxy_pwd = u"Proxy password:"
+        self.loc.st_query_twitter_usr = u"twitter user:"
+        self.loc.st_query_twitter_pwd = u"Twitter password:"
         
         # Settings menu
         self.loc.st_menu_canc = u"Cancel"
@@ -217,6 +220,7 @@ class Default(object):
         self.loc.st_menu_proxy = u"Proxy"
         self.loc.st_menu_access_point = u"Access Point"
         self.loc.st_menu_lang = u"Language"
+        self.loc.st_menu_twitter = u"Twitter"
         self.loc.st_menu_blog_url = u"Blog URL:"
         self.loc.st_menu_blog_usr = u"Username:"
         self.loc.st_menu_blog_pwd = u"Password:"
@@ -231,6 +235,10 @@ class Default(object):
         self.loc.st_menu_proxy_pwd = u"Password"
         self.loc.st_menu_proxy_on = u"Enabled"
         self.loc.st_menu_proxy_off = u"Disabled"
+        self.loc.st_menu_twitter_ena = u"Send post to twitter"
+        self.loc.st_menu_twitter_on = u"Yes"
+        self.loc.st_menu_twitter_off = u"No"
+        
         # languages support
         self.loc.st_menu_en_us = u"English (USA)"
         self.loc.st_menu_pt_br = u"Portuguese"

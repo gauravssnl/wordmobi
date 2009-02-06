@@ -160,6 +160,57 @@ class ProxySettings(Dialog):
                     self.proxy_password = u""
         self.refresh()
 
+class TwitterSettings(Dialog):
+    def __init__(self, cbk):
+        self.twitter_enabled = DB["twitter_enabled"]
+        self.twitter_user = DB["twitter_user"]             
+        self.twitter_password = DB["twitter_pass"]
+
+        self.last_idx = 0
+        body =  Listbox( [ (u"",u"") ], self.update_value )
+        menu = [( LABELS.loc.st_menu_canc, self.cancel_app )]
+        
+        Dialog.__init__(self, cbk, LABELS.loc.st_info_twitter_set, body,  menu)
+
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        self.bind(key_codes.EKeyRightArrow, self.update_value)
+        
+    def refresh(self):
+        Dialog.refresh(self)
+        if self.twitter_enabled == u"True":
+            twitter = LABELS.loc.st_menu_twitter_on
+        else:
+            twitter = LABELS.loc.st_menu_twitter_off
+        values = [ (LABELS.loc.st_menu_twitter_ena, twitter ), \
+                   (LABELS.loc.st_menu_proxy_usr, self.twitter_user), \
+                   (LABELS.loc.st_menu_proxy_pwd, u"*"*len( self.twitter_password ) ) ]
+        app.body.set_list( values, self.last_idx )
+
+    def update_value(self):
+        idx = app.body.current()
+        self.last_idx = idx
+        
+        if idx == 0:
+            if self.twitter_enabled == u"True":
+                self.twitter_enabled = u"False"
+            else:
+                self.twitter_enabled = u"True"
+        elif self.twitter_enabled == u"True":                        
+            if idx == 1:
+                user = query(LABELS.loc.st_query_twitter_usr,"text", self.twitter_user)
+                if user is not None:
+                    self.twitter_user = user
+                else:
+                    self.twitter_user = u""
+            elif idx == 2:
+                password = query(LABELS.loc.st_query_twitter_pwd,"code", self.twitter_password)
+                if password is not None:
+                    self.twitter_password = password
+                else:
+                    self.twitter_password = u""
+        self.refresh()
+
+
 class Settings(Dialog):
     def __init__(self,cbk):
         self.dlg = None
@@ -175,12 +226,17 @@ class Settings(Dialog):
         items = [ ( LABELS.loc.st_menu_blog,u""),
                   ( LABELS.loc.st_menu_proxy, u""),
                   ( LABELS.loc.st_menu_access_point, u""),
-                  ( LABELS.loc.st_menu_lang, u"")]
+                  ( LABELS.loc.st_menu_lang, u""),
+                  ( LABELS.loc.st_menu_twitter, u"")]
         self.body.set_list( items, idx )
         
     def update_value(self):
         idx = self.body.current()
-        ( self.blog, self.proxy, self.access_point, self.language)[idx]()
+        ( self.blog,
+          self.proxy,
+          self.access_point,
+          self.language,
+          self.twitter)[idx]()
 
     def blog_cbk(self):
         self.lock_ui()
@@ -224,6 +280,22 @@ class Settings(Dialog):
         if sel_access_point():
             BLOG.set_blog()
 
+    def twitter_cbk(self):
+        self.lock_ui()
+        if not self.dlg.cancel:
+            DB["twitter_enabled"]= self.dlg.twitter_enabled
+            DB["twitter_user"] = self.dlg.twitter_user
+            DB["twitter_pass"] = self.dlg.twitter_password
+            DB.save()
+            BLOG.set_blog()
+        self.unlock_ui()
+        self.refresh()
+        return True
+    
+    def twitter(self):
+        self.dlg = TwitterSettings( self.twitter_cbk )
+        self.dlg.run()
+        
     def language(self):
         langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
                   (LABELS.loc.st_menu_pt_br, u"pt_br") ]
