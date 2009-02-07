@@ -8,8 +8,12 @@ from urllib import unquote, splittype, splithost
 PC=True
 if not PC:
     import s60simplejson as json
+    # making both pc and s60 version compatible
+    def loads(msg):
+        return json.simplejson().loads(msg) 
+    json.loads = staticmethod(loads)
 else:
-    import json
+    import simplejson as json
 class _FancyURLopener(urllib.FancyURLopener):
     """ This class handles basic auth, providing user and password
         when required by twitter
@@ -98,7 +102,7 @@ class TwitterApi(object):
     def json_read(self,msg):
         """ Converts a json response from twitter in a python object
         """
-        return json.simplejson().loads(msg)
+        return json.loads(msg)
     
     def dirty_tinyfy_url(self,page):
         """ Creates a tiny url using http://tinyurl.com/ service
