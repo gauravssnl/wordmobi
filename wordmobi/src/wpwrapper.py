@@ -22,6 +22,7 @@ class WordPressWrapper(object):
         self.refresh()
         self.categories = self.cat_default   
         self.blog = None
+        self.proxy = ""
         
     def refresh(self):
         """ Update variables related to multiple idioms support
@@ -341,15 +342,16 @@ class WordPressWrapper(object):
             pwrd = unicode_to_utf8( DB["proxy_pass"] )
             
             if user:
-                proxy = "http://%s:%s@%s:%s" % (user,pwrd,addr,port)
+                self.proxy = "http://%s:%s@%s:%s" % (user,pwrd,addr,port)
             else:
-                proxy = "http://%s:%s" % (addr,port)
+                self.proxy = "http://%s:%s" % (addr,port)
                 
             transp = UrllibTransport()
-            transp.set_proxy(proxy)
-            os.environ["http_proxy"] = proxy # for urllib
+            transp.set_proxy(self.proxy)
+            os.environ["http_proxy"] = self.proxy # for urllib
         else:
             transp = None
+            self.proxy = ""
             os.environ["http_proxy"] = ""
             del os.environ["http_proxy"]
             
