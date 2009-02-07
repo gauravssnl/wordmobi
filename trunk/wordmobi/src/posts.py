@@ -17,7 +17,8 @@ from filesel import FileSel
 from window import Dialog
 from comments import Comments
 
-from appuifw import InfoPopup # "from appuifw import *" above does not working properly ... missing in __all__
+# "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
+from appuifw import InfoPopup 
 
 from persist import DB
 from wpwrapper import BLOG
@@ -576,8 +577,10 @@ class Posts(Dialog):
         self.menu_items = [( LABELS.loc.pt_menu_updt, self.update ),
                            ( LABELS.loc.pt_menu_view, self.contents ),
                            ( LABELS.loc.pt_menu_dele, self.delete ),
-                           ( LABELS.loc.pt_menu_lstc, self.comments ),
-                           ( LABELS.loc.pt_menu_cnew, self.new ) ]
+                           ( LABELS.loc.pt_menu_lstc, self.comments )]
+        if DB["twitter_enabled"] == u"True":
+            self.menu_items += [( LABELS.loc.pt_menu_s2tw, self.send2twitter )]
+        self.menu_items += [( LABELS.loc.pt_menu_cnew, self.new )]
         menu = self.menu_items + [(LABELS.loc.pt_menu_clos, self.close_app )]
         
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_post, body, menu)
@@ -693,12 +696,21 @@ class Posts(Dialog):
             
         self.refresh()
         return True
-
+        
     def contents(self):
         idx = self.body.current()
+        if self.download_contents(idx):
+            publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
+            self.dlg = EditPost( self.contents_cbk,
+                                 BLOG.categoryNamesList(),
+                                 BLOG.posts[idx],
+                                 publish )
+            self.dlg.run()
+
+    def download_contents(self,idx):
         if not BLOG.posts:
             note(LABELS.loc.pt_info_updt_pst_lst, "info" )
-            return
+            return False
         
         # if post was not totally retrieved yet, fetch all data
         if BLOG.posts[idx].has_key('description') == False:
@@ -706,13 +718,17 @@ class Posts(Dialog):
             ok = BLOG.get_post(idx)
             self.unlock_ui()
             if not ok:
-                return
+                return False
             
-        publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
-
-        self.dlg = EditPost( self.contents_cbk, BLOG.categoryNamesList(), BLOG.posts[idx], publish )
-        self.dlg.run()
-    
+        return True
+        
+    def send2twitter(self):
+        idx = self.body.current()
+        if self.download_contents(idx):
+            link = BLOG.posts[idx]['permaLink']
+            title = BLOG.posts[idx]['title']
+            
+        
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
 
