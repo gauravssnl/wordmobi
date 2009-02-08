@@ -751,7 +751,7 @@ class Posts(Dialog):
                     note(LABELS.loc.pt_info_twitter_updated,"info")
                     
             self.unlock_ui()
-            self.set_title(LABELS.loc.wm_menu_post)
+            self.refresh()
         
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
