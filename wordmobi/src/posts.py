@@ -16,6 +16,7 @@ from wmutil import *
 from filesel import FileSel
 from window import Dialog
 from comments import Comments
+import s60twitter
 
 # "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
 from appuifw import InfoPopup 
@@ -718,16 +719,39 @@ class Posts(Dialog):
             ok = BLOG.get_post(idx)
             self.unlock_ui()
             if not ok:
+                note(LABELS.loc.pt_err_cant_pst_cont, "error" )
                 return False
             
         return True
         
     def send2twitter(self):
+        """ Send a post title to twitter. Just must be called if twitter is enabled
+        """
         idx = self.body.current()
         if self.download_contents(idx):
+            self.lock_ui(LABELS.loc.pt_info_send_twt1)
             link = BLOG.posts[idx]['permaLink']
             title = BLOG.posts[idx]['title']
-            
+            api = s60twitter.TwitterApi(DB["twitter_user"],
+                                        DB["twitter_pass"],
+                                        BLOG.proxy)
+            self.set_title(LABELS.loc.pt_info_send_twt2)
+            try:
+                tiny_link = api.tinyfy_url(link)
+            except:
+                note(LABELS.loc.pt_err_cant_tiny_url,"error")
+            else:
+                msg = title[:140-len(tiny_link)-1] + " " + tiny_link # twitter: 140 chars max
+                self.set_title(LABELS.loc.pt_info_send_twt3)
+                try:
+                    api.update(msg)
+                except:
+                    note(LABELS.loc.pt_err_cant_send_twitter,"error")
+                else:
+                    note(LABELS.loc.pt_info_twitter_updated,"info")
+                    
+            self.unlock_ui()
+            self.set_title(LABELS.loc.wm_menu_post)
         
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
