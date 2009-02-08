@@ -239,7 +239,8 @@ st_menu_twitter_off = u"No"
 
 # languages support
 st_menu_en_us = u"English (USA)"
-st_menu_pt_br = u"Portuguese"
+st_menu_pt_br = u"Portuguese (Brazil)"
+st_menu_es_cl = u"Spanish (Chile)"
 
 # Setting popup menu
 st_pmenu_lang = u"Language:"
