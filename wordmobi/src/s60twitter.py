@@ -5,13 +5,13 @@
 import base64
 import urllib
 from urllib import unquote, splittype, splithost
-PC=True
+PC=False
 if not PC:
     import s60simplejson as json
     # making both pc and s60 version compatible
     def loads(msg):
         return json.simplejson().loads(msg) 
-    json.loads = staticmethod(loads)
+    json.loads = loads
 else:
     import simplejson as json
 class _FancyURLopener(urllib.FancyURLopener):

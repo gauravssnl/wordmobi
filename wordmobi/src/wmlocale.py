@@ -139,6 +139,7 @@ class Default(object):
         self.loc.pt_menu_cats = u"Categories"
         self.loc.pt_menu_imgs = u"Images"
         self.loc.pt_menu_pubs = u"Publish"
+        self.loc.pt_menu_s2tw = u"Send to Twitter"
         
         # Posts lists
         self.loc.pt_list_320x240 = u"(320x240)"
@@ -171,6 +172,10 @@ class Default(object):
         self.loc.pt_info_no_imgs_sel = u"No images selected."
         self.loc.pt_info_downld_img = u"Downloading %s"
         self.loc.pt_info_alrd_pub = u"Post already published."
+        self.loc.pt_info_send_twt1 = u"Sending post title to Twitter."
+        self.loc.pt_info_send_twt2 = u"Sending post title to Twitter.."
+        self.loc.pt_info_send_twt3 = u"Sending post title to Twitter..."
+        self.loc.pt_info_twitter_updated = u"Twitter updated."
 
         # Posts error messages
         self.loc.pt_err_cant_del_pt = u"Impossible to delete post."
@@ -181,7 +186,10 @@ class Default(object):
         self.loc.pt_err_cant_prvw = u"Impossible to preview."
         self.loc.pt_err_cant_open = u"Impossible to open %s"
         self.loc.pt_err_cant_downld = u"Impossible to download %s"
+        self.loc.pt_err_cant_pst_cont = u"Impossible to post contents"
         self.loc.pt_err_unknown_ext = u"Unkown externsion for %s"
+        self.loc.pt_err_cant_tiny_url = u"Impossible to create tiny URL."
+        self.loc.pt_err_cant_send_twitter = u"Impossible to send post title to twitter."
         
         # Posts popup menu
         self.loc.pt_pmenu_posts = u"Posts:"
