@@ -74,7 +74,7 @@ cm_menu_cont = u"Contents"
 cm_menu_name = u"Name"
 cm_menu_mail = u"Email"
 cm_menu_webs = u"Website"
-        
+
 # Comments lists
 cm_list_any = u"Any"
 cm_list_spam = u"Spam"
@@ -129,6 +129,7 @@ pt_menu_cont = u"Contents"
 pt_menu_cats = u"Categories"
 pt_menu_imgs = u"Images"
 pt_menu_pubs = u"Publish"
+pt_menu_s2tw = u"Send to Twitter"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -161,6 +162,10 @@ pt_info_draft = u"No (draft)"
 pt_info_no_imgs_sel = u"No images selected."
 pt_info_downld_img = u"Downloading %s"
 pt_info_alrd_pub = u"Post already published."
+pt_info_send_twt1 = u"Sending post to Twitter."
+pt_info_send_twt2 = u"Sending post to Twitter.."
+pt_info_send_twt3 = u"Sending post to Twitter..."
+pt_info_twitter_updated = u"Twitter updated."
 
 # Posts error messages
 pt_err_cant_del_pt = u"Impossible to delete post."
@@ -171,7 +176,10 @@ pt_err_cant_gen_prvw = u"Could not generate preview file."
 pt_err_cant_prvw = u"Impossible to preview."
 pt_err_cant_open = u"Impossible to open %s"
 pt_err_cant_downld = u"Impossible to download %s"
+pt_err_cant_pst_cont = u"Impossible to download post contents"
 pt_err_unknown_ext = u"Unkown externsion for %s"
+pt_err_cant_tiny_url = u"Impossible to create tiny URL."
+pt_err_cant_send_twitter = u"Impossible to send post to twitter."
 
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
@@ -189,24 +197,28 @@ pt_pmenu_updt_post = u"Update post ?"
 # Settings info
 st_info_blog_set = u"Blog settings"
 st_info_proxy_set = u"Proxy settings"
-        
+st_info_twitter_set = u"Twitter settings"
+
 # Settings error
 st_err_no_access_point = u"Could't find any access point."
 st_err_one_ap_req = u"At least one access point is required."
-        
+
 # Settings query
 st_query_access_points = u"Access points:"
 st_query_proxy_add = u"Proxy address:"
 st_query_proxy_prt = u"Proxy port:"
 st_query_proxy_usr = u"Proxy username:"
 st_query_proxy_pwd = u"Proxy password:"
-        
+st_query_twitter_usr = u"Twitter user:"
+st_query_twitter_pwd = u"Twitter password:"
+
 # Settings menu
 st_menu_canc = u"Cancel"
 st_menu_blog = u"Blog"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Access Point"
 st_menu_lang = u"Language"
+st_menu_twitter = u"Twitter"
 st_menu_blog_url = u"Blog URL:"
 st_menu_blog_usr = u"Username:"
 st_menu_blog_pwd = u"Password:"
@@ -221,11 +233,14 @@ st_menu_proxy_usr = u"Username"
 st_menu_proxy_pwd = u"Password"
 st_menu_proxy_on = u"Enabled"
 st_menu_proxy_off = u"Disabled"
+st_menu_twitter_ena = u"Send to twitter"
+st_menu_twitter_on = u"Yes"
+st_menu_twitter_off = u"No"
 
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese"
-        
+
 # Setting popup menu
 st_pmenu_lang = u"Language:"
 
@@ -256,6 +271,6 @@ wp_info_upld_post_cont = u"Uploading post contents..."
 wp_info_updt_post_list = u"Updating post list..."
 wp_info_cmt_approved = u"Comment approved."
 wp_info_cmt_del = u"Comment deleted."
-        
+
 # Wpwrapper list
 wp_list_uncategorized = u"Uncategorized"
