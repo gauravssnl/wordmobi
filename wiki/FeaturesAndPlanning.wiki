@@ -1,6 +1,6 @@
 #summary Desired features and enhancements
 
-= Current implemented features and caveats =
+= Current implemented features =
 
  * Show a fixed number of recent posts
  * Allow new posts with text and images. 
@@ -12,7 +12,7 @@
  * Comments management (new, delete, edit, moderation) 
  * Categories management (new, delete) 
  * upgrade support
- * send post title to twitter
+ * Post title submission to twitter
  * Multilingual support
  * Proxy support
 
