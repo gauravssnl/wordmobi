@@ -1,5 +1,9 @@
 # -*- coding: cp1252 -*-
 
+# Translation by:
+#
+# Marcelo Barros <marcelobarrosalmeida (at) gmail.com>
+
 # Wordmobi main menu
 wm_menu_post = u"Posts"
 wm_menu_comm = u"Comments"
