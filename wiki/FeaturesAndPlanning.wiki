@@ -28,6 +28,7 @@
 
  # TAGs support
  # multiples blogs support
+ # Default button label customizations with uikludges/uitricks .
  # upload to flickr or other providers with xmlrpc/REST support
  # html support when editing comments
  # video support
