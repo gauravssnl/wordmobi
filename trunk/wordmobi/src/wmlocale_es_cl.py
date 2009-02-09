@@ -133,6 +133,7 @@ pt_menu_cont = u"Contenido"
 pt_menu_cats = u"Categorías"
 pt_menu_imgs = u"Imágenes"
 pt_menu_pubs = u"Publicar"
+pt_menu_s2tw = u"Enviar a Twitter"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -165,6 +166,10 @@ pt_info_draft = u"No (borrador)"
 pt_info_no_imgs_sel = u"No hay imágenes seleccionadas."
 pt_info_downld_img = u"Descargando %s"
 pt_info_alrd_pub = u"Entrada ya publicada."
+pt_info_send_twt1 = u"Enviando a Twitter."
+pt_info_send_twt2 = u"Enviando a Twitter.."
+pt_info_send_twt3 = u"Enviando a Twitter..."
+pt_info_twitter_updated = u"Twitter actualizado."
 
 # Posts error messages
 pt_err_cant_del_pt = u"No es posible eliminar la entrada."
@@ -175,7 +180,10 @@ pt_err_cant_gen_prvw = u"No es posible generar la previsulización."
 pt_err_cant_prvw = u"No es posible previsualizar."
 pt_err_cant_open = u"No es posible abrir %s"
 pt_err_cant_downld = u"No es posible descargar %s"
+pt_err_cant_pst_cont = u"No es posible descargar el contenido de la entrada"
 pt_err_unknown_ext = u"Extensión desconocida para %s"
+pt_err_cant_tiny_url = u"No es posible crear la url abreviada (tiny URL)."
+pt_err_cant_send_twitter = u"No es posible enviar la entrada twitter."
 
 # Posts popup menu
 pt_pmenu_posts = u"Opciones:"
@@ -193,6 +201,7 @@ pt_pmenu_updt_post = u"¿Actualizar entrada ?"
 # Settings info
 st_info_blog_set = u"Configuración del Blog"
 st_info_proxy_set = u"Configuración del Proxy"
+st_info_twitter_set = u"Configuración de Twitter"
         
 # Settings error
 st_err_no_access_point = u"No se han encontrado puntos de acceso."
@@ -204,13 +213,16 @@ st_query_proxy_add = u"Dirección:"
 st_query_proxy_prt = u"Puerto:"
 st_query_proxy_usr = u"Nombre de usuario:"
 st_query_proxy_pwd = u"Contraseña:"
-        
+st_query_twitter_usr = u"Usuario de Twitter:"
+st_query_twitter_pwd = u"Contraseña de Twitter:"
+
 # Settings menu
 st_menu_canc = u"Cancelar"
 st_menu_blog = u"Blog"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Punto de acceso "
 st_menu_lang = u"Idioma"
+st_menu_twitter = u"Twitter"
 st_menu_blog_url = u"URL:"
 st_menu_blog_usr = u"Nombre de usuario:"
 st_menu_blog_pwd = u"Contraseña:"
@@ -225,6 +237,9 @@ st_menu_proxy_usr = u"Nombre de usuario"
 st_menu_proxy_pwd = u"Contraseña"
 st_menu_proxy_on = u"Habilitado"
 st_menu_proxy_off = u"Deshabilitado"
+st_menu_twitter_ena = u"Enviar a twitter"
+st_menu_twitter_on = u"Sí"
+st_menu_twitter_off = u"No"
 
 # languages support
 st_menu_en_us = u"Inglés (USA)"
