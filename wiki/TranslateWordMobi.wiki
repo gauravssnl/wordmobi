@@ -5,9 +5,9 @@
 Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 multilingual] support since version 0.4.4. At this moment, the following translations are available:
 
 || *Language* || *Translator* || *Email* ||
-|| English (EUA) || Marcelo Barros || marcelobarrosalmeida (at) gmail.com ||
-|| Brazilian Portuguese || Marcelo Barros || marcelobarrosalmeida (at) gmail.com ||
-|| Spanish || Pablo Poo || pablopoo (at) gmail.com ||
+|| English (EUA) || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
+|| Brazilian Portuguese || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
+|| Spanish || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
 
 = Translating Wordmobi =
 
