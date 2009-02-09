@@ -22,13 +22,27 @@
 
 = Next feature to be implemented =
 
- # offline support (saving posts locally)
+ # offline support (saving posts locally) and categories persistence
 
-= Future enhancements =
+= Future enhancements and ideas =
 
- # TAGs support
+ # TAGs support (with persistence)
  # multiples blogs support
+ # access point persistence
  # Default button label customizations with uikludges/uitricks .
  # upload to flickr or other providers with xmlrpc/REST support
  # html support when editing comments
+ # better icon for "about" menu entry
+ # "test connection" option in access point selection/proxy/twitter setup
+ # percentage size when adding images
+ # calendar view, showing days with posts
+ # preview option in other places, like post title window, not only inside post contents
+ # allow categories inclusion inside post edit window
+ # sub categories support
+ # search in posts
+ # batch operations (multiple selection for deleting and approving, for instance)
+ # create a css for better post preview
+ # add title in html (post preview)
+ # better exception handler, providing more elucidative messages
+ # retry option when uploading images
  # video support
