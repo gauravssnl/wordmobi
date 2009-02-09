@@ -30,8 +30,8 @@ wm_info_downloading = u"Descargando ..."
 wm_info_downld_ok = u"Ejecute el archivo %s descargado en %supdates para completar la actualización."
 
 # Wordmobi popup menus
-wm_pmenu_download = "Descargar %s ?"
-wm_pmenu_exit = u"Desea salir ?"
+wm_pmenu_download = "¿Descargar %s ?"
+wm_pmenu_exit = u"¿Desea salir ?"
 
 # General messages
 gm_yes = u"Sí"
@@ -55,7 +55,7 @@ ca_menu_clos = u"Cerrar"
 
 # Categories popup menu
 ca_pmenu_cats = u"Opciones:"
-ca_pmenu_delete = u"Eliminar %s ?"
+ca_pmenu_delete = u"¿Eliminar %s ?"
 
 # Categories info messages
 ca_info_cat_pos = u"[%d/%d] Categorías"
