@@ -10,6 +10,9 @@ class Default(object):
     "Default language support"
     def __init__(self):
         self.loc = Loc_Data()
+        # Promo phrase (do not use unicode ! use utf-8 or ascii)
+        self.loc.promo_phrase = "<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
+        
         # Wordmobi main menu
         self.loc.wm_menu_post = u"Posts"
         self.loc.wm_menu_comm = u"Comments"
