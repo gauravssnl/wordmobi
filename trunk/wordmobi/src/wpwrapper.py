@@ -8,7 +8,6 @@ import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
 from persist import DB
-from wmglobals import PROMO_PHRASE
 from wmlocale import LABELS
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
@@ -150,7 +149,7 @@ class WordPressWrapper(object):
         app.title = LABELS.loc.wp_info_upld_post_cont 
 
         post = wp.WordPressPost()
-        post.description = contents + PROMO_PHRASE
+        post.description = contents + unicode_to_utf8(LABELS.loc.promo_phrase)
                       
         post.title = unicode_to_utf8( title )
         post.categories = [ self.categoryName2Id(c)[0] for c in categories ]

@@ -4,6 +4,9 @@
 #
 # Pablo Poo <pablopoo (at) gmail.com>
 
+# Promo phrase 
+promo_phrase = u"<br><br>Publicado por <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
+
 # Wordmobi main menu
 wm_menu_post = u"Entradas"
 wm_menu_comm = u"Comentarios"
