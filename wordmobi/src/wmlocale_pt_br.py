@@ -169,7 +169,7 @@ pt_info_alrd_pub = u"Post já publicado."
 pt_info_send_twt1 = u"Enviando post para o Twitter."
 pt_info_send_twt2 = u"Enviando post para o Twitter.."
 pt_info_send_twt3 = u"Enviando post para o Twitter..."
-pt_info_twitter_updated = u"Twitter updated."
+pt_info_twitter_updated = u"Twitter atualizado."
 
 # Posts error messages
 pt_err_cant_del_pt = u"Impossível apagar o post."
