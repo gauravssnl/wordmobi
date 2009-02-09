@@ -14,7 +14,7 @@
  * upgrade support
  * send post title to twitter
 
-= partially implemented =
+= Partially implemented =
 
  * Icons in all list views (I am not good with graphics ...)
 
