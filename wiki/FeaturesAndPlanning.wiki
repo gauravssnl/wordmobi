@@ -13,6 +13,8 @@
  * Categories management (new, delete) 
  * upgrade support
  * send post title to twitter
+ * Multilingual support
+ * Proxy support
 
 = Partially implemented =
 
