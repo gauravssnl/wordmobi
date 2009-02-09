@@ -36,7 +36,9 @@ Credits:
 
 * Simple Json for S60 by Aaron Straup Cope
   http://aaronland.info/python/s60-simplejson/
-
+  s60simplejson is derived from Bob Ippolito's simplejson
+  http://cheeseshop.python.org/pypi/simplejson
+  
 * Safe unicode routine from ASPY Player by Douglas Fernando da Silva
   http://code.google.com/p/aspyplayer/
   http://aspyplayer.googlecode.com/svn/trunk/src/aspyplayer.py
