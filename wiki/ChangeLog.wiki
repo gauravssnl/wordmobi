@@ -2,6 +2,11 @@
 
 = Change log =
 
+== 0.5.0 == 
+
+ * Spanish translation added. Thanks to Pablo Poo (Chile).
+ * Support for sending post titles to twitter.
+ * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=27 27]
 
 == 0.4.4 - 2009/02/05 ==
 
