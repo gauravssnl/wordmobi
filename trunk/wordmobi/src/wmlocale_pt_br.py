@@ -182,8 +182,8 @@ pt_err_cant_open = u"Impossível abrir %s"
 pt_err_cant_downld = u"Impossível baixar %s"
 pt_err_cant_pst_cont = u"Impossível baixar conteúdo do post."
 pt_err_unknown_ext = u"Extensão desconhecida para %s"
-pt_err_cant_tiny_url = u"Impossible criar URL reduzida."
-pt_err_cant_send_twitter = u"Impossible enviar post para o Twitterr."
+pt_err_cant_tiny_url = u"Impossível criar URL reduzida."
+pt_err_cant_send_twitter = u"Impossível enviar post para o Twitterr."
 
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
