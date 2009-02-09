@@ -33,3 +33,11 @@ Credits:
 
   It was necessary to remove any reference for sets (only available since
   python 2.3)
+
+* Simple Json for S60 by Aaron Straup Cope
+  http://aaronland.info/python/s60-simplejson/
+
+* Safe unicode routine from ASPY Player by Douglas Fernando da Silva
+  http://code.google.com/p/aspyplayer/
+  http://aspyplayer.googlecode.com/svn/trunk/src/aspyplayer.py
+  
