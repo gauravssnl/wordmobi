@@ -12,14 +12,20 @@
  * Comments management (new, delete, edit, moderation) 
  * Categories management (new, delete) 
  * upgrade support
- 
+ * send post title to twitter
+
+= partially implemented =
+
+ * Icons in all list views (I am not good with graphics ...)
+
+= Next feature to be implemented =
+
+ # offline support (saving posts locally)
 
 = Future enhancements =
 
- * Icons in all list views
- * TAGs support
- * multiples blogs support
- * upload to flickr or other providers with xmlrpc support
- * video support
- * offline support (saving posts locally)
- * html support when editing comments
+ # TAGs support
+ # multiples blogs support
+ # upload to flickr or other providers with xmlrpc/REST support
+ # html support when editing comments
+ # video support
