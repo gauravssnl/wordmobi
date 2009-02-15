@@ -230,7 +230,7 @@ class Comments(Dialog):
         t = self.get_title()
         if not BLOG.posts:
             self.lock_ui(LABELS.loc.cm_info_downld_pt)
-            upd = BLOG.update_posts()
+            upd = BLOG.update_posts_and_cats()
             self.set_title( t )
             self.unlock_ui()
             if not upd:
@@ -322,7 +322,7 @@ class Comments(Dialog):
             # no comments ... user need to select a post to add the comment
             if not BLOG.posts:
                 self.lock_ui(LABELS.loc.cm_info_downld_pt)
-                upd = BLOG.update_posts()
+                upd = BLOG.update_posts_and_cats()
                 self.set_title( t )
                 self.unlock_ui()
                 if not upd:
