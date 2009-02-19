@@ -107,6 +107,8 @@ class WordMobi(Application):
         return a+b+c
         
     def upgrade(self):
+        note(u"Not available yet for Python 1.9.1","info")
+        return
         if DB["proxy_enabled"] == u"True" and len(DB["proxy_user"]) > 0:
             note(LABELS.loc.wm_err_no_proxy,"info")
             return
