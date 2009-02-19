@@ -2,6 +2,19 @@
 
 = Change log =
 
+== 0.5.0 for Python 1.9.1 - 2009/02/19 == 
+
+ * Replacing s60simplejson by original simplejson ported to s60
+   http://code.google.com/p/wordmobi/source/browse/#svn/trunk/simplejson
+ * Modification for running in Python 1.9.1
+  * appuifw.app.screen='normal'at beggining was required
+  * new ensymble for 1.9.1
+  * btsocket replacing socket (see release info for python 1.9.1)
+  * e32calendar replacing calendar (see release info for python 1.9.1)
+  * fixing unicode conversion when argument is already unicode
+  * increasing application heap for 5MB (original 1MB was not working)
+  * due to import problems, all .py files need to use extrasdir (see release info for python 1.9.1)
+
 == 0.5.0 - 2009/02/09 == 
 
  * Spanish translation added. Thanks to Pablo Poo (Chile).
