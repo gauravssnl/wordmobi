@@ -21,7 +21,11 @@ XXX calendar.weekday may break for certain old times.. not sure why, but that is
 """
 
 import time as t
-import calendar
+import sys
+if float(sys.version[:3]) >= 1.9:
+    import e32calender as calendar
+else:
+    import calendar
 from types import InstanceType
     
 MINYEAR = 1
