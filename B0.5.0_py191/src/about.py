@@ -11,7 +11,7 @@ __all__ = [ "About" ]
 class About(Dialog):
     def __init__(self,cbk):
         LABELS.set_locale(DB["language"])
-        self.items = [ ( u"Wordmobi %s" % VERSION, LABELS.loc.ab_menu_wordmobi_defi_val ),
+        self.items = [ ( u"Wordmobi %s (191)" % VERSION, LABELS.loc.ab_menu_wordmobi_defi_val ),
                        ( LABELS.loc.ab_menu_wordmobi_auth, u"Marcelo Barros de Almeida" ),
                        ( LABELS.loc.ab_menu_wordmobi_mail, u"marcelobarrosalmeida@gmail.com" ),
                        ( LABELS.loc.ab_menu_wordmobi_srcc, u"http://wordmobi.googlecode.com" ),
