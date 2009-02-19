@@ -32,6 +32,7 @@ __license__ = "GPLv3"
 class WordMobi(Application):
     
     def __init__(self):
+        app.screen='normal'
         LABELS.set_locale(DB["language"])
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
