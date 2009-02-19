@@ -14,6 +14,7 @@
   * fixing unicode conversion when argument is already unicode
   * increasing application heap for 5MB (original 1MB was not working)
   * due to import problems, all .py files need to use extrasdir (see release info for python 1.9.1)
+ * *Upgrade option should not be used in this version*.
 
 == 0.5.0 - 2009/02/09 == 
 
