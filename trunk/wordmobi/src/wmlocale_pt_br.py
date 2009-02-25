@@ -7,7 +7,7 @@
 # Promo phrase
 promo_phrase = u"<br><br>Publicado pelo <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
 
-# Wordmobi main menu 
+# Wordmobi main menu
 wm_menu_post = u"Posts"
 wm_menu_comm = u"Comentários"
 wm_menu_tags = u"Tags"
@@ -87,6 +87,7 @@ cm_list_any = u"Qualquer"
 cm_list_spam = u"Spam"
 cm_list_moderated = u"Moderado"
 cm_list_unmoderated = u"Não moderado"
+cm_list_approve = u"Aprovar"
 cm_list_one_post = u"Um post"
 cm_list_all_posts = u"Todos os posts"
 
@@ -123,6 +124,7 @@ pt_menu_view = u"Ver/Editar"
 pt_menu_dele = u"Apagar"
 pt_menu_lstc = u"Listar Comentários"
 pt_menu_cnew = u"Criar novo"
+pt_menu_offl_publ = u"Publicar"
 pt_menu_clos = u"Fechar"
 pt_menu_pict = u"Tirar uma foto"
 pt_menu_canc = u"Cancelar"
@@ -150,6 +152,10 @@ pt_list_ins_img = u"Inserir"
 pt_list_take_img = u"Tirar um foto"
 pt_list_view_img = u"Ver/Listar"
 pt_list_rem_img = u"Remover"
+pt_list_save_it = u"Não, mas salve-o"
+pt_list_yes_rem_pst = u"Sim, só o post"
+pt_list_yes_loc_ch = u"Sim, só mudanças locais"
+pt_list_yes_del_all = u"Sim, tudo"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Posts"
@@ -168,10 +174,7 @@ pt_info_no_pub = u"Sim"
 pt_info_draft = u"Não (rascunho)"
 pt_info_no_imgs_sel = u"Nenhuma imagem selecionada."
 pt_info_downld_img = u"Baixando %s"
-pt_info_alrd_pub = u"Post já publicado."
-pt_info_send_twt1 = u"Enviando post para o Twitter."
-pt_info_send_twt2 = u"Enviando post para o Twitter.."
-pt_info_send_twt3 = u"Enviando post para o Twitter..."
+pt_info_send_twt = u"Enviando post para o Twitter"
 pt_info_twitter_updated = u"Twitter atualizado."
 
 # Posts error messages
@@ -186,7 +189,7 @@ pt_err_cant_downld = u"Impossível baixar %s"
 pt_err_cant_pst_cont = u"Impossível baixar conteúdo do post."
 pt_err_unknown_ext = u"Extensão desconhecida para %s"
 pt_err_cant_tiny_url = u"Impossível criar URL reduzida."
-pt_err_cant_send_twitter = u"Impossível enviar post para o Twitterr."
+pt_err_cant_send_twitter = u"Impossível enviar post para o Twitter."
 
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
@@ -196,10 +199,10 @@ pt_pmenu_flash = u"Flash ?"
 pt_pmenu_img_src = u"Imagem de:"
 pt_pmenu_img_url = u"URL da imagem:"
 pt_pmenu_link_url = u"URL do link:"
-pt_pmenu_send_post = u"Enviar post ?"
+pt_pmenu_linkyt_url = u"URL do Youtube:"
+pt_pmenu_send_post = u"Publicar post ?"
 pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
-pt_pmenu_updt_post = u"Atualizar post ?"
 
 # Settings info
 st_info_blog_set = u"Configurações do blog"
@@ -240,15 +243,16 @@ st_menu_proxy_usr = u"Usuário"
 st_menu_proxy_pwd = u"Senha"
 st_menu_proxy_on = u"Sim"
 st_menu_proxy_off = u"Não"
-st_menu_twitter_ena = u"Enviar para Twitter"
+st_menu_twitter_ena = u"Enviar para o Twitter"
 st_menu_twitter_on = u"Sim"
 st_menu_twitter_off = u"Não"
 
 # languages support
 st_menu_en_us = u"Inglês (USA)"
 st_menu_pt_br = u"Português (Brasil)"
-st_menu_es_cl = u"Espanhol (Chile)"
-        
+st_menu_es = u"Espanhol"
+st_menu_tr = u"Turco"
+
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
 

@@ -4,9 +4,9 @@
 #
 # Marcelo Barros <marcelobarrosalmeida (at) gmail.com>
 
-# Promo phrase 
+# Promo phrase
 promo_phrase = u"<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
-        
+
 # Wordmobi main menu
 wm_menu_post = u"Posts"
 wm_menu_comm = u"Comments"
@@ -87,6 +87,7 @@ cm_list_any = u"Any"
 cm_list_spam = u"Spam"
 cm_list_moderated = u"Moderated"
 cm_list_unmoderated = u"Unmoderated"
+cm_list_approve = u"Approve"
 cm_list_one_post = u"One post"
 cm_list_all_posts = u"All posts"
 
@@ -123,6 +124,7 @@ pt_menu_view = u"View/Edit"
 pt_menu_dele = u"Delete"
 pt_menu_lstc = u"List Comments"
 pt_menu_cnew = u"Create new"
+pt_menu_offl_publ = u"Publish"
 pt_menu_clos = u"Close"
 pt_menu_pict = u"Take a photo"
 pt_menu_canc = u"Cancel"
@@ -150,6 +152,10 @@ pt_list_ins_img = u"Insert"
 pt_list_take_img = u"Take a photo"
 pt_list_view_img = u"View/List"
 pt_list_rem_img = u"Remove"
+pt_list_save_it = u"No, but save it"
+pt_list_yes_rem_pst = u"Yes, just remote post"
+pt_list_yes_loc_ch = u"Yes, just local changes"
+pt_list_yes_del_all = u"Yes, delete all"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Posts"
@@ -168,10 +174,7 @@ pt_info_no_pub = u"Yes"
 pt_info_draft = u"No (draft)"
 pt_info_no_imgs_sel = u"No images selected."
 pt_info_downld_img = u"Downloading %s"
-pt_info_alrd_pub = u"Post already published."
-pt_info_send_twt1 = u"Sending post to Twitter."
-pt_info_send_twt2 = u"Sending post to Twitter.."
-pt_info_send_twt3 = u"Sending post to Twitter..."
+pt_info_send_twt = u"Sending post title to Twitter"
 pt_info_twitter_updated = u"Twitter updated."
 
 # Posts error messages
@@ -186,7 +189,7 @@ pt_err_cant_downld = u"Impossible to download %s"
 pt_err_cant_pst_cont = u"Impossible to download post contents"
 pt_err_unknown_ext = u"Unkown externsion for %s"
 pt_err_cant_tiny_url = u"Impossible to create tiny URL."
-pt_err_cant_send_twitter = u"Impossible to send post to twitter."
+pt_err_cant_send_twitter = u"Impossible to send post title to twitter."
 
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
@@ -196,10 +199,10 @@ pt_pmenu_flash = u"Flash ?"
 pt_pmenu_img_src = u"Image from:"
 pt_pmenu_img_url = u"Image URL:"
 pt_pmenu_link_url = u"Link URL:"
-pt_pmenu_send_post = u"Send post ?"
+pt_pmenu_linkyt_url = u"Youtube URL:"
+pt_pmenu_send_post = u"Publish post ?"
 pt_pmenu_post_title = u"Post title:"
 pt_pmenu_images = u"Images"
-pt_pmenu_updt_post = u"Update post ?"
 
 # Settings info
 st_info_blog_set = u"Blog settings"
@@ -247,7 +250,8 @@ st_menu_twitter_off = u"No"
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese (Brazil)"
-st_menu_es_cl = u"Spanish (Chile)"
+st_menu_es = u"Spanish"
+st_menu_tr = u"Turkish"
 
 # Setting popup menu
 st_pmenu_lang = u"Language:"
