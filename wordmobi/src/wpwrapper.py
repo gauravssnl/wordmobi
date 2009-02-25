@@ -9,17 +9,23 @@ from wmutil import *
 from wmproxy import UrllibTransport
 from persist import DB
 from wmlocale import LABELS
+from wmglobals import DEFDIR, PERSIST, VERSION
+from types import IntType
+import pickle
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 
 class WordPressWrapper(object):
     def __init__(self):
+        self.persist_name = os.path.join(DEFDIR,PERSIST)
         self.posts = []
         self.comments = []
         self.categories = []
+        self.cat_dict = {}
         self.cat_default = []
+        self.load()
         self.refresh()
-        self.categories = self.cat_default   
+        self.build_cat_dict()
         self.blog = None
         self.proxy = ""
         
@@ -27,6 +33,7 @@ class WordPressWrapper(object):
         """ Update variables related to multiple idioms support
         """
         # just use default values if categories were not retrieved yet
+        # but considering possible new locale
         if self.categories == self.cat_default:
             self.categories = []
         self.cat_default = [ { 'categoryName':LABELS.loc.wp_list_uncategorized,
@@ -35,14 +42,34 @@ class WordPressWrapper(object):
         if not self.categories:
             self.categories = self.cat_default
         
+    def save(self):
+        f = open(self.persist_name,"wb")
+        pickle.dump(VERSION,f)
+        pickle.dump(self.categories,f)
+        pickle.dump(self.posts,f)
+        pickle.dump(self.comments,f)
+        f.close()
+
+    def load(self):
+        if os.path.exists(self.persist_name):
+            f = open(self.persist_name,"rb")
+            version = pickle.load(f)
+            self.categories = pickle.load(f)
+            self.posts = pickle.load(f)
+            self.comments = pickle.load(f)
+            f.close()
+
     def categoryNamesList(self):
+        """ Return a list with all category names. The name order must match with
+            self.categories, so it is not possible to use dict keys.
+        """
         return map( lambda x:  x['categoryName'] , self.categories)
 
     def categoryName2Id(self,cat):
-        for c in self.categories:
-            if c['categoryName'] == cat:
-                return (c['categoryId'], c['parentId'])
-        return ( '0', '0' )
+        if self.cat_dict.has_key(cat):
+            return (self.cat_dict[cat]['categoryId'],
+                    self.cat_dict[cat]['parentId'])
+        return ('0','0')
             
     def update_categories(self):
         """ Update categories. Return True or False.
@@ -65,9 +92,16 @@ class WordPressWrapper(object):
         # categories *never* may be empty
         if not self.categories:
             self.categories = self.cat_default
-            
+
+        self.build_cat_dict()
+        self.save()
         return True
 
+    def build_cat_dict(self):
+        self.cat_dict = {}
+        for c in self.categories:
+            self.cat_dict[c['categoryName']] = c
+                    
     def delete_category(self, item):
         retval = False
         cat_id = self.categories[item]['categoryId']
@@ -76,19 +110,19 @@ class WordPressWrapper(object):
         try:
             res = self.blog.deleteCategory(cat_id)
         except:
-            note(LABEL.loc.wp_err_cant_del_cat % cat_name,"error")
-            
-        if res:
-            del self.categories[item]
-            note(LABELS.loc.wp_info_cat_del % cat_name,"info")
-            retval = True
+            note(LABELS.loc.wp_err_cant_del_cat % cat_name,"error")
         else:
-            note(LABEL.loc.wp_err_cant_del_cat % cat_name,"error")
-
-        # categories *never* may be empty
-        if not self.categories:
-            self.categories = self.cat_default
-            
+            if res:
+                del self.categories[item]
+                # categories can not be empty
+                if not self.categories:
+                    self.categories = self.cat_default 
+                self.build_cat_dict()
+                retval = True
+                note(LABELS.loc.wp_info_cat_del % cat_name,"info")
+            else:
+                note(LABELS.loc.wp_err_cant_del_cat % cat_name,"error")
+    
         return retval
 
     def new_category(self,cat_name):
@@ -104,14 +138,19 @@ class WordPressWrapper(object):
             note(LABELS.loc.wp_err_cant_create_cat % cat_name,"error")
             return False
         return True
+    
 
-    def update_posts(self):
+    def update_posts_and_cats(self):
         try:
-            self.posts = self.blog.getRecentPostTitles( int(DB["num_posts"]) )
+            posts = self.blog.getRecentPostTitles( int(DB["num_posts"]) )
         except:
             note(LABELS.loc.wp_err_cant_updt_post,"error")
             return False
 
+        # merge local posts with new ones
+        [ posts.append(p) for p in self.posts if self.post_is_local(p) ]
+        self.posts = posts
+        
         return self.update_categories()
 
     def get_post(self,item):
@@ -120,7 +159,7 @@ class WordPressWrapper(object):
         except:
             note(LABELS.loc.wp_err_cant_downl_post,"error")
             return False
-        
+        self.save()
         return True
 
     def upload_images(self, fname):
@@ -133,12 +172,12 @@ class WordPressWrapper(object):
         
         return img_src
     
-    def new_post(self, title, contents, categories, publish):
-        """ Uplaod a new post
+    def new_post(self, title, contents, categories, publish, offline_idx=-1):
+        """ Upload a new post
         """
         app.title = LABELS.loc.wp_info_upld_post_cont
                       
-        soup = BeautifulSoup( unicode_to_utf8(contents) )
+        soup = BeautifulSoup(unicode_to_utf8(contents))
         for img in soup.findAll('img'):
             if os.path.isfile( img['src'] ): # just upload local files
                 url = self.upload_images( img['src'] )
@@ -165,15 +204,80 @@ class WordPressWrapper(object):
             app.title =  LABELS.loc.wp_info_updt_post_list 
             try:
                 p = self.blog.getLastPostTitle( )
-                self.posts.insert( 0, p )
+                # indicate that the corresponding offline post now has a remote copy
+                if offline_idx >= 0:              
+                    self.posts[offline_idx] = p
+                else:
+                    self.posts.insert( 0, p )
             except:
                 note(LABELS.loc.wp_err_cant_updt_post_list,"error")
-
+            self.save()
         return npost
 
-    def edit_post(self, title, contents, categories, post_orig, publish):
-        app.title = LABELS.loc.wp_info_upld_post_cont
+    def save_new_post(self, title, contents, categories, publish):
+        """ We need to create a post like that one provided by xmlrpclib.
+            Otherwise, WM will fail when decoding this post. Just a new
+            dict is added (wordmobi), for controlling.
+        """
+        cats = [ unicode_to_utf8(c) for c in categories ]
+        if publish:
+            pub = 'publish'
+        else:
+            pub = 'draft'
+        dt = time.gmtime()
+        pst = { 'title': unicode_to_utf8(title),
+                'description': unicode_to_utf8(contents),
+                'categories':cats,
+                'post_status':pub,
+                'dateCreated':DateTime(time.mktime(dt)),
+                'wordmobi':True
+                }
+        self.posts.insert(0,pst)
+        self.save()
 
+    def post_is_local(self,obj):
+        """ Check if a post is saved locally. It may be or not a remote copy.
+            Obj is a post index or the post itself.
+        """
+        if isinstance(obj,IntType):
+            local = self.posts[obj].has_key('wordmobi')
+        else:
+            local = obj.has_key('wordmobi')
+        return local
+
+    def post_is_remote(self,obj):
+        """ Check if a post is remote.
+            Obj is a post index or the post itself.
+        """
+        if isinstance(obj,IntType):
+            remote = self.posts[obj].has_key('postid')
+        else:
+            remote = obj.has_key('postid')
+
+        return remote
+
+    def post_is_only_remote(self,obj):
+        """ Check if a post is only remote.
+            Obj is a post index or the post itself.
+        """
+        return (self.post_is_remote(obj) and (not self.post_is_local(obj)))
+        
+    def post_is_only_local(self,obj):
+        """ Check if the post exists only locally, no remote copy exists.
+            Obj is a post index or the post itself.
+        """
+        return (self.post_is_local(obj) and (not self.post_is_remote(obj)))
+    
+    def edit_post(self, title, contents, categories, post_idx, publish):
+        """ Update a post. Return True or False, indicating if the updating
+            operation was completed sucessfuly or not
+        """
+        # when local post is edited it does not have a postid, in such case we need to
+        # create a new post instead updating an existing one
+        if self.post_is_only_local(post_idx):
+            np_id = self.new_post(title, contents, categories, publish, post_idx)
+            return (np_id >= 0)
+        app.title = LABELS.loc.wp_info_upld_post_cont
         soup = BeautifulSoup( unicode_to_utf8(contents) )
         for img in soup.findAll('img'):
             if os.path.isfile( img['src'] ): # just upload local files
@@ -185,49 +289,105 @@ class WordPressWrapper(object):
         app.title = LABELS.loc.wp_info_upld_post_cont
 
         post = wp.WordPressPost()
-        post.id = post_orig['postid']
+        post.id = self.posts[post_idx]['postid']
         post.title = unicode_to_utf8( title )
         post.description = contents
         post.categories = [ self.categoryName2Id(c)[0] for c in categories ]
         post.allowComments = True
-        post.permaLink = post_orig['permaLink']
-        post.textMore = post_orig['mt_text_more']
-        post.excerpt = post_orig['mt_excerpt']
+        post.permaLink = self.posts[post_idx]['permaLink']
+        post.textMore = self.posts[post_idx]['mt_text_more']
+        post.excerpt = self.posts[post_idx]['mt_excerpt']
 
-        ret = True
         try:
-            npost = self.blog.editPost( post.id, post, publish)
+            npost = self.blog.editPost(post.id, post, publish)
         except:
             note(LABELS.loc.wp_err_cant_updt_the_post,"error")
-            ret = False
-
-        upd_ok = False
-        if ret:
+            return False
+        else:
             app.title = LABELS.loc.wp_info_updt_post_list
             try:
                 upd_post = self.blog.getPost(post.id)
-                upd_ok = True
             except:
                 note(LABELS.loc.wp_err_cant_updt_post_list,"error")
+            else:
+                self.posts[post_idx] = upd_post
 
-        if upd_ok:
-            # update the list !
-            for idx in range(len(self.posts)):
-                if self.posts[idx]['postid'] == post.id:
-                    self.posts[idx] = upd_post
-                    break
-
-        return ret
-
-    def delete_post(self, idx):
-        try:
-            self.blog.deletePost(self.posts[idx]['postid'])
-        except:
-            return False
-        
-        del self.posts[idx]
+        self.save()
         return True
 
+    def save_exist_post(self, title, contents, categories, post_idx, publish):
+        cats = [ unicode_to_utf8(c) for c in categories ]
+        if publish:
+            pub = 'publish'
+        else:
+            pub = 'draft'         
+        self.posts[post_idx]['title'] = unicode_to_utf8(title)
+        self.posts[post_idx]['description'] = unicode_to_utf8(contents)
+        self.posts[post_idx]['categories'] = cats
+        self.posts[post_idx]['post_status'] = pub
+        if not self.posts[post_idx].has_key('wordmobi'):
+            self.posts[post_idx]['wordmobi'] = True
+        self.save() 
+    
+    def delete_post(self,idx):
+        """ Delete a post, local, remote or both
+        """
+        if self.post_is_remote(idx):
+            try:
+                self.blog.deletePost(self.posts[idx]['postid'])
+            except:
+                return False
+
+        del self.posts[idx]
+        self.save()
+        return True
+
+    def delete_only_remote_post(self,idx):
+        """ Delete remote post, keeping local changes
+        """
+        if self.post_is_remote(idx):
+            try:
+                self.blog.deletePost(self.posts[idx]['postid'])
+            except:
+                return False
+            del self.posts[idx]['postid']
+            self.posts[idx]['dateCreated'] = DateTime(time.mktime(time.gmtime()))
+            self.posts[idx]['wordmobi'] = True
+            self.save()
+            return True
+        return False
+            
+    def delete_only_local_post(self,idx):
+        """ Delete local changes, keeping remote post
+        """
+        if self.post_is_local(idx):
+            # discarding any local changes in the post
+            del self.posts[idx]['wordmobi']
+            del self.posts[idx]['description'] # force posts download
+            # try to download the post content
+            self.get_post(idx)
+            self.save()
+            return True
+        return False
+
+    def offline_publish(self, idx):
+        """ Publish the offline post with index idx.
+        """   
+        cats = []
+        for c in self.posts[idx]['categories']:
+            try:
+                cats.append(decode_html(c))
+            except:
+                cats.append(utf8_to_unicode(c))
+
+        title = utf8_to_unicode(BLOG.posts[idx]['title'])
+        conts = utf8_to_unicode(BLOG.posts[idx]['description'])
+        publish = self.posts[idx]['post_status'] == 'publish'
+        
+        if self.post_is_only_local(idx):
+            BLOG.new_post(title,conts,cats,publish,idx)
+        else:
+            self.edit_post(title,conts,cats,idx,publish)
 
     def get_comment(self, post_idx, comment_status):
         post_id = self.posts[post_idx]['postid']
@@ -246,7 +406,6 @@ class WordPressWrapper(object):
         return True
 
     def edit_comment(self, idx, email, realname, website, contents):
-        
         comment_id = self.comments[idx]['comment_id']
         comment = wp.WordPressEditComment()
         comment.status = 'approve'
@@ -254,7 +413,7 @@ class WordPressWrapper(object):
         comment.author = unicode_to_utf8( realname )
         comment.author_url = unicode_to_utf8( website )
         comment.author_email = unicode_to_utf8( email )
-        comment.date_created_gmt = DateTime( time.mktime(time.gmtime()) ) # gmt time required
+        comment.date_created_gmt = DateTime(time.mktime(time.gmtime())) # gmt time required
     
         try:
             self.blog.editComment(comment_id, comment)
@@ -329,7 +488,7 @@ class WordPressWrapper(object):
         
         del self.comments[idx]
         note(LABELS.loc.wp_info_cmt_del,"info")
-        
+
         return True
             
     def set_blog(self):
