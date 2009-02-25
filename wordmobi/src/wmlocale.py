@@ -93,6 +93,7 @@ class Default(object):
         self.loc.cm_list_spam = u"Spam"
         self.loc.cm_list_moderated = u"Moderated"
         self.loc.cm_list_unmoderated = u"Unmoderated"
+        self.loc.cm_list_approve = u"Approve"
         self.loc.cm_list_one_post = u"One post"
         self.loc.cm_list_all_posts = u"All posts"
 
@@ -129,6 +130,7 @@ class Default(object):
         self.loc.pt_menu_dele = u"Delete"
         self.loc.pt_menu_lstc = u"List Comments"
         self.loc.pt_menu_cnew = u"Create new"
+        self.loc.pt_menu_offl_publ = u"Publish"
         self.loc.pt_menu_clos = u"Close"
         self.loc.pt_menu_pict = u"Take a photo"
         self.loc.pt_menu_canc = u"Cancel"
@@ -156,6 +158,10 @@ class Default(object):
         self.loc.pt_list_take_img = u"Take a photo"
         self.loc.pt_list_view_img = u"View/List"
         self.loc.pt_list_rem_img = u"Remove"
+        self.loc.pt_list_save_it = u"No, but save it"
+        self.loc.pt_list_yes_rem_pst = u"Yes, just remote post"
+        self.loc.pt_list_yes_loc_ch = u"Yes, just local changes"
+        self.loc.pt_list_yes_del_all = u"Yes, delete all"
         
         # Posts info
         self.loc.pt_info_pst_pos = u"[%d/%d] Posts"
@@ -174,10 +180,7 @@ class Default(object):
         self.loc.pt_info_draft = u"No (draft)"
         self.loc.pt_info_no_imgs_sel = u"No images selected."
         self.loc.pt_info_downld_img = u"Downloading %s"
-        self.loc.pt_info_alrd_pub = u"Post already published."
-        self.loc.pt_info_send_twt1 = u"Sending post title to Twitter."
-        self.loc.pt_info_send_twt2 = u"Sending post title to Twitter.."
-        self.loc.pt_info_send_twt3 = u"Sending post title to Twitter..."
+        self.loc.pt_info_send_twt = u"Sending post title to Twitter"
         self.loc.pt_info_twitter_updated = u"Twitter updated."
 
         # Posts error messages
@@ -189,7 +192,7 @@ class Default(object):
         self.loc.pt_err_cant_prvw = u"Impossible to preview."
         self.loc.pt_err_cant_open = u"Impossible to open %s"
         self.loc.pt_err_cant_downld = u"Impossible to download %s"
-        self.loc.pt_err_cant_pst_cont = u"Impossible to post contents"
+        self.loc.pt_err_cant_pst_cont = u"Impossible to download post contents"
         self.loc.pt_err_unknown_ext = u"Unkown externsion for %s"
         self.loc.pt_err_cant_tiny_url = u"Impossible to create tiny URL."
         self.loc.pt_err_cant_send_twitter = u"Impossible to send post title to twitter."
@@ -202,10 +205,10 @@ class Default(object):
         self.loc.pt_pmenu_img_src = u"Image from:"
         self.loc.pt_pmenu_img_url = u"Image URL:"
         self.loc.pt_pmenu_link_url = u"Link URL:"
-        self.loc.pt_pmenu_send_post = u"Send post ?"
+        self.loc.pt_pmenu_linkyt_url = u"Youtube URL:"
+        self.loc.pt_pmenu_send_post = u"Publish post ?"
         self.loc.pt_pmenu_post_title = u"Post title:"
         self.loc.pt_pmenu_images = u"Images"
-        self.loc.pt_pmenu_updt_post = u"Update post ?"
 
         # Settings info
         self.loc.st_info_blog_set = u"Blog settings"
@@ -222,7 +225,7 @@ class Default(object):
         self.loc.st_query_proxy_prt = u"Proxy port:"
         self.loc.st_query_proxy_usr = u"Proxy username:"
         self.loc.st_query_proxy_pwd = u"Proxy password:"
-        self.loc.st_query_twitter_usr = u"twitter user:"
+        self.loc.st_query_twitter_usr = u"Twitter user:"
         self.loc.st_query_twitter_pwd = u"Twitter password:"
         
         # Settings menu
@@ -246,14 +249,15 @@ class Default(object):
         self.loc.st_menu_proxy_pwd = u"Password"
         self.loc.st_menu_proxy_on = u"Enabled"
         self.loc.st_menu_proxy_off = u"Disabled"
-        self.loc.st_menu_twitter_ena = u"Send post to twitter"
+        self.loc.st_menu_twitter_ena = u"Send to twitter"
         self.loc.st_menu_twitter_on = u"Yes"
         self.loc.st_menu_twitter_off = u"No"
         
         # languages support
         self.loc.st_menu_en_us = u"English (USA)"
         self.loc.st_menu_pt_br = u"Portuguese (Brazil)"
-        self.loc.st_menu_es_cl = u"Spanish (Chile)"
+        self.loc.st_menu_es = u"Spanish"
+        self.loc.st_menu_tr = u"Turkish"
         
         # Setting popup menu
         self.loc.st_pmenu_lang = u"Language:"
