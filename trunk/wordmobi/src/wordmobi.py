@@ -32,6 +32,7 @@ __license__ = "GPLv3"
 class WordMobi(Application):
     
     def __init__(self):
+        app.screen='normal'
         LABELS.set_locale(DB["language"])
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
@@ -62,12 +63,23 @@ class WordMobi(Application):
                         LABELS.loc.wm_menu_upgr,
                         LABELS.loc.wm_menu_abou ]
         return menu_labels
+
+    def _get_menu_functions(self):
+        funcs = [self.posts,
+                 self.comments,
+                 self.categories,
+                 self.tags,
+                 self.settings,
+                 self.upgrade,
+                 self.about]
+        return funcs
     
     def refresh(self):
         Application.refresh(self)
         idx = self.body.current()
-        app.menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
-        items = map( lambda a,b: (a,u"",b), self._get_menu_labels(), self.icons )
+        app.menu = map(lambda a,b: (a,b), self._get_menu_labels(), self._get_menu_functions())
+        app.menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
+        items = map(lambda a,b: (a,u"",b), self._get_menu_labels(), self.icons)
         app.body.set_list( items, idx )
         
     def check_update_value(self):
@@ -169,6 +181,7 @@ class WordMobi(Application):
         ny = popup_menu( [LABELS.loc.gm_yes, LABELS.loc.gm_no], LABELS.loc.wm_pmenu_exit )
         if ny is not None:
             if ny == 0:
+                BLOG.save()
                 self.clear_cache()
                 Application.close_app(self)
 
