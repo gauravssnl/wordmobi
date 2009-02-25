@@ -789,20 +789,20 @@ class Posts(Dialog):
             idx = self.body.current()
             if BLOG.post_is_remote(idx):
                 if self.download_contents(idx):
-                    self.lock_ui(LABELS.loc.pt_info_send_twt1)
+                    self.lock_ui(LABELS.loc.pt_info_send_twt+u".")
                     link = BLOG.posts[idx]['permaLink']
                     title = BLOG.posts[idx]['title']
                     api = s60twitter.TwitterApi(DB["twitter_user"],
                                                 DB["twitter_pass"],
                                                 BLOG.proxy)
-                    self.set_title(LABELS.loc.pt_info_send_twt2)
+                    self.set_title(LABELS.loc.pt_info_send_twt+u"..")
                     try:
                         tiny_link = api.tinyfy_url(link)
                     except:
                         note(LABELS.loc.pt_err_cant_tiny_url,"error")
                     else:
                         msg = title[:140-len(tiny_link)-1] + " " + tiny_link # twitter: 140 chars max
-                        self.set_title(LABELS.loc.pt_info_send_twt3)
+                        self.set_title(LABELS.loc.pt_info_send_twt+u"...")
                         try:
                             api.update(msg)
                         except:
