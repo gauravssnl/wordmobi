@@ -247,7 +247,7 @@ st_menu_twitter_off = u"No"
 # languages support
 st_menu_en_us = u"Inglés (USA)"
 st_menu_pt_br = u"Portugués"
-st_menu_es_cl = u"Español (Chile)"
+st_menu_es = u"Español (Chile)"
         
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
