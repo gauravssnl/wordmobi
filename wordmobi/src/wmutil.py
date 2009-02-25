@@ -32,7 +32,10 @@ def parse_iso8601(val):
     return (int(dt[:4]),int(dt[4:6]),int(dt[6:8]),int(tm[0]),int(tm[1]),int(tm[2]))
 
 def utf8_to_unicode(s):
-    return unicode(s,'utf-8',errors='ignore')
+    if isinstance(s, unicode):
+        return s
+    else:
+        return unicode(s,'utf-8',errors='ignore')
 
 def unicode_to_utf8(s):
     return s.encode('utf-8')
