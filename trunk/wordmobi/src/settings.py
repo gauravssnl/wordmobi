@@ -3,7 +3,10 @@ import e32
 from types import StringTypes
 from appuifw import *
 from window import Dialog
-from socket import select_access_point, access_point, access_points, set_default_access_point
+if float(e32.pys60_version[:3]) >= 1.9:
+    import btsocket as socket
+else:
+    import socket
 from wmutil import *
 import key_codes
 from persist import DB
@@ -16,7 +19,7 @@ def sel_access_point():
     """ Select the default access point. Return True if the selection was
         done or False if not
     """
-    aps = access_points()
+    aps = socket.access_points()
     if not aps:
         note(LABELS.loc.st_err_no_access_point,"error")
         return False
@@ -27,8 +30,8 @@ def sel_access_point():
         note(LABELS.loc.st_err_one_ap_req,"error")
         return False
     
-    apo = access_point( aps[item]['iapid'] )
-    set_default_access_point( apo )
+    apo = socket.access_point( aps[item]['iapid'] )
+    socket.set_default_access_point( apo )
     
     return True
 
@@ -241,6 +244,8 @@ class Settings(Dialog):
     def blog_cbk(self):
         self.lock_ui()
         if not self.dlg.cancel:
+            if self.dlg.blog[-1] == u"/":
+                self.dlg.blog = self.dlg.blog[:-1]
             DB["blog"] = self.dlg.blog
             DB["user"] = self.dlg.user
             DB["pass"] = self.dlg.passw
@@ -297,9 +302,10 @@ class Settings(Dialog):
         self.dlg.run()
         
     def language(self):
-        langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
-                  (LABELS.loc.st_menu_pt_br, u"pt_br"),
-                  (LABELS.loc.st_menu_es_cl, u"es_cl")]
+        langs = [(LABELS.loc.st_menu_en_us, u"en_us"),
+                 (LABELS.loc.st_menu_pt_br, u"pt_br"),
+                 (LABELS.loc.st_menu_es_cl, u"es"),
+                 (LABELS.loc.st_menu_tr, u"tr")]
         item = popup_menu(map(lambda x:x[0], langs), LABELS.loc.st_pmenu_lang )
         if item is not None:
             loc = langs[item][1]
