@@ -64,7 +64,7 @@ class Categories(Dialog):
     def delete(self):
         item = app.body.current()
         cat_name = self.headlines[item]
-        ny = popup_menu( [LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.ca_pmenu_delete % cat_name)
+        ny = popup_menu([LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.ca_pmenu_delete % cat_name)
         if ny is not None:
             if ny == 1:
                 self.lock_ui(LABELS.loc.ca_info_del_cat % cat_name)
@@ -79,7 +79,8 @@ class Categories(Dialog):
             ret = BLOG.new_category( cat_name )
             self.unlock_ui()
             if ret:
-                self.update()        
+                self.update()
+            self.refresh()
     
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
