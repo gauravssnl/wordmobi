@@ -204,8 +204,8 @@ class Comments(Dialog):
         cbk = map( lambda x: x[1], self.menu_items )
         if BLOG.comments:
             if BLOG.comments[app.body.current()]['status'] != 'approve':
-                menu.append( u"Approve" )
-                cbk.append( self.moderate )            
+                menu.append(LABELS.loc.cm_list_approve)
+                cbk.append(self.moderate)            
         op = popup_menu(menu, LABELS.loc.cm_pmenu_comts)
         if op is not None:
             self.last_idx = app.body.current()
