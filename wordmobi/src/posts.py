@@ -8,7 +8,11 @@ from beautifulsoup import BeautifulSoup
 
 import e32
 import key_codes
-import camera
+try:
+    import camera
+    HAS_CAM = True
+except:
+    HAS_CAM = False
 import graphics
 import key_codes
 from appuifw import *
@@ -164,6 +168,12 @@ class PostContents(Dialog):
                                          "CLOSE_TAG":u"",
                                          "OPEN_FUNC":lambda: self.insert_link(False),
                                          "CLOSE_FUNC":lambda: self.insert_link(True) }
+        self.text_snippets["LINKYT"] = { "MENU_NAME":u"Youtube Link",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"",
+                                         "CLOSE_TAG":u"",
+                                         "OPEN_FUNC":lambda: self.insert_linkyt(),
+                                         "CLOSE_FUNC":None }        
         self.text_snippets["OLIST"]  = { "MENU_NAME":u"List (ordered)",
                                          "MENU_STATE":False,
                                          "OPEN_TAG":u"<ol>",
@@ -248,7 +258,8 @@ class PostContents(Dialog):
                      ),
                     (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
-                        (gen_label("LINK"), gen_ckb("LINK")))
+                        (gen_label("LINK"), gen_ckb("LINK")),
+                        (gen_label("LINKYT"), gen_ckb("LINKYT")))
                      ),
                     (LABELS.loc.pt_menu_lsts,(
                         (gen_label("OLIST"), gen_ckb("OLIST")),
@@ -275,7 +286,7 @@ class PostContents(Dialog):
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
-            elif ir == 1:
+            elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
@@ -303,6 +314,15 @@ class PostContents(Dialog):
             self.body.add( txt )
             self.refresh()
 
+    def insert_linkyt(self):
+        txt = u""
+        url = query(LABELS.loc.pt_pmenu_linkyt_url, "text", u"http://www.youtube.com/watch?v=")
+        if url is not None:
+            txt = u"[youtube=%s]" % (url)
+        if txt: 
+            self.body.add(txt)
+            self.refresh()
+            
     def insert_ins(self, closing):
         txt = u""
         if closing:
@@ -375,6 +395,7 @@ class NewPost(Dialog):
         self.find_images()
         self.publish = publish
         self.last_idx = 0
+        self.save = False
 
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app ) ]
@@ -399,16 +420,6 @@ class NewPost(Dialog):
                        (LABELS.loc.pt_menu_pubs, pub) ]
 
         app.body.set_list( lst_values, self.last_idx )   
-        
-    def close_app(self):
-        if not self.cancel:
-            ny = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no], LABELS.loc.pt_pmenu_send_post)
-            if ny is None:
-                return
-            if ny == 1:
-                self.cancel = True
-
-        Dialog.close_app(self)
                 
     def update_post_title(self):
         post_title = query(LABELS.loc.pt_pmenu_post_title, "text", self.post_title)
@@ -446,7 +457,7 @@ class NewPost(Dialog):
                     self.contents = self.contents + \
                                     u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
                                     (sel,os.path.basename( sel ))
-            elif ir == 1:
+            elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
                     self.images.append( sel )
@@ -538,35 +549,46 @@ class NewPost(Dialog):
             if img["src"] == del_img:
                 img.extract()
         self.contents = utf8_to_unicode( soup.prettify().replace("\n","") )
-        
-class EditPost(NewPost):
-    def __init__(self, cbk, cats, post, publish ):
-        NewPost.__init__(self,cbk,
-                          utf8_to_unicode(post['title']),
-                          utf8_to_unicode(post['description']),
-                          cats,
-                          [ decode_html(c) for c in post['categories'] ],
-                          publish )
-        self.original_state = publish
-        self.set_title(LABELS.loc.pt_info_edit_post)
-        self.post = post
-        self.find_images()
 
-    def update_publish(self):
-        # just allow changes if post was not published yet
-        if self.original_state == False:
-            NewPost.update_publish(self)
-        else:
-            note(LABELS.loc.pt_info_alrd_pub,"info")
-            
     def close_app(self):
         if not self.cancel:
-            ny = popup_menu( [LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.pt_pmenu_updt_post)
-            if ny is None:
+            yns = popup_menu([LABELS.loc.gm_yes,
+                             LABELS.loc.gm_no,
+                             LABELS.loc.pt_list_save_it],
+                            LABELS.loc.pt_pmenu_send_post)
+            if yns is None:
                 return
-            if ny == 0:
+            if yns == 1:
                 self.cancel = True
+                self.save = False
+            elif yns == 2:
+                self.cancel = True
+                self.save = True
+            else:
+                self.cancel = False
+                self.save = False
+
         Dialog.close_app(self)
+        
+class EditPost(NewPost):
+    def __init__(self, cbk, cats, post_idx, publish ):
+        cats_post = []
+        for c in BLOG.posts[post_idx]['categories']:
+            try:
+                cats_post.append(decode_html(c))
+            except:
+                cats_post.append(utf8_to_unicode(c))
+                
+        NewPost.__init__(self,cbk,
+                          utf8_to_unicode(BLOG.posts[post_idx]['title']),
+                          utf8_to_unicode(BLOG.posts[post_idx]['description']),
+                          cats,
+                          cats_post,
+                          publish )
+        
+        self.set_title(LABELS.loc.pt_info_edit_post)
+        self.post_idx = post_idx
+        self.find_images()
             
 class Posts(Dialog):
     def __init__(self,cbk):
@@ -574,14 +596,15 @@ class Posts(Dialog):
         self.last_idx = 0
         self.headlines = []
         #self.tooltip = InfoPopup()
-        body = Listbox( [ (u"", u"") ], self.check_popup_menu )
-        self.menu_items = [( LABELS.loc.pt_menu_updt, self.update ),
-                           ( LABELS.loc.pt_menu_view, self.contents ),
-                           ( LABELS.loc.pt_menu_dele, self.delete ),
-                           ( LABELS.loc.pt_menu_lstc, self.comments )]
+        body = Listbox( [ (u"", u"") ], self.check_popup_menu)
+        self.menu_items = [(LABELS.loc.pt_menu_updt, self.update),
+                           (LABELS.loc.pt_menu_view, self.contents),
+                           (LABELS.loc.pt_menu_cnew, self.new),
+                           (LABELS.loc.pt_menu_dele, self.delete),
+                           (LABELS.loc.pt_menu_lstc, self.comments)]
         if DB["twitter_enabled"] == u"True":
-            self.menu_items += [( LABELS.loc.pt_menu_s2tw, self.send2twitter )]
-        self.menu_items += [( LABELS.loc.pt_menu_cnew, self.new )]
+            self.menu_items += [(LABELS.loc.pt_menu_s2tw, self.send2twitter )]
+        self.menu_items += [(LABELS.loc.pt_menu_offl_publ, self.offline_publish)]
         menu = self.menu_items + [(LABELS.loc.pt_menu_clos, self.close_app )]
         
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_post, body, menu)
@@ -622,98 +645,133 @@ class Posts(Dialog):
             self.popup_menu()
 
     def popup_menu(self):
-        op = popup_menu( map( lambda x: x[0], self.menu_items ) , LABELS.loc.pt_pmenu_posts)
+        idx = app.body.current()
+        self.last_idx = idx
+        menu = [(LABELS.loc.pt_menu_updt, self.update)]
+        if BLOG.posts:                
+            menu += [(LABELS.loc.pt_menu_view, self.contents),
+                     (LABELS.loc.pt_menu_cnew, self.new),
+                     (LABELS.loc.pt_menu_dele, self.delete)]
+            if BLOG.post_is_remote(idx):
+                menu += [(LABELS.loc.pt_menu_lstc, self.comments)]
+                if DB["twitter_enabled"] == u"True":
+                    menu += [(LABELS.loc.pt_menu_s2tw, self.send2twitter)]
+            if BLOG.post_is_local(idx):
+                menu += [(LABELS.loc.pt_menu_offl_publ,self.offline_publish)]
+        op = popup_menu(map( lambda x: x[0], menu) , LABELS.loc.pt_pmenu_posts)
         if op is not None:
-            self.last_idx = app.body.current()
-            map( lambda x: x[1], self.menu_items )[op]()
+            map(lambda x: x[1], menu)[op]()
     
     def comments(self):
         def cbk():
             self.refresh()
-            return True            
-        self.dlg = Comments(cbk)
-        self.dlg.run()
+            return True
         if BLOG.posts:
-            self.dlg.update( self.body.current() )  # update comments for current post
+            idx = app.body.current()
+            if BLOG.post_is_remote(idx):           
+                self.dlg = Comments(cbk)
+                self.dlg.run()
+                self.dlg.update(idx)  # update comments for current post
     
     def update(self):
         self.lock_ui(LABELS.loc.pt_info_downld_pt)
-        BLOG.update_posts()
-        #if BLOG.update_posts():
-        #    self.set_title(u"Updating categories...")
-        #BLOG.update_categories()
+        BLOG.update_posts_and_cats()
         self.unlock_ui()            
 
         if not BLOG.posts:
-            note( LABELS.loc.pt_info_no_posts, "info" )
+            note(LABELS.loc.pt_info_no_posts, "info" )
         
         self.refresh()
     
     def delete(self):
         if BLOG.posts:
-            ny = popup_menu( [LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.pt_pmenu_del_post )
+            idx = app.body.current()
+            if BLOG.post_is_local(idx) and BLOG.post_is_remote(idx):
+                # remote post with local changes - many delete option
+                options = ((LABELS.loc.gm_no,lambda x: False),
+                           (LABELS.loc.pt_list_yes_rem_pst,BLOG.delete_only_remote_post),
+                           (LABELS.loc.pt_list_yes_loc_ch,BLOG.delete_only_local_post),
+                           (LABELS.loc.pt_list_yes_del_all,BLOG.delete_post))
+            else:
+                # just local or remote - delete
+                options = ((LABELS.loc.gm_no,lambda x: False),
+                           (LABELS.loc.gm_yes,BLOG.delete_post))
+            ny = popup_menu(map(lambda x:x[0],options),LABELS.loc.pt_pmenu_del_post)
             if ny is not None:
-                if ny == 1:
+                if ny > 0:
                     self.lock_ui(LABELS.loc.pt_info_del_post)
-                    idx = app.body.current()
-                    if not BLOG.delete_post(idx):
-                        note(LABELS.loc.pt_err_cant_del_pt,"error")
+                    funcs = map(lambda x:x[1],options)
+                    res = funcs[ny](idx)
+                    if res:
+                        note(LABELS.loc.pt_info_post_del,"info")
                     else:
-                        note(LABELS.loc.pt_info_post_del,"info")                        
+                        note(LABELS.loc.pt_err_cant_del_pt,"error")                            
                     self.unlock_ui() 
-                    self.refresh()            
+                    self.refresh()
 
     def new_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui()
+            # send to WP
             np = BLOG.new_post(self.dlg.post_title,
-                                        self.dlg.contents,
-                                        self.dlg.categories,
-                                        self.dlg.publish)
+                               self.dlg.contents,
+                               self.dlg.categories,
+                               self.dlg.publish)
             self.unlock_ui()
             
             if np == -1:
                 return False
+        elif self.dlg.save:
+            # just save
+            BLOG.save_new_post(self.dlg.post_title,
+                               self.dlg.contents,
+                               self.dlg.categories,
+                               self.dlg.publish)
             
         self.refresh()
         return True
-    
+            
     def new(self):
-        self.dlg = NewPost( self.new_cbk, u"", u"", BLOG.categoryNamesList(), [], True )
+        self.dlg = NewPost(self.new_cbk, u"", u"", BLOG.categoryNamesList(), [], True)
         self.dlg.run()
 
     def contents_cbk(self):
         if not self.dlg.cancel:
             self.lock_ui()
+            # send post to WP
             ok = BLOG.edit_post(self.dlg.post_title,
-                                         self.dlg.contents,
-                                         self.dlg.categories,
-                                         self.dlg.post,
-                                         self.dlg.publish)
+                                self.dlg.contents,
+                                self.dlg.categories,
+                                self.dlg.post_idx,
+                                self.dlg.publish)
             self.unlock_ui()
             
             if not ok:
                 return False
-            
+        elif self.dlg.save:
+            # just save post
+            BLOG.save_exist_post(self.dlg.post_title,
+                                 self.dlg.contents,
+                                 self.dlg.categories,
+                                 self.dlg.post_idx,
+                                 self.dlg.publish)
         self.refresh()
         return True
         
     def contents(self):
-        idx = self.body.current()
-        if self.download_contents(idx):
-            publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
-            self.dlg = EditPost( self.contents_cbk,
-                                 BLOG.categoryNamesList(),
-                                 BLOG.posts[idx],
-                                 publish )
-            self.dlg.run()
+        if BLOG.posts:
+            idx = self.body.current()
+            if self.download_contents(idx):
+                publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
+                self.dlg = EditPost(self.contents_cbk,
+                                    BLOG.categoryNamesList(),
+                                    idx,
+                                    publish)
+                self.dlg.run()
 
     def download_contents(self,idx):
-        if not BLOG.posts:
-            note(LABELS.loc.pt_info_updt_pst_lst, "info" )
-            return False
-        
         # if post was not totally retrieved yet, fetch all data
+        # only call this function if you have posts
         if BLOG.posts[idx].has_key('description') == False:
             self.lock_ui(LABELS.loc.pt_info_downld_post)
             ok = BLOG.get_post(idx)
@@ -727,32 +785,43 @@ class Posts(Dialog):
     def send2twitter(self):
         """ Send a post title to twitter. Just must be called if twitter is enabled
         """
-        idx = self.body.current()
-        if self.download_contents(idx):
-            self.lock_ui(LABELS.loc.pt_info_send_twt1)
-            link = BLOG.posts[idx]['permaLink']
-            title = BLOG.posts[idx]['title']
-            api = s60twitter.TwitterApi(DB["twitter_user"],
-                                        DB["twitter_pass"],
-                                        BLOG.proxy)
-            self.set_title(LABELS.loc.pt_info_send_twt2)
-            try:
-                tiny_link = api.tinyfy_url(link)
-            except:
-                note(LABELS.loc.pt_err_cant_tiny_url,"error")
-            else:
-                msg = title[:140-len(tiny_link)-1] + " " + tiny_link # twitter: 140 chars max
-                self.set_title(LABELS.loc.pt_info_send_twt3)
-                try:
-                    api.update(msg)
-                except:
-                    note(LABELS.loc.pt_err_cant_send_twitter,"error")
-                else:
-                    note(LABELS.loc.pt_info_twitter_updated,"info")
-                    
-            self.unlock_ui()
-            self.refresh()
-        
+        if BLOG.posts:
+            idx = self.body.current()
+            if BLOG.post_is_remote(idx):
+                if self.download_contents(idx):
+                    self.lock_ui(LABELS.loc.pt_info_send_twt1)
+                    link = BLOG.posts[idx]['permaLink']
+                    title = BLOG.posts[idx]['title']
+                    api = s60twitter.TwitterApi(DB["twitter_user"],
+                                                DB["twitter_pass"],
+                                                BLOG.proxy)
+                    self.set_title(LABELS.loc.pt_info_send_twt2)
+                    try:
+                        tiny_link = api.tinyfy_url(link)
+                    except:
+                        note(LABELS.loc.pt_err_cant_tiny_url,"error")
+                    else:
+                        msg = title[:140-len(tiny_link)-1] + " " + tiny_link # twitter: 140 chars max
+                        self.set_title(LABELS.loc.pt_info_send_twt3)
+                        try:
+                            api.update(msg)
+                        except:
+                            note(LABELS.loc.pt_err_cant_send_twitter,"error")
+                        else:
+                            note(LABELS.loc.pt_info_twitter_updated,"info")
+                            
+                    self.unlock_ui()
+                    self.refresh()
+
+    def offline_publish(self):
+        if BLOG.posts:
+            idx = self.body.current()
+            if BLOG.post_is_local(idx):
+                self.lock_ui()
+                BLOG.offline_publish(idx)
+                self.unlock_ui()
+                self.refresh()
+            
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
 
@@ -762,7 +831,13 @@ class Posts(Dialog):
             self.headlines = []
             for p in BLOG.posts:
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
-                line1 = u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
+                if BLOG.post_is_only_local(p):
+                    status = u"[@] "
+                elif BLOG.post_is_local(p):
+                    status = u"[*] "
+                else:
+                    status = u""
+                line1 = status + u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
                 line2 = utf8_to_unicode( p['title'] )
                 self.headlines.append( ( line1 , line2 ) )
                                
