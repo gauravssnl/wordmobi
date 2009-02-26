@@ -8,7 +8,7 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || English (EUA) || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
 || Brazilian Portuguese || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
 || Spanish || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
-|| Turkish|| drAdeLante(Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
+|| Turkish|| drAdeLante (Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
 
 = Translating Wordmobi =
 
