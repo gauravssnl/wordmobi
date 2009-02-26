@@ -147,10 +147,36 @@ class WordPressWrapper(object):
             note(LABELS.loc.wp_err_cant_updt_post,"error")
             return False
 
-        # merge local posts with new ones
-        [ posts.append(p) for p in self.posts if self.post_is_local(p) ]
+        mod_pst = []
+        mod_idx = []
+        new_pst = []
+        for n in range(len(self.posts)):
+            p = self.posts[n]
+            if self.post_is_only_local(p):
+                new_pst.append(p)
+            elif self.post_is_remote(p) and self.post_is_local(p):
+                # post edited locally: preserve it
+                mod_pst.append(p['postid'])
+                mod_idx.append(n)
+        if mod_pst:
+            for n in range(len(posts)):
+                try:
+                    idx = mod_pst.index(posts[n]['postid'])
+                except:
+                    continue
+                # copy edited post
+                posts[n] = self.posts[mod_idx[idx]]
+        posts += new_pst
         self.posts = posts
-        
+        def _time_sort(x,y):
+            if x['dateCreated'] > y['dateCreated']:
+                return -1
+            elif x['dateCreated'] < y['dateCreated']:
+                return 1
+            else:
+                return 0
+        self.posts.sort(_time_sort)
+        del posts
         return self.update_categories()
 
     def get_post(self,item):
