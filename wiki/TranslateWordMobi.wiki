@@ -8,6 +8,7 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || English (EUA) || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
 || Brazilian Portuguese || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
 || Spanish || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
+|| Turkish|| drAdeLante(Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
 
 = Translating Wordmobi =
 
@@ -26,7 +27,7 @@ You will need to choose one language for starting from. At this moment, English,
 
  * *wmlocale_en_us.py* (English)
  * *wmlocale_pt_br.py* (Brazilian Portuguese)
- * *wmlocale_es_cl.py* (Spanish)
+ * *wmlocale_es.py* (Spanish)
 
 These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letters code for representing language names and ISO 3166-1 is another two letters code for country names. Country name may be omitted if the language does not have any variation. 
 
@@ -68,7 +69,8 @@ If you are comfortable for editing Python code, edit *settings.py* and find the 
 {{{
         langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
                   (LABELS.loc.st_menu_pt_br, u"pt_br"),
-                  (LABELS.loc.st_menu_es_cl, u"es_cl")]
+                  (LABELS.loc.st_menu_es, u"es"),
+                  (LABELS.loc.st_menu_tr, u"tr")]
 }}}
 
 Just modify this array and copy your locale file to e:\python\lib. 
@@ -78,7 +80,8 @@ For instance, copy *wmlocale_en_uk.py* to *e:\python\lib* and change langs as fo
 {{{
         langs = [ (LABELS.loc.st_menu_en_us, u"en_us"),
                   (LABELS.loc.st_menu_pt_br, u"pt_br"),
-                  (LABELS.loc.st_menu_es_cl, u"es_cl"),
+                  (LABELS.loc.st_menu_es, u"es"),
+                  (LABELS.loc.st_menu_tr, u"tr")
                   (u"English (UK)", u"en_uk") ]
 }}}
 
