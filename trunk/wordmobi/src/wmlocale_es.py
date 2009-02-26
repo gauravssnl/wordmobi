@@ -87,6 +87,7 @@ cm_list_any = u"Cualquiera"
 cm_list_spam = u"Spam"
 cm_list_moderated = u"Moderado"
 cm_list_unmoderated = u"No moderado"
+cm_list_approve = u"Aprobar"
 cm_list_one_post = u"Una entrada"
 cm_list_all_posts = u"Todas las entradas"
 
@@ -123,6 +124,7 @@ pt_menu_view = u"Ver/Editar entrada"
 pt_menu_dele = u"Eliminar entrada"
 pt_menu_lstc = u"Listar Comentarios"
 pt_menu_cnew = u"Nueva entrada"
+pt_menu_offl_publ = u"Publicar"
 pt_menu_clos = u"cerrar"
 pt_menu_pict = u"Tomar una foto"
 pt_menu_canc = u"Cancelar"
@@ -150,6 +152,10 @@ pt_list_ins_img = u"Insertar"
 pt_list_take_img = u"Tomar foto"
 pt_list_view_img = u"Ver/Listar"
 pt_list_rem_img = u"Remover"
+pt_list_save_it = u"No, pero guardarlo"
+pt_list_yes_rem_pst = u"Sí, solo entrada remota"
+pt_list_yes_loc_ch = u"Sí, solo cambios locales"
+pt_list_yes_del_all = u"Sí, borrar todo"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Entradas"
@@ -168,10 +174,7 @@ pt_info_no_pub = u"Sí"
 pt_info_draft = u"No (borrador)"
 pt_info_no_imgs_sel = u"No hay imágenes seleccionadas."
 pt_info_downld_img = u"Descargando %s"
-pt_info_alrd_pub = u"Entrada ya publicada."
-pt_info_send_twt1 = u"Enviando a Twitter."
-pt_info_send_twt2 = u"Enviando a Twitter.."
-pt_info_send_twt3 = u"Enviando a Twitter..."
+pt_info_send_twt = u"Enviando a Twitter"
 pt_info_twitter_updated = u"Twitter actualizado."
 
 # Posts error messages
@@ -196,10 +199,10 @@ pt_pmenu_flash = u"¿Flash ?"
 pt_pmenu_img_src = u"Imágen de:"
 pt_pmenu_img_url = u"URL de imágen:"
 pt_pmenu_link_url = u"URL de vínculo:"
+pt_pmenu_linkyt_url = u"URL de Youtube :"
 pt_pmenu_send_post = u"¿Enviar entrada ?"
 pt_pmenu_post_title = u"Título de la entrada:"
 pt_pmenu_images = u"Imágenes"
-pt_pmenu_updt_post = u"¿Actualizar entrada ?"
 
 # Settings info
 st_info_blog_set = u"Configuración del Blog"
@@ -246,9 +249,10 @@ st_menu_twitter_off = u"No"
 
 # languages support
 st_menu_en_us = u"Inglés (USA)"
-st_menu_pt_br = u"Portugués"
-st_menu_es = u"Español (Chile)"
-        
+st_menu_pt_br = u"Portugués (Brazil)"
+st_menu_es = u"Español"
+st_menu_tr = u"Turco"
+
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
 
