@@ -3,3 +3,5 @@
 [http://0.5.0 latest_wordmobi_version]
 
 [http://wordmobi.googlecode.com/files/Wordmobi-0.5.0.sis wordmobi_sis_url]
+
+[http://wordmobi.googlecode.com/files/Wordmobi-0.5.0-py19.sis wordmobi_sis_url_py19]
