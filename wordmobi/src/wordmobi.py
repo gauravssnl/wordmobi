@@ -142,28 +142,36 @@ class WordMobi(Application):
             addrs = soup.findAll('a')
             version = ""
             file_url = ""
+            file_url_py19 = ""
             for addr in addrs:
                 if addr.contents[0] == "latest_wordmobi_version":
                     version = addr["href"]
                 elif addr.contents[0] == "wordmobi_sis_url":
                     file_url = addr["href"]
+                elif addr.contents[0] == "wordmobi_sis_url_py19":
+                    file_url_py19 = addr["href"]
 
-            if version and file_url:
+            if version and file_url and file_url_py19:
                 version = version[version.rfind("/")+1:]
                 num_rem_ver = self.ver2num(version)
                 num_loc_ver = self.ver2num(VERSION)
                 if num_loc_ver >= num_rem_ver:
                     note(LABELS.loc.wm_info_ver_is_updt, "info")
                 else:
-                    yn = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no], LABELS.loc.wm_pmenu_download % (version) )
+                    yn = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no],
+                                     LABELS.loc.wm_pmenu_download % (version) )
                     if yn is not None:
                         if yn == 0:
-                            sis_name = file_url[file_url.rfind("/")+1:]
+                            if float(e32.pys60_version[:3]) >= 1.9:
+                                furl = file_url_py19
+                            else:
+                                furl = file_url
+                            sis_name = furl[furl.rfind("/")+1:]
                             local_file = os.path.join(DEFDIR, "updates", sis_name)
 
                             self.set_title( LABELS.loc.wm_info_downloading )
                             try:
-                                urllib.urlretrieve( file_url, local_file )
+                                urllib.urlretrieve( furl, local_file )
                             except:
                                 note(LABELS.loc.wm_err_downld_fail % sis_name, "error")
                             else:
