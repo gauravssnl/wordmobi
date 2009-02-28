@@ -1,4 +1,5 @@
 #summary Instructions for translators
+#labels Featured
 
 = Introduction =
 
