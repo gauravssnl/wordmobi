@@ -647,10 +647,10 @@ class Posts(Dialog):
     def popup_menu(self):
         idx = app.body.current()
         self.last_idx = idx
-        menu = [(LABELS.loc.pt_menu_updt, self.update)]
+        menu = [(LABELS.loc.pt_menu_updt, self.update),
+                (LABELS.loc.pt_menu_cnew, self.new)]
         if BLOG.posts:                
             menu += [(LABELS.loc.pt_menu_view, self.contents),
-                     (LABELS.loc.pt_menu_cnew, self.new),
                      (LABELS.loc.pt_menu_dele, self.delete)]
             if BLOG.post_is_remote(idx):
                 menu += [(LABELS.loc.pt_menu_lstc, self.comments)]
