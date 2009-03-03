@@ -18,3 +18,7 @@ Afterward, do the following:
  # Run default.py via python shell, opening Python and selecting "Option->Run script"
 
 This way, it will be possible to see the error messages or to add logs and alerts during execution. Please, collect these log messages and send them to developers.
+
+=== 2) After removing wordmobi, e:\wordmobi is not removed ===
+
+Yes, the uninstall program can not remove e:\wordmobi. Please, remove it using your file manager. O just keep it if you want to install wordmobi again.
