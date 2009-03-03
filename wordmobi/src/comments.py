@@ -234,6 +234,7 @@ class Comments(Dialog):
             self.set_title( t )
             self.unlock_ui()
             if not upd:
+                self.refresh()
                 return False
 
         if post_idx is None:
@@ -253,9 +254,7 @@ class Comments(Dialog):
                 post_idx = -1
 
         self.lock_ui()
-        
         upd = self.update_comment(post_idx, comment_status)
-        
         self.set_title( LABELS.loc.wm_menu_comm )
         self.unlock_ui()
         self.refresh()
