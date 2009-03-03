@@ -3,9 +3,9 @@
 
 = Installing wordmobi =
 
-First install Python for your S60 mobile phone and appropriated Wordmobi version. I tested the current version only in S60 3rd edition phones (N95 and E71), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [https://garage.maemo.org/frs/download.php/5325/Python_1.9.2_3rdEd.sis PythonForS60 1.9.x]. If you running a feature pack 2 device, like Nokia XM 5800, install [https://garage.maemo.org/frs/download.php/5326/Python_1.9.2_3rdEdFP2.sis PythonForS60 FP2 1.9.x]
+First install Python for your S60 mobile phone and appropriated Wordmobi version. I tested the current version only in S60 3rd edition phones (N95 and E71), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [https://garage.maemo.org/frs/download.php/5325/Python_1.9.2_3rdEd.sis PythonForS60 1.9.2]. If you running a feature pack 2 device, like Nokia XM 5800, install [https://garage.maemo.org/frs/download.php/5326/Python_1.9.2_3rdEdFP2.sis PythonForS60 FP2 1.9.2]
 
-After, install Wordmobi for Python [http://wordmobi.googlecode.com/files/Wordmobi-0.6.0.sis 1.4.5] or for [http://wordmobi.googlecode.com/files/Wordmobi-0.6.0-py19.sis 1.9.x].
+After, install Wordmobi for Python [http://wordmobi.googlecode.com/files/Wordmobi-0.6.0.sis 1.4.5] or for [http://wordmobi.googlecode.com/files/Wordmobi-0.6.0-py19.sis 1.9.2].
 
 There requirements for Wordpress as well. Comments will work only with wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
@@ -14,7 +14,7 @@ Wordmobi saves all relevant data in memory card. So, do not forget to insert one
  * e:\wordmobi => settings database
  * e:\wordmobi\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
  * e:\wordmobi\images => snapshots taken
- * *Wordmobi for Python 1.9.x must be installed in memory phone*.
+ * *Wordmobi for Python 1.9.2 must be installed in memory phone*.
 
 = Setup =
 
