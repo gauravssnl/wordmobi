@@ -4,5 +4,5 @@
  * Update LatestVersion
  * update ChangeLog
  * Update [http://code.google.com/p/wordmobi/ project home page]
- * Check Installing page
+ * Check [http://code.google.com/p/wordmobi/wiki/Installing Installing] page
  * Check TranslateWordMobi page
