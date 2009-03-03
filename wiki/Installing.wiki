@@ -11,7 +11,7 @@ After, install Wordmobi for Python [http://wordmobi.googlecode.com/files/Wordmob
 
 There requirements for Wordpress as well. Comments will work only with wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
-Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required). The directories used are the following:
+Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required). The following directories are used:
 
  * e:\wordmobi => settings database
  * e:\wordmobi\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
