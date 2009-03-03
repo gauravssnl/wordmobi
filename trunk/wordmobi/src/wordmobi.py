@@ -39,7 +39,7 @@ class WordMobi(Application):
         self.icons = [Icon(mif,16392,16392),
                       Icon(mif,16390,16390),
                       Icon(mif,16388,16388),
-                      Icon(mif,16386,16386),
+                      #Icon(mif,16386,16386),
                       Icon(mif,16394,16394),
                       Icon(mif,16396,16396),
                       Icon(mif,16384,16384)]
@@ -58,7 +58,7 @@ class WordMobi(Application):
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
                         LABELS.loc.wm_menu_cats,
-                        LABELS.loc.wm_menu_tags,
+                        #LABELS.loc.wm_menu_tags,
                         LABELS.loc.wm_menu_sets,
                         LABELS.loc.wm_menu_upgr,
                         LABELS.loc.wm_menu_abou ]
@@ -68,7 +68,7 @@ class WordMobi(Application):
         funcs = [self.posts,
                  self.comments,
                  self.categories,
-                 self.tags,
+                 #self.tags,
                  self.settings,
                  self.upgrade,
                  self.about]
@@ -88,7 +88,13 @@ class WordMobi(Application):
             
     def update_value(self):
         idx = self.body.current()
-        ( self.posts, self.comments, self.categories, self.tags, self.settings, self.upgrade, self.about)[idx]()
+        ( self.posts,
+          self.comments,
+          self.categories,
+          #self.tags,
+          self.settings,
+          self.upgrade,
+          self.about)[idx]()
 
     def default_cbk(self):
         self.refresh()
