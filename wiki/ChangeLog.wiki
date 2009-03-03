@@ -2,7 +2,107 @@
 
 = Change log =
 
-== 0.5.0 for Python 1.9.1 - 2009/02/19 == 
+= 0.6.0 (Python 1.9.2 and Python 1.4.5) - 2009/03/03 =
+ * Issue 29 - Things to fix
+ * Issue 18 - No categories in new post
+ * Adding support for Python 1.9.2
+=== comments.py ===
+ * fixing missing locale for "Approve"
+=== datetime.py ===
+ * Adding support for python 1.9.x (import e32calender as calendar) 
+=== default.py ===
+ * Adding support for python 1.9. 
+   Due to import problems, all .py files need to use extrasdir 
+   (see release info for python 1.9.1)   
+=== persist.py ===
+ * removing key "categories" (not in use)
+=== s60twitter.py ===
+ * Replacing s60simplejson by original simplejson ported to s60
+   http://code.google.com/p/wordmobi/source/browse/#svn/trunk/simplejson 
+=== wordmobi.py ===
+ * appuifw.app.screen='normal'at beggining was required
+ * adding all menu option to app.menu
+ * saving at exit 
+ * update support for py1.9 added 
+=== wmutil.py ===
+ * Issue 30 - "Impossible to update posts" with 0.4.4.
+   fixing unicode conversion when argument is already unicode
+=== wmglobals.py ===
+ * creating persist file name
+ * updating version info
+=== settings.py ===
+ * btsocket replacing socket (see release info for python 1.9.1)
+ * Issue 26 - Remove any slash at the end of blog name automatically
+   http://code.google.com/p/wordmobi/issues/detail?id=26&can=1 
+ * Adding Turkish translation
+ * renaming es_cl to es only 
+=== categories.py ===
+ * Missing self.refresh() after adding a item to categories
+=== posts.py ===
+ * Issue 28 - Camera problem E60 (and possibly other S60v3 without cam)
+   http://code.google.com/p/wordmobi/issues/detail?id=28&can=1 
+ * Adding support for including youtube links
+ * Adding support for saving post locally
+ * EditPost now using same close_app() from NewPost
+ * Decoding category names properly when EditPost() is called
+ * Allowing draft\publish at any time in EditPost(). Now, a published post
+   may be converted to draft.
+ * offline_publish() meny entry added for publishing offline post
+ * smart popup menu (only related options are showed) 
+ * smart delete option, covering all cases for local, remote and mixed
+ * EditPost() using post index instead post entry when called
+ * Protecting several function against invalid selection from left key menu
+   contents, send2twitter, comments, delete)
+ * refresh() with special symbols for 
+   Local post only: [@]
+   Remote post with local modification: [*]       
+ * Improving merge routine: 
+   - local only posts are kept unchanged and listed 
+   - modified posts with remote copy overwrites the remote copy. 
+     User must delete the local changes if he wants 
+   - post are sorted by creation time
+=== wpwrapper.py ===
+ * including cpickle for persistence
+ * adding function for persistence: save(), load(), save_new_post(),
+   post_is_only_remote(), post_is_only_local(), post_is_remote(), 
+   post_is_local(), save_exist_post(), offline_publish()
+ * creating a dictionary with categories for faster processing in
+   categoryName2Id()
+ * added build_cat_dict() for rebuilding the category dict
+ * improving delete_category() and fixing a localization bug (LABEL.)
+ * update_posts() renamed to update_posts_and_cats() since both need to be
+   updated. Performing merge operation with local posts.      
+ * edit_post() changed for support local posts editing 
+ * several new delete function for covering all cases. 
+   - delete_post() for deleting local/remote post
+   - delete_only_remote_post()
+   - delete_only_local_post()
+ * DateTime() must use GMT for better integration with wordpress.
+   WP must be set properly as well 
+=== locales ===
+==== added ====
+ * cm_list_approve = u"Approve"
+ * pt_menu_offl_publ = u"Publish"
+ * pt_list_save_it = u"No, but save it"
+ * pt_list_yes_rem_pst = u"Yes, just remote post"
+ * pt_list_yes_loc_ch = u"Yes, just local changes"
+ * pt_list_yes_del_all = u"Yes, delete all"
+ * pt_info_send_twt = u"Sending post title to Twitter" #no final period
+ * pt_pmenu_linkyt_url = u"Youtube URL:"
+ * st_menu_tr = u"Turkish"
+ * st_menu_es = u"Spanish"
+==== deleted ====
+ * pt_info_alrd_pub = u"Post already published."
+ * pt_info_send_twt1 = u"Sending post to Twitter."
+ * pt_info_send_twt2 = u"Sending post to Twitter.."
+ * pt_info_send_twt3 = u"Sending post to Twitter..."
+ * pt_pmenu_updt_post = u"Update post ?"
+ * st_menu_es_cl = u"Spanish (Chile)"
+==== changed ====
+ * pt_pmenu_send_post = u"Publish post ?"
+ * pt_err_cant_pst_cont = u"Impossible to download post contents"
+ 
+= 0.5.0 for Python 1.9.1 - 2009/02/19 =
 
  * Replacing s60simplejson by original simplejson ported to s60
    http://code.google.com/p/wordmobi/source/browse/#svn/trunk/simplejson
@@ -16,27 +116,27 @@
   * due to import problems, all .py files need to use extrasdir (see release info for python 1.9.1)
  * *Upgrade option should not be used in this version*.
 
-== 0.5.0 - 2009/02/09 == 
+= 0.5.0 - 2009/02/09 =
 
  * Spanish translation added. Thanks to Pablo Poo (Chile).
  * Support for sending post titles to twitter.
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=27 27]
 
-== 0.4.4 - 2009/02/05 ==
+= 0.4.4 - 2009/02/05 =
 
  * [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 Multilingual] support added. At this moment, only English and Portuguese (Brazil) are available. If you want to see your language supported, see TranslateWordMobi.
 
-== 0.4.3 - 2009/01/17 ==
+= 0.4.3 - 2009/01/17 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=23 23] -   	 Impossible to send posts in version 0.4.2
 
-== 0.4.2 - 2009/01/13 ==
+= 0.4.2 - 2009/01/13 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=20 20] - Preview is not working on 0.4.0 .
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=21 21] -  	 UI is not indicating when the updating finishes.
  * Preview now using the correct encoding for HTML (UTF-8)
 
-== 0.4.0 - 2009/01/11 ==
+= 0.4.0 - 2009/01/11 =
 
  * Navigation based on left\right keys.
  * New UI, based on list boxes instead tabs. 
@@ -47,47 +147,47 @@
  * Sorry, no tag support yet.
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=19 19]
 
-== 0.3.5 - 2008/12/16 ==
+= 0.3.5 - 2008/12/16 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=16 16]. Categories with accents were blocking wordmobi when uploading post.
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=15 15]. Categories mis-spelled on one menu option (thanks to [http://code.google.com/u/captainjim/ captainjim])
 
-== 0.3.4 - 2008/12/08 ==
+= 0.3.4 - 2008/12/08 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=5 5]. Categories with accents were blocking wordmobi during category download.
 
-== 0.3.3 - 2008/12/08 ==
+= 0.3.3 - 2008/12/08 =
 
  * Adding a note related to proxy authentication before downloading the update (About->Check upgrade). urllib does not support authentication for python 2.2.
 
-== 0.3.2 - 2008/12/08 ==
+= 0.3.2 - 2008/12/08 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=12 12]
  * New versions can be download now using About->Check upgrade. The sis file is stored in e:\wordmobi\updates
 
-== 0.3.0.1 - 2008/12/07 ==
+= 0.3.0.1 - 2008/12/07 =
 
  * [http://code.google.com/p/wordmobi/issues/detail?id=11 Issue 11]: After second comment update, edit/view comment continues to show contents from first update
 
-== 0.3.0 - 2008/12/06 ==
+= 0.3.0 - 2008/12/06 =
 
  * New interface based on tabs 
  * Support for categories management (delete, new)
  * Support for comments management (approve, delete, edit, new)
  * New internal organization
 
-== 0.2.10 - 2008/12/05 ==
+= 0.2.10 - 2008/12/05 =
 
  * Fixing issue [http://code.google.com/p/wordmobi/issues/detail?id=9 9]. Thanks to [http://code.google.com/u/Sebastian.Protasiuk/ Sebastian Protasiuk] for reporting and debuging.
 
  * Small problem in proxy setup when user/pass need to be empty. Once you fill theses fields, never you will erase them again. Now, when you press cancel the field is cleared.
 
-== 0.2.9 - 2008/12/04 ==
+= 0.2.9 - 2008/12/04 =
 
 Initial support for comments added to this version. It is possible to approve, delete and edit comments. However, menus and dialogs for comments may change soon. Moreover, more tests need to be done. 
 
 If you want to use this version, put additional required information (email, name) inside Setting->blog.
 
-== 0.2.8 ==
+= 0.2.8 =
  * support for later publishing (draft post)
  * [http://code.google.com/p/wordmobi/issues/detail?id=7 space tag] added
