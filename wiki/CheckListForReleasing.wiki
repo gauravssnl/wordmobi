@@ -1,8 +1,9 @@
 #summary Check list for releasing
 
- * Add sis, sis for 1.9.x and src to downloads
+ * Add sis, sis for 1.9.x and src to [http://code.google.com/p/wordmobi/downloads/list Downloads] section. Set them as *featured* and remove any previous featured.
  * Update LatestVersion
  * update ChangeLog
  * Update [http://code.google.com/p/wordmobi/ project home page]
  * Check [http://code.google.com/p/wordmobi/wiki/Installing Installing] page
  * Check TranslateWordMobi page
+ * Update [http://wordmobi.wordpress.com/ Wordmobi blog]
