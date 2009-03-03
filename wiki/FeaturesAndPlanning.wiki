@@ -26,6 +26,7 @@
 
 = Future enhancements and ideas =
 
+ # Icons for indicating the post status: draft, local, edited or just remote
  # TAGs support (with persistence)
  # multiples blogs support
  # access point persistence
