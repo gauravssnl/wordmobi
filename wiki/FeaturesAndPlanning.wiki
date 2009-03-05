@@ -26,10 +26,10 @@
 
  # TAGs support
  # access point persistence
+ # "test connection" option in access point selection/proxy/twitter setup
  # percentage size when adding images
  # Offline comments
  # Offline category/TAGs creation
- # "test connection" option in access point selection/proxy/twitter setup
  # upload to flickr or other providers with xmlrpc/REST support
 
 = Future enhancements and ideas =
