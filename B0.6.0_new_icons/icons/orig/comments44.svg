@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="44"
+   id="svg548"
+   inkscape:version="0.46"
+   sodipodi:docbase="/var/www/html/svg_gallery/svg/callouts"
+   sodipodi:docname="comments44.svg"
+   sodipodi:version="0.32"
+   width="44"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0">
+  <metadata
+     id="metadata3">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Clipart by Nicu Buculei - segmented</dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li />
+            <rdf:li>callout</rdf:li>
+            <rdf:li>shape</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs550">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 250 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="500 : 250 : 1"
+       inkscape:persp3d-origin="250 : 166.66667 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     inkscape:cx="22"
+     inkscape:cy="22"
+     inkscape:window-height="964"
+     inkscape:window-width="1280"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:zoom="17.181818"
+     showgrid="false"
+     inkscape:current-layer="svg548" />
+  <path
+     style="font-size:12px;fill:#3376af;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.69308394;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path779"
+     d="M 28.715677,3.0189365 C 23.190185,3.1135079 18.31646,6.3933048 17.281723,11.045943 C 16.099651,16.36107 20.373028,21.464727 26.821833,22.442101 C 26.823189,22.450288 26.820904,22.462404 26.820291,22.474107 L 26.783308,22.475793 L 21.758225,27.453715 L 32.082683,22.28712 L 31.98098,22.290488 L 32.047241,22.236583 L 32.195174,22.231529 L 32.082683,22.28712 L 32.224452,22.282066 L 32.224452,22.229844 L 32.225993,22.229844 C 36.693421,21.181628 39.825511,18.341518 40.662773,14.576815 C 41.845328,9.259514 37.566635,4.1533692 31.113417,3.1789712 C 30.306765,3.0571715 29.505032,3.0054263 28.715677,3.0189365 z" />
+  <path
+     style="font-size:12px;fill:#00b6b6;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.61966062;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path2385"
+     d="M 11.764344,24.541651 C 15.748422,24.603277 19.262554,26.740441 20.008636,29.772168 C 20.860951,33.235584 17.779694,36.561202 13.129873,37.198074 C 13.128894,37.203408 13.130542,37.211303 13.130984,37.21893 L 13.157649,37.220027 L 16.780918,40.463715 L 9.3366102,37.097085 L 9.4099418,37.099282 L 9.3621653,37.064154 L 9.2555009,37.060863 L 9.3366102,37.097085 L 9.2343902,37.093794 L 9.2343902,37.059764 L 9.2332788,37.059764 C 6.012102,36.376731 3.7537526,34.526073 3.1500573,32.072937 C 2.2973921,28.608105 5.382484,25.280866 10.035487,24.645934 C 10.617111,24.566567 11.195189,24.532848 11.764344,24.541651 z" />
+  <path
+     style="font-size:12px;fill:#ffaaaa;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.44811264;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path2380"
+     d="M 33.78913,29.293526 C 30.549742,29.333162 27.692463,30.707741 27.085835,32.657683 C 26.392831,34.88528 28.89815,37.024246 32.678839,37.433869 C 32.679634,37.4373 32.678295,37.442377 32.677936,37.447283 L 32.656254,37.447989 L 29.710238,39.534261 L 35.763076,37.368915 L 35.703452,37.370327 L 35.7423,37.347735 L 35.829026,37.345618 L 35.763076,37.368915 L 35.846192,37.366798 L 35.846192,37.344911 L 35.847094,37.344911 C 38.466179,36.905598 40.302403,35.715294 40.793258,34.13749 C 41.486544,31.908982 38.97811,29.768973 35.194833,29.360597 C 34.721924,29.309551 34.251897,29.287865 33.78913,29.293526 z" />
+</svg>
