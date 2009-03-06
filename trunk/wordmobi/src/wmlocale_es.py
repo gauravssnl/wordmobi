@@ -252,6 +252,7 @@ st_menu_en_us = u"Inglés (USA)"
 st_menu_pt_br = u"Portugués (Brazil)"
 st_menu_es = u"Español"
 st_menu_tr = u"Turco"
+st_menu_it = u"Italiano"
 
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
