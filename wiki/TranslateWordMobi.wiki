@@ -5,11 +5,12 @@
 
 Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS60 multilingual] support since version 0.4.4. At this moment, the following translations are available:
 
-|| *Language* || *Translator* || *Email* ||
-|| English (EUA) || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
-|| Brazilian Portuguese || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
-|| Spanish || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
-|| Turkish|| drAdeLante (Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
+|| *Language* || *File* || *Translator* || *Email* ||
+|| English (EUA) || wmlocale_en_us.py || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
+|| Brazilian Portuguese || wmlocale_pt_br.py || [http://jedizone.wordpress.com Marcelo Barros] || marcelobarrosalmeida (at) gmail.com ||
+|| Spanish || wmlocale_es.py || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
+|| Turkish || wmlocale_tr.py || drAdeLante (Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
+|| Italian || wmlocale_it.py || Claudio Cherubino || claudiocherubino (at) gmail.com ||
 
 = Translating Wordmobi =
 
@@ -24,12 +25,7 @@ If you want to see your language supported, follow the steps below.
 
 == Creating our locale file ==
 
-You will need to choose one language for starting from. At this moment, English, Spanish and Brazilian Portuguese are available. In source files (e:\python\lib), these translations are available as:
-
- * *wmlocale_en_us.py* (English)
- * *wmlocale_pt_br.py* (Brazilian Portuguese)
- * *wmlocale_es.py* (Spanish)
- * *wmlocale_tr.py* (Turkish)
+You will need to choose one language for starting from. In source files (e:\python\lib), these translations are available as files that start with *wmlocale_* (see table in previous section).
 
 These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letters code for representing language names and ISO 3166-1 is another two letters code for country names. Country name may be omitted if the language does not have any variation. 
 
