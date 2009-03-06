@@ -258,6 +258,7 @@ class Default(object):
         self.loc.st_menu_pt_br = u"Portuguese (Brazil)"
         self.loc.st_menu_es = u"Spanish"
         self.loc.st_menu_tr = u"Turkish"
+        self.loc.st_menu_it = u"Italian"
         
         # Setting popup menu
         self.loc.st_pmenu_lang = u"Language:"
