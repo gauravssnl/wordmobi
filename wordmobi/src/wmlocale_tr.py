@@ -225,7 +225,11 @@ st_menu_proxy_off = u"Etkisiz"
 # languages support
 st_menu_en_us = u"ingilizce (USA)"
 st_menu_pt_br = u"Portekizce"
-        
+st_menu_es = u"Ispanyolca"
+st_menu_tr = u"Türk"
+st_menu_it = u"Italyanca"
+st_menu_nl = u"Hollandaca"
+
 # Setting popup menu
 st_pmenu_lang = u"Dil:"
 

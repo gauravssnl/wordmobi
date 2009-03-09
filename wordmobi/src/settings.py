@@ -306,7 +306,8 @@ class Settings(Dialog):
                  (LABELS.loc.st_menu_pt_br, u"pt_br"),
                  (LABELS.loc.st_menu_es, u"es"),
                  (LABELS.loc.st_menu_tr, u"tr"),
-                 (LABELS.loc.st_menu_it, u"it")]
+                 (LABELS.loc.st_menu_it, u"it"),
+                 (LABELS.loc.st_menu_nl, u"nl")]
         item = popup_menu(map(lambda x:x[0], langs), LABELS.loc.st_pmenu_lang )
         if item is not None:
             loc = langs[item][1]
