@@ -36,7 +36,6 @@
 
  # Avoid app to be terminates when the red key is pressed
  # Icons for indicating the post status: draft, local, edited or just remote
- # TAGs support (with persistence)
  # multiples blogs support
  # Default button label customizations with uikludges/uitricks
  # html support when editing comments
