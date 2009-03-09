@@ -11,6 +11,8 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || Spanish || wmlocale_es.py || [http://pablo.poo.cl/ Pablo Poo] || pablopoo (at) gmail.com ||
 || Turkish || wmlocale_tr.py || drAdeLante (Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
 || Italian || wmlocale_it.py || Claudio Cherubino || claudiocherubino (at) gmail.com ||
+|| Dutch|| wmlocale_nl.py || Raymond Sneekes || raymond (at) sneek.es ||
+
 
 = Translating Wordmobi =
 
