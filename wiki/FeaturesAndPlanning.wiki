@@ -1,4 +1,5 @@
 #summary Desired features and enhancements
+#labels Featured
 
 = Current implemented features =
 
