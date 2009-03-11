@@ -229,6 +229,7 @@ st_menu_es = u"Ispanyolca"
 st_menu_tr = u"Türk"
 st_menu_it = u"Italyanca"
 st_menu_nl = u"Hollandaca"
+st_menu_de = u"Almanca"
 
 # Setting popup menu
 st_pmenu_lang = u"Dil:"

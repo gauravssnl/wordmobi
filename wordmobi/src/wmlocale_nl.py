@@ -254,6 +254,7 @@ st_menu_es = u"Spaans"
 st_menu_tr = u"Turks"
 st_menu_it = u"Italiaans"
 st_menu_nl = u"Nederlands"
+st_menu_de = u"Duits"
 
 # Setting popup menu
 st_pmenu_lang = u"Taal:"

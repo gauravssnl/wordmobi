@@ -254,6 +254,7 @@ st_menu_es = u"Spanish"
 st_menu_tr = u"Turkish"
 st_menu_it = u"Italian"
 st_menu_nl = u"Dutch"
+st_menu_de = u"German"
 
 # Setting popup menu
 st_pmenu_lang = u"Language:"
