@@ -12,7 +12,7 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || Turkish || wmlocale_tr.py || drAdeLante (Deniz Karaoglu) || drdeniz79 (at) gmail.com ||
 || Italian || wmlocale_it.py || Claudio Cherubino || claudiocherubino (at) gmail.com ||
 || Dutch|| wmlocale_nl.py || Raymond Sneekes || raymond (at) sneek.es ||
-|| German|| wmlocale_de.py || Steffen Fechner || fechman (at) googlemail.com ||
+|| German|| wmlocale_de.py || [http://diefechis.de/ Steffen Fechner] || fechman (at) googlemail.com ||
 
 = Translating Wordmobi =
 
