@@ -310,6 +310,7 @@ class Settings(Dialog):
                  (LABELS.loc.st_menu_nl, u"nl"),
                  (LABELS.loc.st_menu_de, u"de"),
                  (LABELS.loc.st_menu_ro, u"ro")]
+        langs.sort()
         item = popup_menu(map(lambda x:x[0], langs), LABELS.loc.st_pmenu_lang )
         if item is not None:
             loc = langs[item][1]
