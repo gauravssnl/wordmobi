@@ -1,0 +1,35 @@
+Icons for double line list boxes and applications:
+===================================================
+
+1) create, copy, steal your icone. Use Inkscape for editing as save as SVG (or svg plano/plain)
+
+2) Create a 44x44 icon. In fact, the S60 should be able to scale the icon, but sometimes this fails.
+
+3) Convert your icon using SVG2SVGTConverter tool, available inside S60 SDK
+
+4) Add viewBox parameter to your icon:
+http://wiki.forum.nokia.com/index.php/KIS000398_-_SVG_rendering_problems_caused_by_missing_viewBox_attribute
+If your icon is, for instance, 44x44, attribute viewBox="0 0 64 64" to tag svg. Something like:
+<svg baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" width="44px" height="44px" viewBox="0 0 44 44">
+
+5) converte to mif using mifconf. Dont forget to use /X for no compression
+
+C:\S60\devices\S60_3rd_FP2_SDK_v1.1\epoc32\tools\mifconv.exe myicon.mif /c32 myicon.svg /SC:\S60\devices\S60_3rd_FP2_SDK_v1.1\epoc32\tools  /Hmyicon.mbg /X
+
+6) When loading, it is necessary to specify indexes. You can find the indexes inside myicon.mbg. In appuifw, use the same index for image and mask, like below:
+
+/* This file has been generated, DO NOT MODIFY. */
+enum TMifWordmobi
+	{
+	EMbmWordmobiRecycle = 16384,
+	EMbmWordmobiLastElement
+	};
+
+
+appuifw.Icon("myicon.mif",16384,16384)
+
+
+
+http://discussion.forum.nokia.com/forum/showthread.php?t=98661
+http://wiki.forum.nokia.com/index.php/Issue_with_SVG_icon_display_on_3rd_edition
+http://wiki.forum.nokia.com/index.php/KIS000398_-_SVG_rendering_problems_caused_by_missing_viewBox_attribute
