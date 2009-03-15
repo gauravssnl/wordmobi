@@ -154,6 +154,7 @@ class Default(object):
         self.loc.pt_list_fsh_forc = u"Forced"
         self.loc.pt_list_loc_file = u"Local file"
         self.loc.pt_list_url = u"URL"
+        self.loc.pt_list_flickr = u"From Flickr"
         self.loc.pt_list_ins_img = u"Insert"
         self.loc.pt_list_take_img = u"Take a photo"
         self.loc.pt_list_view_img = u"View/List"

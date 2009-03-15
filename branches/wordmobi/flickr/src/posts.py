@@ -18,6 +18,7 @@ import key_codes
 from appuifw import *
 from wmutil import *
 from filesel import FileSel
+from flickr_sel import FlickrSel
 from window import Dialog
 from comments import Comments
 import s60twitter
@@ -27,7 +28,7 @@ from appuifw import InfoPopup
 
 from persist import DB
 from wpwrapper import BLOG
-from wmglobals import DEFDIR
+from wmglobals import DEFDIR, FLICKR_API_KEY
 from wmlocale import LABELS
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
@@ -279,7 +280,9 @@ class PostContents(Dialog):
         txt =  u""
         ir = popup_menu( [LABELS.loc.pt_list_loc_file,
                           LABELS.loc.pt_list_take_img,
-                          LABELS.loc.pt_list_url],
+                          LABELS.loc.pt_list_url,
+						  LABELS.loc.pt_list_flickr
+						  ],
                          LABELS.loc.pt_pmenu_img_src)
         if ir is not None:
             if ir == 0:
@@ -290,10 +293,12 @@ class PostContents(Dialog):
                 sel = TakePhoto().run()
                 if sel is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
-            else:
+            elif ir == 2:
                 url = query(LABELS.loc.pt_pmenu_img_url, "text", u"http://")
                 if url is not None:
                     txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (url,url)
+            elif ir == 3:
+                txt = FlickrSel(DB['email'], FLICKR_API_KEY).run()
 
         if txt:                    
             self.body.add( txt )
@@ -446,6 +451,7 @@ class NewPost(Dialog):
     def update_images(self):
         ir = popup_menu( [LABELS.loc.pt_list_ins_img,
                           LABELS.loc.pt_list_take_img,
+                          LABELS.loc.pt_list_flickr,
                           LABELS.loc.pt_list_view_img,
                           LABELS.loc.pt_list_rem_img],
                          LABELS.loc.pt_pmenu_images)
@@ -464,6 +470,10 @@ class NewPost(Dialog):
                     self.contents = self.contents + \
                                     u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
                                     (sel,os.path.basename( sel ))
+            elif ir == 2:
+                txt = FlickrSel(DB['email'], FLICKR_API_KEY).run()
+                if txt:
+                    self.contents += txt
             else:
                 if self.images:
                     item = selection_list(self.images, search_field=1) 
