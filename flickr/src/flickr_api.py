@@ -80,6 +80,15 @@ class Flickr:
 
         return method
 
+    def return_result(self, result, key_name):
+        """
+            Return new object if key_name is present in the result
+        """
+        if not None is result and result.has_key(key_name):
+            return FlickrObject(result[key_name])
+        else:
+            return None
+
     def get_data(self, method, parameters):
         # default parameters
         parameters['method'] = method
@@ -103,7 +112,8 @@ class Flickr:
             res = self.people_findByEmail(find_email = search_string)
         else:
             res  = self.people_findByUsername(username = search_string)
-        return FlickrObject(res['user'])
+
+        return self.return_result(res, 'user')
 
     def get_photos(self, user_id, per_page=10, page = 1):
         """
@@ -111,22 +121,23 @@ class Flickr:
         """
         photos = self.people_getPublicPhotos(
                 user_id = user_id, per_page = per_page, page = page
-                )
-        return FlickrObject(photos['photos'])
+            )
+
+        return self.return_result(photos, 'photos')
 
     def get_photo_sizes(self, photo_id):
         """
             Get the possible photo sizes
         """
         sizes = self.photos_getSizes(photo_id = photo_id)
-        return FlickrObject(sizes['sizes'])
+        return self.return_result(sizes, 'sizes')
 
     def get_photo_info(self, photo_id):
         """
             Get detailed photo information
         """
         info = self.photos_getInfo(photo_id = photo_id)
-        return FlickrObject(info['photo'])
+        return self.return_result(info, 'photo')
 
     def get_photo_url(self, user_id, photo_id):
         """
