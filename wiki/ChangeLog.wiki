@@ -2,6 +2,10 @@
 
 = Change log =
 
+= 0.6.1 (Python 1.9.2 and Python 1.4.5) - 2009/03/15 =
+ * Translations added: Romanian, German, Dutch, Italian.
+ * Sorting languages in language selection menu
+
 = 0.6.0 (Python 1.9.2 and Python 1.4.5) - 2009/03/03 =
  * Issue 29 - Things to fix
  * Issue 18 - No categories in new post
