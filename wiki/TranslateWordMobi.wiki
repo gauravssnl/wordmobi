@@ -13,7 +13,7 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || Italian || wmlocale_it.py || Claudio Cherubino || claudiocherubino (at) gmail.com ||
 || Dutch|| wmlocale_nl.py || Raymond Sneekes || raymond (at) sneek.es ||
 || German|| wmlocale_de.py || [http://diefechis.de/ Steffen Fechner] || fechman (at) googlemail.com ||
-|| Romanian|| wmlocale_ro.py || Adinel Giboi ||adinel.giboi (at) gmail.com ||
+|| Romanian|| wmlocale_ro.py || [http://reinventer.wordpress.com Adinel Giboi] ||adinel.giboi (at) gmail.com ||
 
 = Translating Wordmobi =
 
