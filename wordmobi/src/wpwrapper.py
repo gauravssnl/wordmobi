@@ -516,7 +516,10 @@ class WordPressWrapper(object):
         note(LABELS.loc.wp_info_cmt_del,"info")
 
         return True
-            
+
+    def get_proxy(self):
+        return self.proxy
+    
     def set_blog(self):
         if DB["proxy_enabled"] == u"True":
             user = unicode_to_utf8( DB["proxy_user"] )

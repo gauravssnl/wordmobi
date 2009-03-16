@@ -4,6 +4,7 @@ import time
 import urllib
 from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime
+from urllibproxy import UrllibProxy
 
 import e32
 import e32dbm
@@ -124,9 +125,10 @@ class WordMobi(Application):
         return a+b+c
         
     def upgrade(self):
-        if DB["proxy_enabled"] == u"True" and len(DB["proxy_user"]) > 0:
-            note(LABELS.loc.wm_err_no_proxy,"info")
-            return
+        # TODO remove this local wm_err_no_proxy
+        #if DB["proxy_enabled"] == u"True" and len(DB["proxy_user"]) > 0:
+        #    note(LABELS.loc.wm_err_no_proxy,"info")
+        #    return
 
         self.lock_ui(LABELS.loc.wm_info_check_updt)
         
@@ -135,7 +137,8 @@ class WordMobi(Application):
         local_file = os.path.join(DEFDIR, "cache", local_file)
 
         try:
-            urllib.urlretrieve( url, local_file )
+            urlprx = UrllibProxy(BLOG.get_blog())
+            urlprx.urlretrieve(url, local_file)
         except:
             note(LABELS.loc.wm_err_upd_page % url,"error")
             ok = False
@@ -177,7 +180,8 @@ class WordMobi(Application):
 
                             self.set_title( LABELS.loc.wm_info_downloading )
                             try:
-                                urllib.urlretrieve( furl, local_file )
+                                urlprx = UrllibProxy(BLOG.get_blog())
+                                urlprx.urlretrieve(furl, local_file)
                             except:
                                 note(LABELS.loc.wm_err_downld_fail % sis_name, "error")
                             else:

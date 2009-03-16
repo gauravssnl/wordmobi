@@ -21,6 +21,7 @@ from filesel import FileSel
 from window import Dialog
 from comments import Comments
 import s60twitter
+from urllibproxy import UrllibProxy
 
 # "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
 from appuifw import InfoPopup 
@@ -515,7 +516,8 @@ class NewPost(Dialog):
                 local_file = local_file + img[d:]
                 self.lock_ui(LABELS.loc.pt_info_downld_img % img)
                 try:
-                    urllib.urlretrieve( img, local_file )
+                    urlprx = UrllibProxy(BLOG.get_blog())
+                    urlprx.urlretrieve( img, local_file )
                 except:
                     note(LABELS.loc.pt_err_cant_downld % img,"error")
                     self.unlock_ui()
