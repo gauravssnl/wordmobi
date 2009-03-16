@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # Marcelo Barros de Almeida
 # marcelobarrosalmeida (at) gmail.com
-#
+
+# TODO use just UrllibProxy, removing all no necessary stuff
+
 import base64
 import urllib
 from urllib import unquote, splittype, splithost
