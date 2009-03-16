@@ -516,7 +516,7 @@ class NewPost(Dialog):
                 local_file = local_file + img[d:]
                 self.lock_ui(LABELS.loc.pt_info_downld_img % img)
                 try:
-                    urlprx = UrllibProxy(BLOG.get_blog())
+                    urlprx = UrllibProxy(BLOG.get_proxy())
                     urlprx.urlretrieve( img, local_file )
                 except:
                     note(LABELS.loc.pt_err_cant_downld % img,"error")
