@@ -256,6 +256,7 @@ st_menu_it = u"Italiano"
 st_menu_nl = u"Holandês"
 st_menu_de = u"Alemão"
 st_menu_ro = u"Romeno"
+st_menu_zh_cn = u"Chinês simplificado"
 
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"

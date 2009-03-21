@@ -256,6 +256,7 @@ st_menu_it = u"Italiaans"
 st_menu_nl = u"Nederlands"
 st_menu_de = u"Duits"
 st_menu_ro = u"Roemeens"
+st_menu_zh_cn = u"Vereenvoudigd Chinees"
 
 # Setting popup menu
 st_pmenu_lang = u"Taal:"
