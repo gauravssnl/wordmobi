@@ -11,7 +11,11 @@ from persist import DB
 from wmlocale import LABELS
 from wmglobals import DEFDIR, PERSIST, VERSION
 from types import IntType
-import pickle
+import e32
+if e32.in_emulator():
+    import cPickle as pickle
+else:
+    import pickle
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 

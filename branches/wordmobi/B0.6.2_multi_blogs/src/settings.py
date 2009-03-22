@@ -3,10 +3,13 @@ import e32
 from types import StringTypes
 from appuifw import *
 from window import Dialog
-if float(e32.pys60_version[:3]) >= 1.9:
-    import btsocket as socket
+if e32.in_emulator():
+    import pys60_compat_socket as socket
 else:
-    import socket
+    if float(e32.pys60_version[:3]) >= 1.9:
+        import btsocket as socket
+    else:
+        import socket
 from wmutil import *
 import key_codes
 from persist import DB
