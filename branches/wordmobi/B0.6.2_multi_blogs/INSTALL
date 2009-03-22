@@ -1,0 +1,13 @@
+First install Python for your S60 mobile phone. 
+The latest version is 1.4.4
+
+* http://sourceforge.net/project/showfiles.php?group_id=154155
+
+I tested the current version only in S60 3rd edition phones (N95 and E71), 
+using the following Python interpreter:
+
+* http://downloads.sourceforge.net/pys60/PythonForS60_1_4_4_3rdEd.sis?modtime=1214578033&big_mirror=0 
+
+More info:
+
+* http://opensource.nokia.com/projects/pythonfors60/
