@@ -19,6 +19,9 @@ echo "Generating for Python 1.4.5..."
 rmdir /s /q %TMPDIR%
 mkdir %TMPDIR%
 copy  %SRCDIR%\*.py  %TMPDIR%
+cd %TMPDIR%
+del appuifw.py e32.py e32dbm.py graphics.py key_codes.py pys60_compat_socket.py sysinfo.py TopWindow.py 
+cd ..
 
 %PYTHON% ensymble.py py2sis %OPTS% --heapsize=4k,2M "%APPNAME%-%1.sis"
 
@@ -26,6 +29,9 @@ echo "Generating for Python 1.9.2..."
 rmdir /s /q %TMPDIR%
 mkdir %TMPDIR%\extras\data\python
 copy  %SRCDIR%\*.py  %TMPDIR%\extras\data\python
+cd %TMPDIR%\extras\data\python
+del appuifw.py e32.py e32dbm.py graphics.py key_codes.py pys60_compat_socket.py sysinfo.py TopWindow.py 
+cd ..\..\..\..
 move %TMPDIR%\extras\data\python\default.py  %TMPDIR%\
 
 %PYTHON% ensymble_py19.py py2sis %OPTS% --extrasdir=extras --heapsize=4k,5M "%APPNAME%-%1-py19.sis"

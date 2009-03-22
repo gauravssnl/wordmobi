@@ -24,7 +24,7 @@ import s60twitter
 from urllibproxy import UrllibProxy
 
 # "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
-from appuifw import InfoPopup 
+#from appuifw import InfoPopup 
 
 from persist import DB
 from wpwrapper import BLOG
