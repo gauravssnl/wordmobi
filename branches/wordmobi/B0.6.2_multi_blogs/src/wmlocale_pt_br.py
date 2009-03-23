@@ -205,9 +205,10 @@ pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
 
 # Settings info
-st_info_blog_set = u"Configurações do blog"
-st_info_proxy_set = u"Configurações do proxy"
-st_info_twitter_set = u"Configurações do Twitter"
+st_info_blog_set = u"Config. do blog"
+st_info_proxy_set = u"Config. do proxy"
+st_info_twitter_set = u"Config. do Twitter"
+st_info_blog_acc_set = u"Config. da conta do blog"
 
 # Settings error
 st_err_no_access_point = u"Nenhum  ponto de acesso encontrado."
@@ -224,11 +225,12 @@ st_query_twitter_pwd = u"Senha do Twitter:"
 
 # Settings menu
 st_menu_canc = u"Cancelar"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Contas de Blog"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Ponto de acesso"
 st_menu_lang = u"Idioma"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Nome da conta:"
 st_menu_blog_url = u"URL do blog:"
 st_menu_blog_usr = u"Usuario:"
 st_menu_blog_pwd = u"Senha:"
@@ -246,6 +248,10 @@ st_menu_proxy_off = u"Não"
 st_menu_twitter_ena = u"Enviar para o Twitter"
 st_menu_twitter_on = u"Sim"
 st_menu_twitter_off = u"Não"
+st_menu_new_blog = u"Nova"
+st_menu_cpy_blog = u"Copiar"
+st_menu_del_blog = u"Apagar"
+st_menu_edt_blog = u"Editar"
 
 # languages support
 st_menu_en_us = u"Inglês (USA)"
