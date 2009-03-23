@@ -3,6 +3,7 @@ import e32
 from types import StringTypes
 from appuifw import *
 from window import Dialog
+import simplejson as json
 if e32.in_emulator():
     import pys60_compat_socket as socket
 else:
@@ -16,7 +17,7 @@ from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
 
-__all__ = [ "sel_access_point", "BlogSettings", "ProxySettings", "Settings" ]
+__all__ = [ "sel_access_point", "BlogSettings", "BlogAccounts", "ProxySettings", "Settings" ]
 
 def sel_access_point():
     """ Select the default access point. Return True if the selection was
@@ -39,14 +40,19 @@ def sel_access_point():
     return True
 
 class BlogSettings(Dialog):
-    def __init__(self, cbk):
-        self.user = DB["user"]
-        self.passw = DB["pass"]
-        self.blog = DB["blog"]
-        self.num_posts = int(DB["num_posts"])
-        self.num_comments = int(DB["num_comments"])
-        self.email = DB["email"]
-        self.realname = DB["realname"]
+    def __init__(self, cbk,
+                 account=u"Account name",
+                 user=u"user name",
+                 passwd=u"password",
+                 blog=u"http://blogname.wordpress.com",
+                 np=10,
+                 nc=20):
+        self.account = account
+        self.user = user
+        self.passw = passwd
+        self.blog = blog
+        self.num_posts = np
+        self.num_comments = nc
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
         menu = [( LABELS.loc.st_menu_canc, self.cancel_app )]
@@ -57,14 +63,15 @@ class BlogSettings(Dialog):
         self.bind(key_codes.EKeyRightArrow, self.update_value)
             
     def refresh(self):
-        Dialog.refresh(self) # must be called *before* 
-        values = [ (LABELS.loc.st_menu_blog_url, self.blog ),
+        Dialog.refresh(self) # must be called *before*
+        if self.blog[-1] == u"/":
+            self.blog = self.blog[:-1]        
+        values = [ (LABELS.loc.st_menu_blog_acc, self.account ),
+                   (LABELS.loc.st_menu_blog_url, self.blog ),
                    (LABELS.loc.st_menu_blog_usr, self.user ),
                    (LABELS.loc.st_menu_blog_pwd, u"*"*len( self.passw )),
                    (LABELS.loc.st_menu_blog_npt, unicode( self.num_posts )),
-                   (LABELS.loc.st_menu_blog_cpp, unicode( self.num_comments )),
-                   (LABELS.loc.st_menu_blog_eml, self.email ),
-                   (LABELS.loc.st_menu_blog_rnm, self.realname ) ]
+                   (LABELS.loc.st_menu_blog_cpp, unicode( self.num_comments ))]
 
         app.body.set_list( values, self.last_idx )
 
@@ -72,29 +79,26 @@ class BlogSettings(Dialog):
         idx = app.body.current()
         self.last_idx = idx
         
-        vars = ( "blog",
+        vars = ( "account",
+                 "blog",
                  "user",
                  "passw",
                  "num_posts",
-                 "num_comments",
-                 "email",
-                 "realname" )
+                 "num_comments")
         
-        labels = ( LABELS.loc.st_menu_blog_url,
+        labels = ( LABELS.loc.st_menu_blog_acc,
+                   LABELS.loc.st_menu_blog_url,
                    LABELS.loc.st_menu_blog_usr,
                    LABELS.loc.st_menu_blog_pwd,
                    LABELS.loc.st_menu_blog_npt,
-                   LABELS.loc.st_menu_blog_cpp,
-                   LABELS.loc.st_menu_blog_eml,
-                   LABELS.loc.st_menu_blog_rnm )
+                   LABELS.loc.st_menu_blog_cpp)
 
         formats = ( "text",
                     "text",
+                    "text",
                     "code",
                     "number",
-                    "number",
-                    "text",
-                    "text" )
+                    "number" )
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
@@ -104,6 +108,94 @@ class BlogSettings(Dialog):
             
         self.refresh()
 
+class BlogAccounts(Dialog):
+    def __init__(self,cbk,blogs):
+        self.dlg = None
+        self.last_idx = 0
+        self.blogs = blogs
+        menu = [(LABELS.loc.st_menu_edt_blog, self.edit),
+                (LABELS.loc.st_menu_new_blog, self.add),
+                (LABELS.loc.st_menu_cpy_blog, self.copy),
+                (LABELS.loc.st_menu_del_blog, self.delete),
+                (LABELS.loc.st_menu_canc, self.cancel_app)]
+
+        body =  Listbox( [ (u"",u"") ], self.edit )
+
+        Dialog.__init__(self, cbk, LABELS.loc.st_info_blog_acc_set, body,  menu)
+
+        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        self.bind(key_codes.EKeyRightArrow, self.edit)
+
+    def edit_cbk(self):
+        self.lock_ui()
+        if not self.dlg.cancel:
+            idx = self.body.current()
+            self.blogs[idx]["account"] = self.dlg.account
+            self.blogs[idx]["blog"] = self.dlg.blog
+            self.blogs[idx]["user"] = self.dlg.user
+            self.blogs[idx]["pass"] = self.dlg.passw
+            self.blogs[idx]["num_posts"] = self.dlg.num_posts
+            self.blogs[idx]["num_comments"] = self.dlg.num_comments
+        self.unlock_ui()
+        self.refresh()
+        return True
+    
+    def edit(self):
+        idx = self.body.current()
+        self.last_idx = idx
+        b = self.blogs[idx]
+        self.dlg = BlogSettings(self.edit_cbk,
+                                b["account"],
+                                b["user"],
+                                b["pass"],
+                                b["blog"],
+                                b["num_posts"],
+                                b["num_comments"])
+        self.dlg.run()
+
+    def copy(self):
+        import copy
+        idx = self.body.current()
+        self.last_idx = idx
+        self.blogs.append(copy.deepcopy(self.blogs[idx]))
+        self.refresh()
+        
+    def add_cbk(self):
+        self.lock_ui()
+        if not self.dlg.cancel:
+            self.blogs.append({"account":self.dlg.account,
+                               "blog":self.dlg.blog,
+                               "user":self.dlg.user,
+                               "pass":self.dlg.passw,
+                               "num_posts":self.dlg.num_posts,
+                               "num_comments":self.dlg.num_comments})
+        self.unlock_ui()
+        self.refresh()
+        return True
+    
+    def add(self):
+        self.dlg = BlogSettings(self.add_cbk)
+        self.dlg.run()
+        
+    def delete(self):
+        idx = self.body.current()
+        self.last_idx = idx
+        del self.blogs[idx]
+        self.refresh()
+    
+    def refresh(self):
+        Dialog.refresh(self) # must be called *before*
+        if not self.blogs:
+            self.blogs = [ {"account":u"Account name",
+                            "user":u"user name",
+                            "pass":u"password",
+                            "blog":u"http://blogname.wordpress.com",
+                            "num_posts":10,
+                            "num_comments":20}]
+        values = [ (b["account"],b["blog"]) for b in self.blogs ]
+        self.last_idx = min( self.last_idx, len(values)-1 )
+        app.body.set_list( values, self.last_idx )
+    
 class ProxySettings(Dialog):
     def __init__(self, cbk):
         self.proxy_enabled = DB["proxy_enabled"]
@@ -220,6 +312,7 @@ class TwitterSettings(Dialog):
 class Settings(Dialog):
     def __init__(self,cbk):
         self.dlg = None
+        self.lang_changed = False
         self.body = Listbox( [(u"",u"")],self.update_value)
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_sets, self.body)
         self.bind(key_codes.EKeyRightArrow, self.update_value)
@@ -247,23 +340,15 @@ class Settings(Dialog):
     def blog_cbk(self):
         self.lock_ui()
         if not self.dlg.cancel:
-            if self.dlg.blog[-1] == u"/":
-                self.dlg.blog = self.dlg.blog[:-1]
-            DB["blog"] = self.dlg.blog
-            DB["user"] = self.dlg.user
-            DB["pass"] = self.dlg.passw
-            DB["email"] = self.dlg.email
-            DB["realname"] = self.dlg.realname
-            DB["num_posts"] = utf8_to_unicode( str(self.dlg.num_posts) )
-            DB["num_comments"] = utf8_to_unicode( str(self.dlg.num_comments) )
+            DB["blog_list"]=json.dumps(self.dlg.blogs)
             DB.save()
-            BLOG.set_blog()
+            #BLOG.set_blog() # TODO call it later, check where it is called
         self.unlock_ui()
         self.refresh()
         return True
     
     def blog(self):
-        self.dlg = BlogSettings( self.blog_cbk )
+        self.dlg = BlogAccounts(self.blog_cbk, json.loads(DB["blog_list"]))
         self.dlg.run()
 
     def proxy_cbk(self):
@@ -275,7 +360,7 @@ class Settings(Dialog):
             DB["proxy_pass"] = self.dlg.proxy_password
             DB["proxy_port"] = utf8_to_unicode( str(self.dlg.proxy_port) )
             DB.save()
-            BLOG.set_blog()
+            #BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
@@ -286,7 +371,7 @@ class Settings(Dialog):
 
     def access_point(self):
         if sel_access_point():
-            BLOG.set_blog()
+            pass #BLOG.set_blog()
 
     def twitter_cbk(self):
         self.lock_ui()
@@ -295,7 +380,7 @@ class Settings(Dialog):
             DB["twitter_user"] = self.dlg.twitter_user
             DB["twitter_pass"] = self.dlg.twitter_password
             DB.save()
-            BLOG.set_blog()
+            #BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
@@ -324,4 +409,5 @@ class Settings(Dialog):
                 DB.save()
                 self.refresh()
                 BLOG.refresh() # update global defines
+                self.lang_changed = True
 
