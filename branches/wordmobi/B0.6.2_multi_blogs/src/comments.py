@@ -135,7 +135,8 @@ class EditComment(NewComment):
                  website=u"http://",                 
                  contents=u""):
 
-        NewComment.__init__(self, cbk, comment_idx, post_id, post_title, realname, email, website, contents)
+        NewComment.__init__(self, cbk, comment_idx, post_id, post_title,
+                            realname, email, website, contents)
         self.set_title(LABELS.loc.cm_info_edit_cmt)
 
     def close_app(self):
@@ -342,11 +343,7 @@ class Comments(Dialog):
         self.dlg = NewComment( self.new_cbk,
                                0,
                                post_id,
-                               utf8_to_unicode(post_title),
-                               DB['realname'],
-                               DB['email'],
-                               DB['blog'],
-                               u"")
+                               utf8_to_unicode(post_title))
         self.dlg.run()
             
     def contents_cbk(self):
