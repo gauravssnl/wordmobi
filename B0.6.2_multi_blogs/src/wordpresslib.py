@@ -61,6 +61,7 @@ import os
 import xmlrpclib
 #import datetime
 import time
+from appuifw import note
 
 class WordPressException(exceptions.Exception):
     """Custom exception for WordPress client operations
@@ -195,7 +196,7 @@ class WordPressClient:
         postObj.categories      = post['categories']
         postObj.allowPings      = post['mt_allow_pings'] == 1
         return postObj
-		
+
     def _filterCategory(self, cat):
         """Transform category struct in MovableTypeCategory instance
         """
@@ -205,7 +206,7 @@ class WordPressClient:
         if cat.has_key('isPrimary'):
             catObj.isPrimary    = cat['isPrimary']
         return catObj
-		
+
     def selectBlog(self, blogId):
         self.blogId = blogId
         
@@ -239,8 +240,9 @@ class WordPressClient:
         """
         try:
             postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
-        except xmlrpclib.Fault, fault:
-            raise WordPressException(fault)
+        except Exception, e:
+            note(unicode(e),"error")
+            raise WordPressException(e)      
 
         return postTitles
     
