@@ -208,6 +208,7 @@ pt_pmenu_images = u"Images"
 st_info_blog_set = u"Blog settings"
 st_info_proxy_set = u"Proxy settings"
 st_info_twitter_set = u"Twitter settings"
+st_info_blog_acc_set = u"Blog account settings"
 
 # Settings error
 st_err_no_access_point = u"Could't find any access point."
@@ -224,11 +225,12 @@ st_query_twitter_pwd = u"Twitter password:"
 
 # Settings menu
 st_menu_canc = u"Cancel"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Blog Accounts"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Access Point"
 st_menu_lang = u"Language"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Account name:"
 st_menu_blog_url = u"Blog URL:"
 st_menu_blog_usr = u"Username:"
 st_menu_blog_pwd = u"Password:"
@@ -246,7 +248,11 @@ st_menu_proxy_off = u"Disabled"
 st_menu_twitter_ena = u"Send to twitter"
 st_menu_twitter_on = u"Yes"
 st_menu_twitter_off = u"No"
-
+st_menu_new_blog = u"New"
+st_menu_cpy_blog = u"Copy"
+st_menu_del_blog = u"Delete"
+st_menu_edt_blog = u"Edit"
+        
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese (Brazil)"
