@@ -75,6 +75,9 @@ class Application(wx.App):
     def set_tabs(self, tab_texts, callback=None):
         self.frame.set_tabs(tab_texts, callback)
 
+    def set_exit(self):
+        self.frame.set_exit()
+
     def activate_tab(self, index):
         self.frame.tabs.SetSelection(index)
 
@@ -198,8 +201,13 @@ class AppFrame(wx.Frame):
         if handler is not None:
             handler()
 
+    def set_exit(self):
+        self.ExitKeyHandler(None)
+
     def set_tabs(self, tab_texts, callback=None):
         self.tabs.Show(False) # Removed RadioBox doesn't disappear without this.
+        if not tab_texts: # only remove all tabs
+            return
         self.tab_sizer.Remove(self.tabs)
 
         self.tabs = wx.RadioBox(self, -1, "", choices=tab_texts)
@@ -633,6 +641,12 @@ def query(label, type, initial_value=""):
             return float(t)
         except:
             return None
+    elif type == "number":
+        t = _text_query(label, '%d' % initial_value)
+        try:
+            return int(t)
+        except:
+            return None        
     elif type == "query":
         return _confirm(label)
     else:
