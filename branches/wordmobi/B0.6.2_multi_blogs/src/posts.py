@@ -286,15 +286,28 @@ class PostContents(Dialog):
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
-                    txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
+                    ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
+                                    LABELS.loc.pt_pmenu_scale_img)
+                    scale_factor = u""
+                    if ny == 1:
+                        # suggested best image size: 480px
+                        imgsz = graphics.Image.inspect(sel)
+                        scale = (480*100)/(imgsz['size'][0])
+                        scale = query(LABELS.loc.pt_pmenu_scale_factor, "number", scale)
+                        if scale is not None:
+                            xs = imgsz['size'][0]*scale/100
+                            ys = imgsz['size'][1]*scale/100
+                            scale_factor = u'height="%d%" width="%d%"' % (xs,ys)
+                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" %s/>' % \
+                          (sel,os.path.basename(sel),scale_factor)
             elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
-                    txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (sel,os.path.basename( sel ))
+                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" />' % (sel,os.path.basename( sel ))
             else:
                 url = query(LABELS.loc.pt_pmenu_img_url, "text", u"http://")
                 if url is not None:
-                    txt = u"<img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" />" % (url,url)
+                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" />' % (url,url)
 
         if txt:                    
             self.body.add( txt )
@@ -454,25 +467,37 @@ class NewPost(Dialog):
             if ir == 0:
                 sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
-                    self.images.append( sel )
+                    ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
+                                    LABELS.loc.pt_pmenu_scale_img)
+                    scale_factor = u""
+                    if ny == 1:
+                        # suggested best image size: 480px
+                        imgsz = graphics.Image.inspect(sel)
+                        scale = (480*100)/(imgsz['size'][0])
+                        scale = query(LABELS.loc.pt_pmenu_scale_factor, "number", scale)
+                        if scale is not None:
+                            xs = imgsz['size'][0]*scale/100
+                            ys = imgsz['size'][1]*scale/100
+                            scale_factor = u'height="%d%" width="%d%"' % (xs,ys)
+                    self.images.append(sel)                    
                     self.contents = self.contents + \
-                                    u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
-                                    (sel,os.path.basename( sel ))
+                                    u'<br><img border="0" class="aligncenter" src="%s" alt="%s" %s/><br>' % \
+                                    (sel,os.path.basename(sel),scale_factor)
             elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
-                    self.images.append( sel )
+                    self.images.append(sel)
                     self.contents = self.contents + \
-                                    u"<br><img border=\"0\" class=\"aligncenter\" src=\"%s\" alt=\"%s\" /><br>" % \
-                                    (sel,os.path.basename( sel ))
+                                    u'<br><img border="0" class="aligncenter" src="%s" alt="%s" /><br>' % \
+                                    (sel,os.path.basename(sel))
             else:
                 if self.images:
                     item = selection_list(self.images, search_field=1) 
                     if item is not None:
                         if ir == 2:
-                            self.view_image( self.images[item].encode('utf-8') )
+                            self.view_image(self.images[item].encode('utf-8'))
                         elif ir == 3:
-                            self.remove_image( self.images[item].encode('utf-8') )
+                            self.remove_image(self.images[item].encode('utf-8'))
                             del self.images[item]
                 else:
                     note(LABELS.loc.pt_info_no_imgs_sel,"info")
