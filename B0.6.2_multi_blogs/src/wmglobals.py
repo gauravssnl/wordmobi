@@ -13,5 +13,5 @@ if e32.in_emulator():
         os.makedirs(DEFDIR)
 else:
     DEFDIR = "e:\\wordmobi\\"
-MIFFILE = "wordmobi.mif"
+MIFFILE = "wordmobi2.mif"
 PERSIST = "persist.bin"
