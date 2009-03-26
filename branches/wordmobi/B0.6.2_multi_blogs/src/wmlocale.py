@@ -209,6 +209,8 @@ class Default(object):
         self.loc.pt_pmenu_send_post = u"Publish post ?"
         self.loc.pt_pmenu_post_title = u"Post title:"
         self.loc.pt_pmenu_images = u"Images"
+        self.loc.pt_pmenu_scale_img = u"Scale this image?"
+        self.loc.pt_pmenu_scale_factor = u"Scale factor (%)"
 
         # Settings info
         self.loc.st_info_blog_set = u"Blog settings"
