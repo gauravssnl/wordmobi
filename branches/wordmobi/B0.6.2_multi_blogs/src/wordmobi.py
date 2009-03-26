@@ -94,11 +94,12 @@ class WordMobi(Application):
     
     def __init__(self):
         app.screen='normal' # TODO check all app.xyz use
-        LABELS.set_locale(DB["language"]) # remover chamadas destas
+        LABELS.set_locale(DB["language"]) # TODO remover outras chamadas destas
+        mif = unicode(os.path.join(DEFDIR,MIFFILE))
+        self.wp_icon = icons = Icon(mif,16398,16398)
         self.blogs = json.loads(DB["blog_list"])
-        items = [ (b["account"],b["blog"]) for b in self.blogs ]
-        #items = map( lambda a,b: (a,u"",b), self._get_menu_labels(), self.icons )
-        #items = [ (u"",u"")]  # TODO collect all blogs
+        items = [ (b["account"],self.wp_icon) for b in self.blogs ]
+        #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)] 
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
         self._update_menu()
@@ -142,7 +143,7 @@ class WordMobi(Application):
             #LABELS.set_locale(DB["language"])
             self._update_menu()
         self.blogs = json.loads(DB["blog_list"])
-        items = [ (b["account"],b["blog"]) for b in self.blogs ]
+        items = [ (b["account"],self.wp_icon) for b in self.blogs ]
         self.body.set_list(items,0)
         self.refresh()
         return True
