@@ -108,6 +108,7 @@ class PostContents(Dialog):
     def __init__(self, cbk, contents=u""):
         body = Text( self.html_to_text(contents) )
         body.focus = True
+        self.init_dir=""
         body.set_pos( 0 )
 
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_post_contents, body,
@@ -284,8 +285,9 @@ class PostContents(Dialog):
                          LABELS.loc.pt_pmenu_img_src)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
+                    self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
                                     LABELS.loc.pt_pmenu_scale_img)
                     scale_factor = u""
@@ -297,7 +299,7 @@ class PostContents(Dialog):
                         if scale is not None:
                             xs = imgsz['size'][0]*scale/100
                             ys = imgsz['size'][1]*scale/100
-                            scale_factor = u'height="%d%" width="%d%"' % (xs,ys)
+                            scale_factor = u'height="%d" width="%d"' % (xs,ys)
                     txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" %s/>' % \
                           (sel,os.path.basename(sel),scale_factor)
             elif ir == 1 and HAS_CAM:
@@ -410,6 +412,7 @@ class NewPost(Dialog):
         self.publish = publish
         self.last_idx = 0
         self.save = False
+        self.init_dir=""
 
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app ) ]
@@ -465,8 +468,9 @@ class NewPost(Dialog):
                          LABELS.loc.pt_pmenu_images)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
                 if sel is not None:
+                    self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
                                     LABELS.loc.pt_pmenu_scale_img)
                     scale_factor = u""
@@ -478,7 +482,7 @@ class NewPost(Dialog):
                         if scale is not None:
                             xs = imgsz['size'][0]*scale/100
                             ys = imgsz['size'][1]*scale/100
-                            scale_factor = u'height="%d%" width="%d%"' % (xs,ys)
+                            scale_factor = u'height="%d" width="%d"' % (xs,ys)
                     self.images.append(sel)                    
                     self.contents = self.contents + \
                                     u'<br><img border="0" class="aligncenter" src="%s" alt="%s" %s/><br>' % \
