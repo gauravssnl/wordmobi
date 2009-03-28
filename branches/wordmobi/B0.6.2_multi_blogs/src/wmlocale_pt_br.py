@@ -19,7 +19,6 @@ wm_menu_exit = u"Sair"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Ainda não suportado."
-wm_err_no_proxy = u"Não existe ainda suporte a proxy para esta operação."
 wm_err_upd_page = u"Impossível acesssar a página de update %s"
 wm_err_downld_fail = u"Impossível baixar %s"
 wm_err_upd_info = u"Faltando informação sobre a atualização."
@@ -203,6 +202,8 @@ pt_pmenu_linkyt_url = u"URL do Youtube:"
 pt_pmenu_send_post = u"Publicar post ?"
 pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
+pt_pmenu_scale_img = u"Reduzir esta imagem?"
+pt_pmenu_scale_factor = u"Fator de escala (%)"
 
 # Settings info
 st_info_blog_set = u"Config. do blog"
