@@ -623,7 +623,6 @@ class EditPost(NewPost):
             
 class Posts(Dialog):
     def __init__(self,cbk):
-        LABELS.set_locale(DB["language"])
         self.last_idx = 0
         self.headlines = []
         #self.tooltip = InfoPopup()
@@ -861,13 +860,16 @@ class Posts(Dialog):
         else:
             self.headlines = []
             for p in BLOG.posts:
+                status = u""
                 (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
                 if BLOG.post_is_only_local(p):
                     status = u"[@] "
                 elif BLOG.post_is_local(p):
                     status = u"[*] "
-                else:
-                    status = u""
+                elif p.has_key('post_status'):
+                    if p['post_status'] != 'publish':
+                        status = u"[#]"
+
                 line1 = status + u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
                 line2 = utf8_to_unicode( p['title'] )
                 self.headlines.append( ( line1 , line2 ) )
