@@ -19,7 +19,6 @@ wm_menu_exit = u"Exit"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Not supported yet."
-wm_err_no_proxy = u"Proxy authentication not supported for this feature."
 wm_err_upd_page = u"Impossible to access update page %s"
 wm_err_downld_fail = u"Impossible to download %s"
 wm_err_upd_info = u"Upgrade information missing."
@@ -203,6 +202,8 @@ pt_pmenu_linkyt_url = u"Youtube URL:"
 pt_pmenu_send_post = u"Publish post ?"
 pt_pmenu_post_title = u"Post title:"
 pt_pmenu_images = u"Images"
+pt_pmenu_scale_img = u"Scale this image?"
+pt_pmenu_scale_factor = u"Scale factor (%)"
 
 # Settings info
 st_info_blog_set = u"Blog settings"
@@ -262,6 +263,7 @@ st_menu_it = u"Italian"
 st_menu_nl = u"Dutch"
 st_menu_de = u"German"
 st_menu_ro = u"Romanian"
+st_menu_zh_cn = u"Simplified Chinese"
 
 # Setting popup menu
 st_pmenu_lang = u"Language:"
