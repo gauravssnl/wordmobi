@@ -33,7 +33,6 @@ __license__ = "GPLv3"
 class BlogManager(Dialog):
     def __init__(self,cbk,title):
         # TODO Better icons or remove them
-        LABELS.set_locale(DB["language"])
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
         icons = [Icon(mif,16392,16392),
                  Icon(mif,16390,16390),
@@ -94,7 +93,7 @@ class WordMobi(Application):
     
     def __init__(self):
         app.screen='normal' # TODO check all app.xyz use
-        LABELS.set_locale(DB["language"]) # TODO remover outras chamadas destas
+        LABELS.set_locale(DB["language"])
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
         self.wp_icon = icons = Icon(mif,16398,16398)
         self.blogs = json.loads(DB["blog_list"])
@@ -140,7 +139,6 @@ class WordMobi(Application):
             
     def settings_cbk(self):
         if self.dlg.lang_changed:
-            #LABELS.set_locale(DB["language"])
             self._update_menu()
         self.blogs = json.loads(DB["blog_list"])
         items = [ (b["account"],self.wp_icon) for b in self.blogs ]
@@ -158,7 +156,6 @@ class WordMobi(Application):
         return a+b+c
         
     def upgrade(self):
-        # TODO remove locale wm_err_no_proxy
         self.lock_ui(LABELS.loc.wm_info_check_updt)
         
         url = "http://code.google.com/p/wordmobi/wiki/LatestVersion"
