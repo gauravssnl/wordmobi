@@ -25,7 +25,6 @@ class Default(object):
 
         # Wordmobi error messages
         self.loc.wm_err_not_supp = u"Not supported yet."
-        self.loc.wm_err_no_proxy = u"Proxy authentication not supported for this feature."
         self.loc.wm_err_upd_page = u"Impossible to access update page %s"
         self.loc.wm_err_downld_fail = u"Impossible to download %s"
         self.loc.wm_err_upd_info = u"Upgrade information missing."
