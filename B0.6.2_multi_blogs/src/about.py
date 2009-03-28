@@ -10,7 +10,6 @@ __all__ = [ "About" ]
 
 class About(Dialog):
     def __init__(self,cbk):
-        LABELS.set_locale(DB["language"])
         self.items = [ ( u"Wordmobi %s" % VERSION, LABELS.loc.ab_menu_wordmobi_defi_val ),
                        ( LABELS.loc.ab_menu_wordmobi_auth, u"Marcelo Barros de Almeida" ),
                        ( LABELS.loc.ab_menu_wordmobi_mail, u"marcelobarrosalmeida@gmail.com" ),
@@ -27,7 +26,7 @@ class About(Dialog):
         self.bind(key_codes.EKeyRightArrow, self.show_info)
 
     def show_info(self):
-        idx = app.body.current()
+        idx = self.body.current()
         note( self.items[idx][1],"info" )
         
 
