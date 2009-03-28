@@ -150,7 +150,6 @@ class EditComment(NewComment):
         
 class Comments(Dialog):
     def __init__(self,cbk):
-        LABELS.set_locale(DB["language"])
         self.status_list = { LABELS.loc.cm_list_any:"",
                              LABELS.loc.cm_list_spam:"spam",
                              LABELS.loc.cm_list_moderated:"approve",
