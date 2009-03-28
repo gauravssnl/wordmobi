@@ -342,7 +342,7 @@ class Settings(Dialog):
         if not self.dlg.cancel:
             DB["blog_list"]=json.dumps(self.dlg.blogs)
             DB.save()
-            #BLOG.set_blog() # TODO call it later, check where it is called
+            BLOG.check_persistence(self.dlg.blogs)
         self.unlock_ui()
         self.refresh()
         return True
@@ -360,7 +360,6 @@ class Settings(Dialog):
             DB["proxy_pass"] = self.dlg.proxy_password
             DB["proxy_port"] = utf8_to_unicode( str(self.dlg.proxy_port) )
             DB.save()
-            #BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
@@ -371,7 +370,7 @@ class Settings(Dialog):
 
     def access_point(self):
         if sel_access_point():
-            pass #BLOG.set_blog()
+            pass
 
     def twitter_cbk(self):
         self.lock_ui()
@@ -380,7 +379,6 @@ class Settings(Dialog):
             DB["twitter_user"] = self.dlg.twitter_user
             DB["twitter_pass"] = self.dlg.twitter_password
             DB.save()
-            #BLOG.set_blog()
         self.unlock_ui()
         self.refresh()
         return True
