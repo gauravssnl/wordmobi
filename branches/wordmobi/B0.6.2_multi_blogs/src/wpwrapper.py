@@ -513,6 +513,26 @@ class WordPressWrapper(object):
     def get_proxy(self):
         return self.proxy
 
+    def check_persistence(self,blogs):
+        """ Remove all data not related to any blog and keep one data
+            data related do configured blogs
+        """
+        if os.path.exists(self.persist_name):
+            f = open(self.persist_name,"rb")
+            version = pickle.load(f)
+            self.blog_data = pickle.load(f)
+            f.close()
+            if isinstance(self.blog_data,dict):
+                saved_keys = self.blog_data.keys()
+                new_keys = [ self.blog_hash(b["blog"],b["user"],b["pass"]) for b in blogs ] 
+                for k in saved_keys:
+                    if k not in new_keys:
+                        del self.blog_data[k]
+                f = open(self.persist_name,"wb")
+                pickle.dump(VERSION,f)
+                pickle.dump(self.blog_data,f)
+                f.close()
+                    
     def save(self):
         self.blog_data[self.blog_key] = {'categories':self.categories,
                                          'posts':self.posts,
@@ -520,9 +540,6 @@ class WordPressWrapper(object):
         f = open(self.persist_name,"wb")
         pickle.dump(VERSION,f)
         pickle.dump(self.blog_data,f)
-        #pickle.dump(self.categories,f)
-        #pickle.dump(self.posts,f)
-        #pickle.dump(self.comments,f)
         f.close()
 
     def load(self):
@@ -541,13 +558,18 @@ class WordPressWrapper(object):
                     if hasattr(self,k):
                         self.__setattr__(k,self.blog_data[self.blog_key][k])
 
-            #else:
-            #version = pickle.load(f)
-            #self.categories = pickle.load(f)
-            #self.posts = pickle.load(f)
-            #self.comments = pickle.load(f)
-            #f.close()
-            
+    def blog_hash(self,url,usr,pwd):
+        """ Create a hash for each blog in use
+        """
+        try:
+            # md5 is deprecated but it is the only available in 1.4.5
+            import hashlisb as md5
+        except:
+            import md5
+
+        h = md5.md5(url+usr+pwd)
+        return h.hexdigest()
+    
     def set_blog(self,bidx):
         self.curr_blog =  json.loads(DB["blog_list"])[bidx]
         self.num_posts = self.curr_blog["num_posts"]
@@ -579,10 +601,9 @@ class WordPressWrapper(object):
                                        unicode_to_utf8(self.curr_blog["pass"]),
                                        transp)
         self.blog.selectBlog(0)
-        self.blog_key = "%X%X%X" % (hash(blog_url),
-                                    hash(self.curr_blog["user"]),
-                                    hash(self.curr_blog["pass"]))
-        #print "key = ", self.blog_key
+        self.blog_key = self.blog_hash(self.curr_blog["blog"],
+                                       self.curr_blog["user"],
+                                       self.curr_blog["pass"])
         self.load()
         
 
