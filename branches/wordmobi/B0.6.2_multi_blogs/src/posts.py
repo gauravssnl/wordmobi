@@ -299,7 +299,7 @@ class PostContents(Dialog):
                         if scale is not None:
                             xs = imgsz['size'][0]*scale/100
                             ys = imgsz['size'][1]*scale/100
-                            scale_factor = u'height="%d" width="%d"' % (xs,ys)
+                            scale_factor = u'width="%d" height="%d"' % (xs,ys)
                     txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" %s/>' % \
                           (sel,os.path.basename(sel),scale_factor)
             elif ir == 1 and HAS_CAM:
@@ -482,7 +482,7 @@ class NewPost(Dialog):
                         if scale is not None:
                             xs = imgsz['size'][0]*scale/100
                             ys = imgsz['size'][1]*scale/100
-                            scale_factor = u'height="%d" width="%d"' % (xs,ys)
+                            scale_factor = u'width="%d" height="%d"' % (xs,ys)
                     self.images.append(sel)                    
                     self.contents = self.contents + \
                                     u'<br><img border="0" class="aligncenter" src="%s" alt="%s" %s/><br>' % \
