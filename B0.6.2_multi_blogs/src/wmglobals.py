@@ -3,7 +3,7 @@
 __all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST" ]
 
 # always 3 numbers with two digits each maximum, e.g. 3.44.2, 4.2.33 ...
-VERSION = "0.7.0-RC2" 
+VERSION = "0.7.0-RC3" 
 import e32
 if e32.in_emulator():
     import sys
