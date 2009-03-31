@@ -41,9 +41,9 @@ def sel_access_point():
 
 class BlogSettings(Dialog):
     def __init__(self, cbk,
-                 account=u"Account name",
-                 user=u"user name",
-                 passwd=u"password",
+                 account=LABELS.loc.st_menu_blog_acc,
+                 user=LABELS.loc.st_menu_proxy_usr,
+                 passwd=u"",
                  blog=u"http://blogname.wordpress.com",
                  np=10,
                  nc=20):
