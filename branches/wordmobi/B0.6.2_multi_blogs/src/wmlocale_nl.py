@@ -19,7 +19,6 @@ wm_menu_exit = u"Afsluiten"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Wordt nog niet ondersteund."
-wm_err_no_proxy = u"Proxy authenticatie wordt nog niet onderseund voor dit onderdeel."
 wm_err_upd_page = u"Kan update pagina %s niet bereiken."
 wm_err_downld_fail = u"Kan %s niet downloaden"
 wm_err_upd_info = u"Upgrade informatie mist."
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"Youtube URL:"
 pt_pmenu_send_post = u"Bericht publiceren ?"
 pt_pmenu_post_title = u"Bericht titel:"
 pt_pmenu_images = u"Afbeeldingen"
+pt_pmenu_scale_img = u"Deze afbeelding schalen?"
+pt_pmenu_scale_factor = u"Schalings factor (%)"
 
 # Settings info
 st_info_blog_set = u"Blog instellingen"
 st_info_proxy_set = u"Proxy instellingen"
 st_info_twitter_set = u"Twitter instellingen"
+st_info_blog_acc_set = u"Blog account instellingen"
 
 # Settings error
 st_err_no_access_point = u"Kon geen toegangspunt vinden."
@@ -224,11 +226,12 @@ st_query_twitter_pwd = u"Twitter wachtwoord:"
 
 # Settings menu
 st_menu_canc = u"Annuleren"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Blog Accounts"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Toegangspunt"
 st_menu_lang = u"Taal"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Account naam:"
 st_menu_blog_url = u"Blog URL:"
 st_menu_blog_usr = u"Gebruikersnaam:"
 st_menu_blog_pwd = u"Wachtwoord:"
@@ -246,6 +249,10 @@ st_menu_proxy_off = u"Uitgeschakeld"
 st_menu_twitter_ena = u"Naar twitter verzenden"
 st_menu_twitter_on = u"Ja"
 st_menu_twitter_off = u"Nee"
+st_menu_new_blog = u"Nieuw"
+st_menu_cpy_blog = u"Kopiëren"
+st_menu_del_blog = u"Verwijder"
+st_menu_edt_blog = u"Bewerken"
 
 # languages support
 st_menu_en_us = u"Engels (USA)"

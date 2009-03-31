@@ -19,7 +19,6 @@ wm_menu_exit = u"Iesire"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Neimplementat inca."
-wm_err_no_proxy = u"Nu pot folosi un Proxy pentru aceasta functie."
 wm_err_upd_page = u"Nu pot accesa pagina de actualizare %s"
 wm_err_downld_fail = u"Nu am putut descarca %s"
 wm_err_upd_info = u"Lipsa informatii de actualizare."
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"URL Youtube:"
 pt_pmenu_send_post = u"Publica articol ?"
 pt_pmenu_post_title = u"Titlul articolului:"
 pt_pmenu_images = u"Imagini"
+pt_pmenu_scale_img = u"Modificare marime imagine?"
+pt_pmenu_scale_factor = u"Factor de marime (%)"
 
 # Settings info
 st_info_blog_set = u"Setari blog"
 st_info_proxy_set = u"Setari Proxy"
 st_info_twitter_set = u"Setari Twitter"
+st_info_blog_acc_set = u"Setari cont blog"
 
 # Settings error
 st_err_no_access_point = u"Nu am gasit niciun punct de acces."
@@ -224,11 +226,12 @@ st_query_twitter_pwd = u"Parola Twitter:"
 
 # Settings menu
 st_menu_canc = u"Anulare"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Bloguri"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Punct de Acces"
 st_menu_lang = u"Limba"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Nume cont:"
 st_menu_blog_url = u"URL Blog:"
 st_menu_blog_usr = u"Nume utilizator:"
 st_menu_blog_pwd = u"Parola:"
@@ -246,6 +249,10 @@ st_menu_proxy_off = u"Dezactivat"
 st_menu_twitter_ena = u"Trimite catre Twitter"
 st_menu_twitter_on = u"Da"
 st_menu_twitter_off = u"Nu"
+st_menu_new_blog = u"Nou"
+st_menu_cpy_blog = u"Copiere"
+st_menu_del_blog = u"Stergere"
+st_menu_edt_blog = u"Editare"
 
 # languages support
 st_menu_en_us = u"Engleza (SUA)"
