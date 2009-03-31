@@ -19,7 +19,6 @@ wm_menu_exit = u"Salir"
 
 # Wordmobi error messages
 wm_err_not_supp = u"No implementado."
-wm_err_no_proxy = u"La autenticación del Proxy no está soportada en esta característica."
 wm_err_upd_page = u"No es posible acceder a la página de actualización %s"
 wm_err_downld_fail = u"No es posible descargar %s"
 wm_err_upd_info = u"No se encontró la información para la actualización."
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"URL de Youtube :"
 pt_pmenu_send_post = u"¿Enviar entrada ?"
 pt_pmenu_post_title = u"Título de la entrada:"
 pt_pmenu_images = u"Imágenes"
+pt_pmenu_scale_img = u"¿Cambiar tamaño?"
+pt_pmenu_scale_factor = u"Porcentaje (%)"
 
 # Settings info
 st_info_blog_set = u"Configuración del Blog"
 st_info_proxy_set = u"Configuración del Proxy"
 st_info_twitter_set = u"Configuración de Twitter"
+st_info_blog_acc_set = u"Configuración del blog"
         
 # Settings error
 st_err_no_access_point = u"No se han encontrado puntos de acceso."
@@ -229,6 +231,7 @@ st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Punto de acceso "
 st_menu_lang = u"Idioma"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Nombre de la cuenta:"
 st_menu_blog_url = u"URL:"
 st_menu_blog_usr = u"Nombre de usuario:"
 st_menu_blog_pwd = u"Contraseña:"
@@ -246,6 +249,10 @@ st_menu_proxy_off = u"Deshabilitado"
 st_menu_twitter_ena = u"Enviar a twitter"
 st_menu_twitter_on = u"Sí"
 st_menu_twitter_off = u"No"
+st_menu_new_blog = u"Nuevo"
+st_menu_cpy_blog = u"Copiar"
+st_menu_del_blog = u"Eliminar"
+st_menu_edt_blog = u"Editar"
 
 # languages support
 st_menu_en_us = u"Inglés (USA)"

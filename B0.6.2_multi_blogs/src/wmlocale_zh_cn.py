@@ -19,7 +19,6 @@ wm_menu_exit = u"退出"
 
 # Wordmobi error messages
 wm_err_not_supp = u"尚未支持。"
-wm_err_no_proxy = u"目前尚不支持代理服务器验证。"
 wm_err_upd_page = u"无法访问更新页面 %s"
 wm_err_downld_fail = u"无法下载 %s"
 wm_err_upd_info = u"升级信息丢失。"
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"Youtube URL："
 pt_pmenu_send_post = u"发布文章？"
 pt_pmenu_post_title = u"文章标题："
 pt_pmenu_images = u"图片"
+pt_pmenu_scale_img = u"是否缩放此图片？"
+pt_pmenu_scale_factor = u"缩放比例 (%)"
 
 # Settings info
 st_info_blog_set = u"Blog 设置"
 st_info_proxy_set = u"代理服务器设置"
 st_info_twitter_set = u"Twitter 设置"
+st_info_blog_acc_set = u"Blog 帐户设置"
 
 # Settings error
 st_err_no_access_point = u"未找到接入点。"
@@ -224,11 +226,12 @@ st_query_twitter_pwd = u"Twitter 密码："
 
 # Settings menu
 st_menu_canc = u"取消"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Blog 帐户"
 st_menu_proxy = u"代理服务器"
 st_menu_access_point = u"接入点"
 st_menu_lang = u"语言"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"帐户名："
 st_menu_blog_url = u"Blog URL："
 st_menu_blog_usr = u"用户名："
 st_menu_blog_pwd = u"密码："
@@ -246,6 +249,10 @@ st_menu_proxy_off = u"已禁用"
 st_menu_twitter_ena = u"发送至 Twitter"
 st_menu_twitter_on = u"是"
 st_menu_twitter_off = u"否"
+st_menu_new_blog = u"新建"
+st_menu_cpy_blog = u"复制"
+st_menu_del_blog = u"删除"
+st_menu_edt_blog = u"编辑"
 
 # languages support
 st_menu_en_us = u"英语（美国）"
