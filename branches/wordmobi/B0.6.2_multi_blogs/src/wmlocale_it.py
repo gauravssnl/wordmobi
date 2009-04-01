@@ -187,7 +187,7 @@ pt_err_cant_prvw = u"Impossibile mostrare l'anteprima."
 pt_err_cant_open = u"Impossibile aprire %s"
 pt_err_cant_downld = u"Impossibile scaricare %s"
 pt_err_cant_pst_cont = u"Impossibile scaricare i contenuti dell'articolo"
-pt_err_unknown_ext = u"Estenzione sconosciuta per %s"
+pt_err_unknown_ext = u"Estensione sconosciuta per %s"
 pt_err_cant_tiny_url = u"Impossibile creare URL."
 pt_err_cant_send_twitter = u"Impossibile inviare il titolo dell'articolo a Twitter."
 

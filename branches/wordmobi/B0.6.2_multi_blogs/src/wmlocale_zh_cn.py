@@ -273,7 +273,7 @@ wi_info_exit = u"退出"
 
 # Wpwrapper error
 wp_err_cant_del_cat = u"无法删除分类 %s。"
-wp_err_cant_create_cat = u"无发创建分类 %s。"
+wp_err_cant_create_cat = u"无法创建分类 %s。"
 wp_err_cant_downl_cat =u"无法找回分类列表。"
 wp_err_cant_updt_post = u"无法更新文章。"
 wp_err_cant_downl_post = u"无法下载文章。请重试。"
