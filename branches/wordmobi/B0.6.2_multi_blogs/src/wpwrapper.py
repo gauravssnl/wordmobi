@@ -557,6 +557,9 @@ class WordPressWrapper(object):
                 for k in ['categories', 'posts', 'comments']:
                     if hasattr(self,k):
                         self.__setattr__(k,self.blog_data[self.blog_key][k])
+            # avoid empty categories and create a valid dict
+            self.refresh()
+            self.build_cat_dict()                        
 
     def blog_hash(self,url,usr,pwd):
         """ Create a hash for each blog in use
