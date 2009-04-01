@@ -64,8 +64,10 @@ class BlogSettings(Dialog):
             
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
-        if self.blog[-1] == u"/":
-            self.blog = self.blog[:-1]        
+        if self.blog.endswith(u"/xmlrpc.php"):
+            self.blog = self.blog[:self.blog.find(u"/xmlrpc.php")]
+        if self.blog.endswith(u"/"):
+            self.blog = self.blog[:-1]
         values = [ (LABELS.loc.st_menu_blog_acc, self.account ),
                    (LABELS.loc.st_menu_blog_url, self.blog ),
                    (LABELS.loc.st_menu_blog_usr, self.user ),
