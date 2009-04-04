@@ -21,6 +21,8 @@ import re
 class FileSel(object):
     def __init__(self,init_dir = "", mask = ".*"):
         self.cur_dir = unicode(init_dir)
+        if not os.path.exists(self.cur_dir):
+            self.cur_dir = ""
         self.mask = mask
         self.fill_items()
         
