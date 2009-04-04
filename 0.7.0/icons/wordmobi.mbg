@@ -1,0 +1,14 @@
+ 
+/* This file has been generated, DO NOT MODIFY. */
+enum TMifWordmobi
+	{
+	EMbmWordmobiAbout44 = 16384,
+	EMbmWordmobiTags44 = 16386,
+	EMbmWordmobiCategories44 = 16388,
+	EMbmWordmobiComments44 = 16390,
+	EMbmWordmobiPosts44 = 16392,
+	EMbmWordmobiSetup44 = 16394,
+	EMbmWordmobiUpdate44 = 16396,
+	EMbmWordmobiWpaccount44 = 16398,
+	EMbmWordmobiLastElement
+	};
