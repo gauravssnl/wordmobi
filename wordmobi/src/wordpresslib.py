@@ -195,7 +195,7 @@ class WordPressClient:
         postObj.categories      = post['categories']
         postObj.allowPings      = post['mt_allow_pings'] == 1
         return postObj
-		
+
     def _filterCategory(self, cat):
         """Transform category struct in MovableTypeCategory instance
         """
@@ -205,7 +205,7 @@ class WordPressClient:
         if cat.has_key('isPrimary'):
             catObj.isPrimary    = cat['isPrimary']
         return catObj
-		
+
     def selectBlog(self, blogId):
         self.blogId = blogId
         
@@ -239,8 +239,10 @@ class WordPressClient:
         """
         try:
             postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
-        except xmlrpclib.Fault, fault:
-            raise WordPressException(fault)
+        except Exception, e:
+            from appuifw import note
+            note(unicode(e),"error")
+            raise WordPressException(e)      
 
         return postTitles
     
@@ -252,7 +254,7 @@ class WordPressClient:
             return self._server.metaWeblog.getPost(str(postId), self.user, self.password)
         except xmlrpclib.Fault, fault:
             raise WordPressException(fault)
-		
+
     def getUserInfo(self):
         """Get user info
         """
@@ -263,11 +265,11 @@ class WordPressClient:
             userObj.firstName = userinfo['firstname']
             userObj.lastName = userinfo['lastname']
             userObj.nickname = userinfo['nickname']
-            userObj.email = userinfo['email']
+            #userObj.email = userinfo['email']
             return userObj
         except xmlrpclib.Fault, fault:
             raise WordPressException(fault)
-			
+
     def getUsersBlogs(self):
         """Get blog's users info
         """
