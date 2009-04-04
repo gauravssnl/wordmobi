@@ -11,7 +11,12 @@ from persist import DB
 from wmlocale import LABELS
 from wmglobals import DEFDIR, PERSIST, VERSION
 from types import IntType
-import pickle
+import simplejson as json
+import e32
+if e32.in_emulator():
+    import cPickle as pickle
+else:
+    import pickle
 
 __all__ = [ "WordPressWrapper", "BLOG" ]
 
@@ -23,7 +28,12 @@ class WordPressWrapper(object):
         self.categories = []
         self.cat_dict = {}
         self.cat_default = []
-        self.load()
+        self.curr_blog =  {}
+        self.num_posts = 20
+        self.num_comments = 30
+        self.blog_key = ""
+        self.blog_data = {}
+        #self.load()
         self.refresh()
         self.build_cat_dict()
         self.blog = None
@@ -41,23 +51,6 @@ class WordPressWrapper(object):
                                'parentId':'0' } ]
         if not self.categories:
             self.categories = self.cat_default
-        
-    def save(self):
-        f = open(self.persist_name,"wb")
-        pickle.dump(VERSION,f)
-        pickle.dump(self.categories,f)
-        pickle.dump(self.posts,f)
-        pickle.dump(self.comments,f)
-        f.close()
-
-    def load(self):
-        if os.path.exists(self.persist_name):
-            f = open(self.persist_name,"rb")
-            version = pickle.load(f)
-            self.categories = pickle.load(f)
-            self.posts = pickle.load(f)
-            self.comments = pickle.load(f)
-            f.close()
 
     def categoryNamesList(self):
         """ Return a list with all category names. The name order must match with
@@ -142,7 +135,7 @@ class WordPressWrapper(object):
 
     def update_posts_and_cats(self):
         try:
-            posts = self.blog.getRecentPostTitles( int(DB["num_posts"]) )
+            posts = self.blog.getRecentPostTitles(self.num_posts)
         except:
             note(LABELS.loc.wp_err_cant_updt_post,"error")
             return False
@@ -420,7 +413,7 @@ class WordPressWrapper(object):
         comm_info = wp.WordPressComment()
         comm_info.post_id = post_id
         comm_info.status = comment_status
-        comm_info.number = DB['num_comments']
+        comm_info.number = self.num_comments
         try:
             comments = self.blog.getComments( comm_info )
         except:
@@ -519,8 +512,71 @@ class WordPressWrapper(object):
 
     def get_proxy(self):
         return self.proxy
+
+    def check_persistence(self,blogs):
+        """ Remove all data not related to any blog and keep one data
+            data related do configured blogs
+        """
+        if os.path.exists(self.persist_name):
+            f = open(self.persist_name,"rb")
+            version = pickle.load(f)
+            self.blog_data = pickle.load(f)
+            f.close()
+            if isinstance(self.blog_data,dict):
+                saved_keys = self.blog_data.keys()
+                new_keys = [ self.blog_hash(b["blog"],b["user"],b["pass"]) for b in blogs ] 
+                for k in saved_keys:
+                    if k not in new_keys:
+                        del self.blog_data[k]
+                f = open(self.persist_name,"wb")
+                pickle.dump(VERSION,f)
+                pickle.dump(self.blog_data,f)
+                f.close()
+                    
+    def save(self):
+        self.blog_data[self.blog_key] = {'categories':self.categories,
+                                         'posts':self.posts,
+                                         'comments':self.comments}
+        f = open(self.persist_name,"wb")
+        pickle.dump(VERSION,f)
+        pickle.dump(self.blog_data,f)
+        f.close()
+
+    def load(self):
+        if os.path.exists(self.persist_name):
+            f = open(self.persist_name,"rb")
+            version = pickle.load(f)
+            self.blog_data = pickle.load(f)
+            f.close()
+            if not isinstance(self.blog_data,dict):
+                self.blog_data = {}
+            self.categories = []
+            self.posts = []
+            self.comments = []
+            if self.blog_data.has_key(self.blog_key):
+                for k in ['categories', 'posts', 'comments']:
+                    if hasattr(self,k):
+                        self.__setattr__(k,self.blog_data[self.blog_key][k])
+            # avoid empty categories and create a valid dict
+            self.refresh()
+            self.build_cat_dict()                        
+
+    def blog_hash(self,url,usr,pwd):
+        """ Create a hash for each blog in use
+        """
+        try:
+            # md5 is deprecated but it is the only available in 1.4.5
+            import hashlisb as md5
+        except:
+            import md5
+
+        h = md5.md5(url+usr+pwd)
+        return h.hexdigest()
     
-    def set_blog(self):
+    def set_blog(self,bidx):
+        self.curr_blog =  json.loads(DB["blog_list"])[bidx]
+        self.num_posts = self.curr_blog["num_posts"]
+        self.num_comments = self.curr_blog["num_comments"]
         if DB["proxy_enabled"] == u"True":
             user = unicode_to_utf8( DB["proxy_user"] )
             addr = unicode_to_utf8( DB["proxy_addr"] )
@@ -542,9 +598,16 @@ class WordPressWrapper(object):
             os.environ["http_proxy"] = ""
             del os.environ["http_proxy"]
             
-        blog_url = unicode_to_utf8( DB["blog"] ) + "/xmlrpc.php"
-        self.blog = wp.WordPressClient(blog_url, unicode_to_utf8( DB["user"] ), unicode_to_utf8( DB["pass"] ), transp)
+        blog_url = unicode_to_utf8( self.curr_blog["blog"] ) + "/xmlrpc.php"
+        self.blog = wp.WordPressClient(blog_url,
+                                       unicode_to_utf8(self.curr_blog["user"]),
+                                       unicode_to_utf8(self.curr_blog["pass"]),
+                                       transp)
         self.blog.selectBlog(0)
+        self.blog_key = self.blog_hash(self.curr_blog["blog"],
+                                       self.curr_blog["user"],
+                                       self.curr_blog["pass"])
+        self.load()
         
 
 BLOG = WordPressWrapper()
