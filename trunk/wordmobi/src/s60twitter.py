@@ -8,6 +8,9 @@ import base64
 import urllib
 from urllib import unquote, splittype, splithost
 import simplejson as json
+import time
+
+__all__ = [ "TwitterApi" ]
 
 class _FancyURLopener(urllib.FancyURLopener):
     """ This class handles basic auth, providing user and password
@@ -70,50 +73,94 @@ class TwitterApi(object):
         urlopener.addheaders = self.headers
         return urlopener
         
-    def update(self, status):
+    def update(self, status, in_reply_to=""):
         """ Update twitter with new status message
         """
-        status = 'status=' + status
-        f = self._get_urlopener().open("http://twitter.com/statuses/update.json", status)
-        d = f.readlines()[0]
+        params = urllib.urlencode({"status":status,"in_reply_to_status_id":in_reply_to})
+        f = self._get_urlopener().open("http://twitter.com/statuses/update.json", params)
+        d = f.read()
+        return self.json_read(d)
+
+    def new_direct_message(self,text,user):
+        """ Send a direct message (text) to user
+        """
+        params = urllib.urlencode({"text":text,"user":user})
+        f = self._get_urlopener().open("http://twitter.com/direct_messages/new.json", params)
+        d = f.read()
         return self.json_read(d)
     
-    def get_friends_timeline(self,page=1,count=20):
-        """ Return friends timeline for current user
+    def _strptime(self,ts):
+        months = [u'Jan',u'Feb',u'Mar',u'Apr',u'May',u'Jun',
+                  u'Jul',u'Aug',u'Sep',u'Oct',u'Nov',u'Dec']    
+        (dw,mo,day,tm,sec,yr) = ts.split()
+        (h,m,s) = tm.split(u":")
+        mo = months.index(mo) + 1
+        return (int(yr),mo,int(day),int(h),int(m),int(s),0,0,0)
+
+    def human_msg_age(self,ts):
+        """ Human message reporting message age. ts is the time stamp provided
+            by twitter (string).
+            See function GetRelativeCreatedAt()
+            http://code.google.com/p/python-twitter/source/browse/trunk/twitter.py
         """
-        url = 'http://twitter.com/statuses/friends_timeline.json?page=%d&count=%d' % (page,count)
+        fudge = 1.25
+        ma = time.mktime(self._strptime(ts))
+        delta  = int(time.mktime(time.gmtime())) - int(ma)
+
+        if delta < (1 * fudge):
+          return u'~1s ago'
+        elif delta < (60 * (1/fudge)):
+          return u'~%ds ago' % (delta)
+        elif delta < (60 * fudge):
+          return u'~1m ago'
+        elif delta < (60 * 60 * (1/fudge)):
+          return u'~%dm ago' % (delta / 60)
+        elif delta < (60 * 60 * fudge):
+          return u'~1h ago'
+        elif delta < (60 * 60 * 24 * (1/fudge)):
+          return u'~%dh ago' % (delta / (60 * 60))
+        elif delta < (60 * 60 * 24 * fudge):
+          return u'~1d ago'
+        else:
+          return u'~%dd ago' % (delta / (60 * 60 * 24))
+
+
+    def get_friends_timeline(self,page=1,count=20):
+        """ Return friends timeline for current user and his friends
+        """
+        params = urllib.urlencode({"page":page,"count":count})
+        url = "http://twitter.com/statuses/friends_timeline.json?" + params
         f = self._get_urlopener().open(url)
-        d = f.readlines()[0]
+        d = f.read()
         return self.json_read(d)
     
     def get_user_timeline(self,page=1,count=20):
         """ Return friends timeline for current user
         """
-        url = 'http://twitter.com/statuses/user_timeline.json?page=%d&count=%d' % (page,count)
+        params = urllib.urlencode({"page":page,"count":count})
+        url = "http://twitter.com/statuses/friends_timeline.json?" + params
         f = self._get_urlopener().open(url)
-        d = f.readlines()[0]
+        d = f.read()
         return self.json_read(d)
 
+    def destroy(self,udpt_id):
+        """ Destroy the status specified by udpt_id
+        """
+        url = 'http://twitter.com/statuses/destroy/%s.json' % udpt_id
+        f = self._get_urlopener().open(url,"")
+        d = f.read()
+        return self.json_read(d)
+    
     def json_read(self,msg):
         """ Converts a json response from twitter in a python object
         """
         return json.loads(msg)
-    
-    def dirty_tinyfy_url(self,page):
-        """ Creates a tiny url using http://tinyurl.com/ service
-        """
-        params = "url=%s" % page
-        url = 'http://tinyurl.com/create.php'
-        f = self._get_urlopener().open(url,params)
-        rsp = "".join(f.readlines())
-        b = rsp.find('" target="_blank"')
-        a = rsp.rfind('"',0,b) + 1
-        return rsp[a:b]
 
-    def tinyfy_url(self,page):
+    def tinyfy_url(self,longurl):
         """ Creates a tiny url using http://is.gd/api_info.php service
         """
-        url = 'http://is.gd/api.php?longurl=%s' % page
+        params = urllib.urlencode({"longurl":longurl})
+        url = 'http://is.gd/api.php?' + params
         f = self._get_urlopener().open(url)
         rsp = "".join(f.readlines())
         return rsp
