@@ -18,6 +18,8 @@
  * Proxy support
  * Offline support for writing posts. Posts, categories and comments persistence.
  * Support for Python 1.4.x and 1.9.x
+ * multiples wordpress accounts supported
+ * percentage size when adding images
 
 = Partially implemented =
 
@@ -28,7 +30,6 @@
  # TAGs support
  # access point persistence
  # "test connection" option in access point selection/proxy/twitter setup
- # percentage size when adding images
  # Offline comments
  # Offline category/TAGs creation
  # upload to flickr or other providers with xmlrpc/REST support
@@ -38,7 +39,7 @@
  # Image selection with thumbnails support
  # Avoid app to be terminates when the red key is pressed
  # Icons for indicating the post status: draft, local, edited or just remote
- # multiples blogs support
+ # blogger support
  # Default button label customizations with uikludges/uitricks
  # html support when editing comments
  # better icon for "about" menu entry
