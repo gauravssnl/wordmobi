@@ -11,7 +11,6 @@ __all__ = [ "Categories" ]
 
 class Categories(Dialog):
     def __init__(self,cbk):
-        LABELS.set_locale(DB["language"])
         self.last_idx = 0
         body = Listbox( [ u"" ], self.check_popup_menu )
         self.menu_items = [( LABELS.loc.ca_menu_updt, self.update ),
@@ -30,7 +29,7 @@ class Categories(Dialog):
 
     def key_up(self):
         if not self.ui_is_locked():
-            p = app.body.current() - 1
+            p = self.body.current() - 1
             m = len( self.headlines )
             if p < 0:
                 p = m - 1
@@ -38,7 +37,7 @@ class Categories(Dialog):
 
     def key_down(self):
         if not self.ui_is_locked():
-            p = app.body.current() + 1
+            p = self.body.current() + 1
             m = len( self.headlines )
             if p >= m:
                 p = 0
@@ -51,7 +50,7 @@ class Categories(Dialog):
     def popup_menu(self):
         op = popup_menu( map( lambda x: x[0], self.menu_items ) , LABELS.loc.ca_pmenu_cats)
         if op is not None:
-            self.last_idx = app.body.current()
+            self.last_idx = self.body.current()
             map( lambda x: x[1], self.menu_items )[op]()
 
     def update(self):
@@ -62,7 +61,7 @@ class Categories(Dialog):
         self.refresh()
 
     def delete(self):
-        item = app.body.current()
+        item = self.body.current()
         cat_name = self.headlines[item]
         ny = popup_menu([LABELS.loc.gm_no, LABELS.loc.gm_yes], LABELS.loc.ca_pmenu_delete % cat_name)
         if ny is not None:
@@ -87,7 +86,7 @@ class Categories(Dialog):
         
         self.headlines = BLOG.categoryNamesList()
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
-        self.set_title( LABELS.loc.ca_info_cat_pos % ( app.body.current()+1,len(self.headlines) ) )
+        self.set_title( LABELS.loc.ca_info_cat_pos % ( self.body.current()+1,len(self.headlines) ) )
 
-        app.body.set_list( self.headlines, self.last_idx )
+        self.body.set_list( self.headlines, self.last_idx )
         
