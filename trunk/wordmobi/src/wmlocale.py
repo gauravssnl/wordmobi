@@ -25,7 +25,6 @@ class Default(object):
 
         # Wordmobi error messages
         self.loc.wm_err_not_supp = u"Not supported yet."
-        self.loc.wm_err_no_proxy = u"Proxy authentication not supported for this feature."
         self.loc.wm_err_upd_page = u"Impossible to access update page %s"
         self.loc.wm_err_downld_fail = u"Impossible to download %s"
         self.loc.wm_err_upd_info = u"Upgrade information missing."
@@ -209,11 +208,14 @@ class Default(object):
         self.loc.pt_pmenu_send_post = u"Publish post ?"
         self.loc.pt_pmenu_post_title = u"Post title:"
         self.loc.pt_pmenu_images = u"Images"
+        self.loc.pt_pmenu_scale_img = u"Scale this image?"
+        self.loc.pt_pmenu_scale_factor = u"Scale factor (%)"
 
         # Settings info
         self.loc.st_info_blog_set = u"Blog settings"
         self.loc.st_info_proxy_set = u"Proxy settings"
         self.loc.st_info_twitter_set = u"Twitter settings"
+        self.loc.st_info_blog_acc_set = u"Blog account settings"
         
         # Settings error
         self.loc.st_err_no_access_point = u"Could't find any access point."
@@ -230,11 +232,12 @@ class Default(object):
         
         # Settings menu
         self.loc.st_menu_canc = u"Cancel"
-        self.loc.st_menu_blog = u"Blog"
+        self.loc.st_menu_blog = u"Blog Accounts"
         self.loc.st_menu_proxy = u"Proxy"
         self.loc.st_menu_access_point = u"Access Point"
         self.loc.st_menu_lang = u"Language"
         self.loc.st_menu_twitter = u"Twitter"
+        self.loc.st_menu_blog_acc = u"Account name:"
         self.loc.st_menu_blog_url = u"Blog URL:"
         self.loc.st_menu_blog_usr = u"Username:"
         self.loc.st_menu_blog_pwd = u"Password:"
@@ -252,6 +255,11 @@ class Default(object):
         self.loc.st_menu_twitter_ena = u"Send to twitter"
         self.loc.st_menu_twitter_on = u"Yes"
         self.loc.st_menu_twitter_off = u"No"
+        self.loc.st_menu_new_blog = u"New"
+        self.loc.st_menu_cpy_blog = u"Copy"
+        self.loc.st_menu_del_blog = u"Delete"
+        self.loc.st_menu_edt_blog = u"Edit"
+        
         
         # languages support
         self.loc.st_menu_en_us = u"English (USA)"

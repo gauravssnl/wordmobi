@@ -19,7 +19,6 @@ wm_menu_exit = u"Sair"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Ainda não suportado."
-wm_err_no_proxy = u"Não existe ainda suporte a proxy para esta operação."
 wm_err_upd_page = u"Impossível acesssar a página de update %s"
 wm_err_downld_fail = u"Impossível baixar %s"
 wm_err_upd_info = u"Faltando informação sobre a atualização."
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"URL do Youtube:"
 pt_pmenu_send_post = u"Publicar post ?"
 pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
+pt_pmenu_scale_img = u"Reduzir esta imagem?"
+pt_pmenu_scale_factor = u"Fator de escala (%)"
 
 # Settings info
-st_info_blog_set = u"Configurações do blog"
-st_info_proxy_set = u"Configurações do proxy"
-st_info_twitter_set = u"Configurações do Twitter"
+st_info_blog_set = u"Config. do blog"
+st_info_proxy_set = u"Config. do proxy"
+st_info_twitter_set = u"Config. do Twitter"
+st_info_blog_acc_set = u"Config. da conta do blog"
 
 # Settings error
 st_err_no_access_point = u"Nenhum  ponto de acesso encontrado."
@@ -224,11 +226,12 @@ st_query_twitter_pwd = u"Senha do Twitter:"
 
 # Settings menu
 st_menu_canc = u"Cancelar"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Contas de Blog"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Ponto de acesso"
 st_menu_lang = u"Idioma"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Nome da conta:"
 st_menu_blog_url = u"URL do blog:"
 st_menu_blog_usr = u"Usuario:"
 st_menu_blog_pwd = u"Senha:"
@@ -246,6 +249,10 @@ st_menu_proxy_off = u"Não"
 st_menu_twitter_ena = u"Enviar para o Twitter"
 st_menu_twitter_on = u"Sim"
 st_menu_twitter_off = u"Não"
+st_menu_new_blog = u"Nova"
+st_menu_cpy_blog = u"Copiar"
+st_menu_del_blog = u"Apagar"
+st_menu_edt_blog = u"Editar"
 
 # languages support
 st_menu_en_us = u"Inglês (USA)"
