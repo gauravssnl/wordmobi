@@ -2,6 +2,21 @@
 
 = Change log =
 
+= 0.7.0 - 2009/04/04 =
+ * Multi wordpress accounts support
+ * new account icon for wordpress
+ * realname, blog and email dont need to be filled when answering a comment and they were removed from setting. This is added by WP.
+ * image selection now saving last directory
+ * persist.py now storing a new key, blog_list. user, pass, blog, num_posts and num_comments are deprecated.
+ * For local image selection, it is presented a dialog with a scale factor. This scale factor is calculated to generate an image with width of 480px. User may change it if he wants.
+ * post status: [#] draft and not changed locally (visible only when you download the post contents), [*] published and changed locally, [@] local only
+ * s60twitter api updated from iamdoing project, using simplejson
+ * New dialog for setting multiple blog accounts
+ * New languages: simplified chinese
+ * Added proxy support for all operations, like update and image download
+ * Readable message error from wordpresslib when it fails
+ * Persistence for multiple blogs implemented
+
 = 0.6.1 - 2009/03/15 =
  * Translations added: Romanian, German, Dutch, Italian.
  * Sorting languages in language selection menu
