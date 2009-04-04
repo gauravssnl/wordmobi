@@ -19,7 +19,6 @@ wm_menu_exit = u"Exit"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Not supported yet."
-wm_err_no_proxy = u"Proxy authentication not supported for this feature."
 wm_err_upd_page = u"Impossible to access update page %s"
 wm_err_downld_fail = u"Impossible to download %s"
 wm_err_upd_info = u"Upgrade information missing."
@@ -203,11 +202,14 @@ pt_pmenu_linkyt_url = u"Youtube URL:"
 pt_pmenu_send_post = u"Publish post ?"
 pt_pmenu_post_title = u"Post title:"
 pt_pmenu_images = u"Images"
+pt_pmenu_scale_img = u"Scale this image?"
+pt_pmenu_scale_factor = u"Scale factor (%)"
 
 # Settings info
 st_info_blog_set = u"Blog settings"
 st_info_proxy_set = u"Proxy settings"
 st_info_twitter_set = u"Twitter settings"
+st_info_blog_acc_set = u"Blog account settings"
 
 # Settings error
 st_err_no_access_point = u"Could't find any access point."
@@ -224,11 +226,12 @@ st_query_twitter_pwd = u"Twitter password:"
 
 # Settings menu
 st_menu_canc = u"Cancel"
-st_menu_blog = u"Blog"
+st_menu_blog = u"Blog Accounts"
 st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Access Point"
 st_menu_lang = u"Language"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Account name:"
 st_menu_blog_url = u"Blog URL:"
 st_menu_blog_usr = u"Username:"
 st_menu_blog_pwd = u"Password:"
@@ -246,7 +249,11 @@ st_menu_proxy_off = u"Disabled"
 st_menu_twitter_ena = u"Send to twitter"
 st_menu_twitter_on = u"Yes"
 st_menu_twitter_off = u"No"
-
+st_menu_new_blog = u"New"
+st_menu_cpy_blog = u"Copy"
+st_menu_del_blog = u"Delete"
+st_menu_edt_blog = u"Edit"
+        
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese (Brazil)"
@@ -256,6 +263,7 @@ st_menu_it = u"Italian"
 st_menu_nl = u"Dutch"
 st_menu_de = u"German"
 st_menu_ro = u"Romanian"
+st_menu_zh_cn = u"Simplified Chinese"
 
 # Setting popup menu
 st_pmenu_lang = u"Language:"
