@@ -8,13 +8,12 @@ __all__ = [ "Persist", "DB" ]
 
 class Persist(dict):
     DBNAME = unicode(os.path.join(DEFDIR,"wordmobi"))
-    DEFVALS = {"user":u"username",
-               "pass":u"password",
-               "blog":u"http://blogname.wordpress.com",
-               "email":u"",
-               "realname":u"",
-               "num_posts":u"10",
-               "num_comments":u"20",
+    DEFVALS = {#"user":u"username",
+               #"pass":u"password",
+               #"blog":u"http://blogname.wordpress.com",
+               #"num_posts":u"10",
+               #"num_comments":u"20",
+               "blog_list":u'[{"account":"Account name","user":"user name","pass":"password","blog":"http://blogname.wordpress.com","num_posts":10,"num_comments":20}]',
                "proxy_user":u"",
                "proxy_pass":u"",
                "proxy_addr":u"",
