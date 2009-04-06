@@ -4,6 +4,13 @@
 
 == Debug ==
 
+=== 0) XML-RPC are disabled on this blog ===
+
+[http://wordmobi.googlecode.com/files/xmlrpc_disabled.png]
+
+[http://www.wpnotifier.com/enable_xmlrpc.php Enable xml-rpc] in your blog. Use the address http://blogname_address/wp-admin/options-writing.php. Follow [http://www.wpnotifier.com/enable_xmlrpc.php this instructions].
+
+
 === 1) Wordmobi is not running, unexpectedly closing or got stuck in some point ===
 
 The best thing to do in such situation is running the scripts. Download the source code for your version e run wormobi from scripts. The download may be done [http://code.google.com/p/wordmobi/source/checkout using subversion] or file by file, using the [http://code.google.com/p/wordmobi/source/browse/#svn/trunk/wordmobi/src source code browser]. 
