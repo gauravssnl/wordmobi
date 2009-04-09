@@ -2,7 +2,7 @@
 
 SET VERSION=1.0.0
 SET PYTHON=C:\Python25\python
-SET APPNAME=ExplorerDemo
+SET APPNAME=Explorer
 SET CAPBLS=LocalServices+NetworkServices+ReadUserData+WriteUserData+UserEnvironment
 
 
