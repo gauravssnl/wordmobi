@@ -34,7 +34,7 @@ class CanvasListBox(Canvas):
             self.bind(key_codes.EKeyUpArrow, None)
             self.bind(key_codes.EKeyDownArrow, None)
             self.bind(key_codes.EKeySelect, None)
-            
+
     def get_config(self):
         return self.attrs
     
@@ -47,7 +47,7 @@ class CanvasListBox(Canvas):
                           'margins':(2,2,2,2),
                           'font_name':'dense',
                           'font_color':(255,255,255),
-                          'font_background_color':(0,0,0),
+                          'font_fill_color':(0,0,0),
                           'line_space': 0,
                           'line_break_chars':u" .;:\\/-",
                           'scrollbar_color':(255,255,255),
@@ -59,7 +59,12 @@ class CanvasListBox(Canvas):
                           'images':[],
                           'image_size':(44,44),
                           'image_keep_aspect':1,
-                          'image_margin':0}
+                          'image_margin':0,
+                          'title':u"",
+                          'title_font':'dense',
+                          'title_font_color':(255,255,102),
+                          'title_fill_color':(124,104,238),
+                          'title_border_color':(124,104,238)}
         
         for k in self.def_attrs.keys():
             if attrs.has_key(k):
@@ -78,16 +83,26 @@ class CanvasListBox(Canvas):
         # no images, no border
         if not self.attrs['images']:
             self.attrs['image_size'] = (0,0)
+        # if we have a title, add additional space for it
+        if self.attrs['title']:
+            self.attrs['title_position']=(0,
+                                          0,
+                                          self.position[2],
+                                          self.attrs['font_height']+2*self.attrs['line_space'])
+        else:
+            self.attrs['title_position']=(0,0,0,0)
+            
         # img_margin + img_size + text_margin
         self.lstbox_xa = self.position[0] + self.attrs['margins'][0] + \
                          self.attrs['image_size'][0] + self.attrs['image_margin']
-        self.lstbox_ya = self.position[1] + self.attrs['margins'][1] 
+        self.lstbox_ya = self.position[1] + self.attrs['margins'][1] + \
+                         self.attrs['title_position'][3]
         self.lstbox_xb = self.position[2] - self.attrs['margins'][2] - \
                          self.attrs['scrollbar_width']
         self.lstbox_yb = self.position[3] - self.attrs['margins'][3]
         
         self.scrbar_xa = self.position[2] - self.attrs['scrollbar_width']
-        self.scrbar_ya = self.position[1] 
+        self.scrbar_ya = self.position[1] + self.attrs['title_position'][3]
         self.scrbar_xb = self.position[2]
         self.scrbar_yb = self.position[3]
 
@@ -119,6 +134,7 @@ class CanvasListBox(Canvas):
     def redraw_list(self,rect=None):
         self.set_binds(False) # it is necessary to disable bindings since redrawing may takes a long time
         self.clear_list()
+        self.draw_title()
         self.draw_scroll_bar()
         self.redraw_items()
         self.blit(self._screen,
@@ -126,6 +142,19 @@ class CanvasListBox(Canvas):
                   source=((0,0),self.lstbox_size))
         self.set_binds(True)
 
+    def draw_title(self):
+        if self.attrs['title']:
+            self._screen.rectangle((self.attrs['title_position']),
+                                   outline = self.attrs['scrollbar_color'],
+                                   fill = self.attrs['title_fill_color'])  
+            self._screen.text((self.attrs['title_position'][0],
+                               self.attrs['title_position'][1]+
+                               self.attrs['font_height']+
+                               self.attrs['line_space']),
+                              self.attrs['title'],
+                              fill=self.attrs['title_border_color'],
+                              font=self.attrs['title_font'])
+            
     def draw_scroll_bar(self):
         self._screen.rectangle((self.scrbar_xa,
                                 self.scrbar_ya,
@@ -315,7 +344,7 @@ class CanvasListBox(Canvas):
         pass
 
     def clear_list(self):
-        self._screen.clear(self.attrs['font_background_color'])
+        self._screen.clear(self.attrs['font_fill_color'])
         self.blit(self._screen,
                   target=(self.attrs['position'][0],self.attrs['position'][1]),
                   source=((0,0),self.lstbox_size))
@@ -335,7 +364,7 @@ class Explorer(object):
                     (u"Quit", self.close_app)]
         self.cur_dir = unicode(init_dir)
         if not os.path.exists(self.cur_dir):
-            self.cur_dir = ""
+            self.cur_dir = u""
         self.fill_items()
         
         pos = (0,0) + sysinfo.display_pixels()
@@ -345,7 +374,8 @@ class Explorer(object):
                                      position=pos,
                                      margins=[6,2,2,2],
                                      selection_border_color=(124,104,238),
-                                     image_size=(44,44))
+                                     image_size=(44,44),
+                                     title=self.cur_dir)
         
         app.body = self.listbox
         self.lock.wait()
@@ -411,6 +441,7 @@ class Explorer(object):
             self.fill_items()
             attrs = self.listbox.get_config()
             attrs['items'] = self.items
+            attrs['title'] = u" " + self.cur_dir
             if self.show_images:
                 attrs['images'] = self.images
                 attrs['image_size'] = (44,44)
