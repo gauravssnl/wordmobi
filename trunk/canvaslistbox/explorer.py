@@ -23,10 +23,18 @@ class CanvasListBox(Canvas):
                         redraw_callback = self.redraw_list,
                         event_callback = self.event_list)
         self.check_default_values(attrs)
-        self.bind(key_codes.EKeyUpArrow, self.up_key)
-        self.bind(key_codes.EKeyDownArrow, self.down_key)
-        self.bind(key_codes.EKeySelect, self.attrs['cbk'])
+        self.set_binds(True)
 
+    def set_binds(self,val):
+        if val:
+            self.bind(key_codes.EKeyUpArrow, self.up_key)
+            self.bind(key_codes.EKeyDownArrow, self.down_key)
+            self.bind(key_codes.EKeySelect, self.attrs['cbk'])
+        else:
+            self.bind(key_codes.EKeyUpArrow, None)
+            self.bind(key_codes.EKeyDownArrow, None)
+            self.bind(key_codes.EKeySelect, None)
+            
     def get_config(self):
         return self.attrs
     
@@ -50,7 +58,8 @@ class CanvasListBox(Canvas):
                           'even_fill_color':(50,50,50),
                           'images':[],
                           'image_size':(44,44),
-                          'image_margin':2}
+                          'image_keep_aspect':1,
+                          'image_margin':0}
         
         for k in self.def_attrs.keys():
             if attrs.has_key(k):
@@ -66,6 +75,9 @@ class CanvasListBox(Canvas):
                          0,
                          self.attrs['position'][2] - self.attrs['position'][0],
                          self.attrs['position'][3] - self.attrs['position'][1])
+        # no images, no border
+        if not self.attrs['images']:
+            self.attrs['image_size'] = (0,0)
         # img_margin + img_size + text_margin
         self.lstbox_xa = self.position[0] + self.attrs['margins'][0] + \
                          self.attrs['image_size'][0] + self.attrs['image_margin']
@@ -105,12 +117,14 @@ class CanvasListBox(Canvas):
         self.check_default_values(attrs)
         
     def redraw_list(self,rect=None):
+        self.set_binds(False) # it is necessary to disable bindings since redrawing may takes a long time
         self.clear_list()
         self.draw_scroll_bar()
         self.redraw_items()
         self.blit(self._screen,
                   target=(self.attrs['position'][0],self.attrs['position'][1]),
-                  source=((0,0),self.lstbox_size))        
+                  source=((0,0),self.lstbox_size))
+        self.set_binds(True)
 
     def draw_scroll_bar(self):
         self._screen.rectangle((self.scrbar_xa,
@@ -164,16 +178,17 @@ class CanvasListBox(Canvas):
                         row['image'] = graphics.Image.open(row['file'])
                         if row['image'].size[0] > self.attrs['image_size'][0] or \
                            row['image'].size[1] > self.attrs['image_size'][1]:
-                            row['image'] = row['image'].resize(self.attrs['image_size'])
+                            row['image'] = row['image'].resize(self.attrs['image_size'],
+                                                               keepaspect=self.attrs['image_keep_aspect'])
                     except:
                         row['image'] = graphics.Image.new(self.attrs['image_size'])
                         row['image'].clear(fill)
                         row['image'].text((1,self.attrs['image_size'][1]/2+self.attrs['font_height']/2),
-                                          u"[X]",
+                                          u"X",
                                           fill=font_color,
                                           font=self.attrs['font_name'])
                 self._screen.blit(row['image'],
-                                  target=(self.images_xa,y-self.attrs['font_height']),
+                                  target=(self.images_xa,y-self.attrs['font_height']-1),
                                   source=((0,0),self.attrs['image_size']))
             #draw text
             yh = 0
@@ -314,9 +329,10 @@ class Explorer(object):
         self.lock = e32.Ao_lock()
         app.title = u"Explorer demo"
         app.screen = "full"
-        app.menu = [(u"About", self.about),
+        self.show_images = True        
+        app.menu = [(u"Hide images", lambda: self.images_menu(False)),
+                    (u"About", self.about),
                     (u"Quit", self.close_app)]
-
         self.cur_dir = unicode(init_dir)
         if not os.path.exists(self.cur_dir):
             self.cur_dir = ""
@@ -327,8 +343,9 @@ class Explorer(object):
                                      cbk=self.item_selected,
                                      images=self.images,
                                      position=pos,
-                                     margins=[10,2,2,2],
-                                     selection_border_color=(124,104,238))
+                                     margins=[6,2,2,2],
+                                     selection_border_color=(124,104,238),
+                                     image_size=(44,44))
         
         app.body = self.listbox
         self.lock.wait()
@@ -355,7 +372,7 @@ class Explorer(object):
                     desc = e.lower() + "\n"
                     desc += "%d bytes" % os.path.getsize(f)
                     files.append(desc)
-                    if f.endswith(".jpg") or f.endswith(".png"):
+                    if f.endswith(".jpg") or f.endswith(".png") or f.endswith(".gif"):
                         fimages.append(f)
                     else:
                         fimages.append(None)
@@ -363,20 +380,43 @@ class Explorer(object):
             dimages.insert(0,None)
             self.items = dirs + files
             self.images = dimages + fimages       
-                       
+
+    def images_menu(self,val):
+        self.show_images = val
+        menu = []
+        if val:
+            menu += [(u"Hide images", lambda: self.images_menu(False))]
+        else:
+            menu += [(u"Show images", lambda: self.images_menu(True))]
+        menu += [(u"About", self.about),
+                 (u"Quit", self.close_app)]
+        app.menu = menu
+        self.update_list()
+                    
     def item_selected(self):
         item = self.listbox.current()
         f = self.items[item]
-        d = os.path.abspath( os.path.join(self.cur_dir,f) )
-        if os.path.isdir( d.encode('utf-8') ):
+        self.update_list(f)
+
+    def update_list(self,f=u""):
+        if f:
+            d = os.path.abspath( os.path.join(self.cur_dir,f) )
+        else:
+            d = self.cur_dir
+        if os.path.isdir(d.encode('utf-8')):
             if f == u".." and len(self.cur_dir) == 3:
                 self.cur_dir = u""
             else:
                 self.cur_dir = d 
             self.fill_items()
             attrs = self.listbox.get_config()
-            attrs['images'] = self.images
             attrs['items'] = self.items
+            if self.show_images:
+                attrs['images'] = self.images
+                attrs['image_size'] = (44,44)
+            else:
+                attrs['images'] = []
+                
             self.listbox.reconfigure(attrs)
 
     def about(self):
