@@ -2,7 +2,7 @@
 
 = Instructions =
 
-For using the remote shell over !WiFi, download and install [http://wordmobi.googlecode.com/files/remoteshell.sis remoteshell.sis]. Do not forget to install the python interpreter before installing remotes hell.
+For using the remote shell over !WiFi, download and install [http://wordmobi.googlecode.com/files/remoteshell.sis remoteshell.sis]. Do not forget to install the python interpreter before installing remote shell.
 
 After, type the following in any Linux console:
 
