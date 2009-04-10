@@ -77,7 +77,6 @@ class SigWatch:
             self.screen.line( (x,0,x,h), outline = self.DARK_GREEN )
         for y in range(0,h,step):
             self.screen.line( (0,y,w,y), outline = self.DARK_GREEN )
-
         self.screen.line( (w-1,0,w-1,h), outline = self.DARK_GREEN )
         self.screen.line( (0,h-1,w,h-1), outline = self.DARK_GREEN )
 
@@ -85,19 +84,14 @@ class SigWatch:
         ns = len(self.samples)
         h = self.height - 1
         step = 2
-        mindbm = 75;
-        maxdbm = 105
         if ns >= 2:
             line_bar = []
             n = int( self.width / step )
             for i in range(ns):
-                
                 ybar = h  - int(h*(self.samples[i]/7.0))
                 xbar = (n-i)*step
-                
                 if xbar < 0: # only points that fit into screen
                     break
-                
                 line_bar.append( (xbar, ybar) )
                 
             self.draw_lines(line_bar,self.BLUE1)
