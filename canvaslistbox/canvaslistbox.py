@@ -381,7 +381,7 @@ class CanvasListBox(Canvas):
         """
         return self._current_sel
      
-class Explorer(object):
+class ExplorerDemo(object):
     """ Demo explorer class
     """
     def __init__(self,init_dir = ""):       
@@ -487,6 +487,7 @@ class Explorer(object):
         self.lock.signal()
         app.set_exit()
 
-Explorer()
+if __name__ == "__main__":
+    ExplorerDemo()
 
 
