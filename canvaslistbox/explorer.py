@@ -12,12 +12,10 @@ import key_codes
 from math import ceil, floor
 
 class CanvasListBox(Canvas):
-    """
-    This classes creates a listbox with variable row size on canvas.
+    """ This classes creates a listbox with variable row size on canvas.
     """
     def __init__(self,**attrs):
-        """ Creates a list box on canvas. Just set callback
-            function and possible attributes.
+        """ Creates a list box on canvas. Just fill the desired parameters attributes.
         """
         Canvas.__init__(self,
                         redraw_callback = self.redraw_list,
@@ -26,6 +24,8 @@ class CanvasListBox(Canvas):
         self.set_binds(True)
 
     def set_binds(self,val):
+        """ Enable or disable bindings
+        """
         if val:
             self.bind(key_codes.EKeyUpArrow, self.up_key)
             self.bind(key_codes.EKeyDownArrow, self.down_key)
@@ -36,9 +36,13 @@ class CanvasListBox(Canvas):
             self.bind(key_codes.EKeySelect, None)
 
     def get_config(self):
+        """ Return listbox attributes
+        """
         return self.attrs
     
     def check_default_values(self,attrs):
+        """ Given some user attributes, define all listbox attributes
+        """
         self.attrs = {}
         self.def_attrs = {'items':[],
                           'cbk':lambda:None,
@@ -129,9 +133,14 @@ class CanvasListBox(Canvas):
         self.redraw_list()
         
     def reconfigure(self,attrs={}):
+        """ Given some user attributes, define e reconfigure all listbox attributes
+        """        
         self.check_default_values(attrs)
         
     def redraw_list(self,rect=None):
+        """ Redraw the listbox. This routine only updates the listbox area, defined
+            self.attrs['position']
+        """
         self.set_binds(False) # it is necessary to disable bindings since redrawing may takes a long time
         self.clear_list()
         self.draw_title()
@@ -143,19 +152,23 @@ class CanvasListBox(Canvas):
         self.set_binds(True)
 
     def draw_title(self):
+        """ If a title was specified, redraw it
+        """
         if self.attrs['title']:
             self._screen.rectangle((self.attrs['title_position']),
-                                   outline = self.attrs['scrollbar_color'],
+                                   outline = self.attrs['title_border_color'],
                                    fill = self.attrs['title_fill_color'])  
             self._screen.text((self.attrs['title_position'][0],
                                self.attrs['title_position'][1]+
                                self.attrs['font_height']+
                                self.attrs['line_space']),
                               self.attrs['title'],
-                              fill=self.attrs['title_border_color'],
+                              fill=self.attrs['title_font_color'],
                               font=self.attrs['title_font'])
             
     def draw_scroll_bar(self):
+        """ Draw the scroolbar
+        """
         self._screen.rectangle((self.scrbar_xa,
                                 self.scrbar_ya,
                                 self.scrbar_xb,
@@ -172,7 +185,9 @@ class CanvasListBox(Canvas):
                                    outline = self.attrs['scrollbar_color'],
                                    fill = self.attrs['scrollbar_color'])            
 
-    def redraw_items(self): 
+    def redraw_items(self):
+        """ Redraw current visible listbox items
+        """
         xa = self.lstbox_xa
         xb = self.lstbox_xb
         y = self.lstbox_ya + self.attrs['font_height']
@@ -230,6 +245,8 @@ class CanvasListBox(Canvas):
             n += 1
 
     def calculate_sel_view(self):
+        """ Calculate the range of visible items
+        """
         n = self._selection_view[0]
         y = self.lstbox_ya
         while y < self.lstbox_yb and n < len(self.lstbox_items):
@@ -242,6 +259,8 @@ class CanvasListBox(Canvas):
         self._selection_view[1] = n - 1
             
     def up_key(self):
+        """ handle up navi key
+        """
         if self._current_sel <= 0:
             return       
         n = self._current_sel - 1
@@ -255,6 +274,8 @@ class CanvasListBox(Canvas):
         self.redraw_list()               
 
     def down_key(self):
+        """ Handle down navi key
+        """
         if self._current_sel >= (len(self.lstbox_items) - 1):
             return
         n = self._current_sel + 1
@@ -272,6 +293,9 @@ class CanvasListBox(Canvas):
         self.redraw_list()            
 
     def build_list(self,items):
+        """ Pre-process the items list, splitting it in several lines that fit
+            in the current listbox size
+        """
         if not self.attrs['images'] or (len(self.attrs['images']) != len(items)):
             have_images = False
         else:
@@ -306,9 +330,10 @@ class CanvasListBox(Canvas):
             self.lstbox_items.append(reg)
             n += 1
    
-    # modified version of TextRenderer.chop 
-    # http://discussion.forum.nokia.com/forum/showthread.php?t=124666
     def split_text(self, text, width):
+        """ modified version of TextRenderer.chop for splitting text
+            http://discussion.forum.nokia.com/forum/showthread.php?t=124666
+        """
         lines = []
         text_left = text
         while len(text_left) > 0: 
@@ -344,16 +369,21 @@ class CanvasListBox(Canvas):
         pass
 
     def clear_list(self):
+        """ Clear screen
+        """
         self._screen.clear(self.attrs['font_fill_color'])
         self.blit(self._screen,
                   target=(self.attrs['position'][0],self.attrs['position'][1]),
                   source=((0,0),self.lstbox_size))
 
     def current(self):
+        """ Return the selected item
+        """
         return self._current_sel
      
 class Explorer(object):
-    
+    """ Demo explorer class
+    """
     def __init__(self,init_dir = ""):       
         self.lock = e32.Ao_lock()
         app.title = u"Explorer demo"
