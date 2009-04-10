@@ -13,10 +13,15 @@ class SigWatch:
 
     BLACK = (0,0,0)
     DARK_GREEN = (0,102,0)
-    BLUE1 = (51,204,255)
+    BLUE = (51,204,255)
     YELLOW = (255,255,102)
 
-    def __init__(self):
+    def __init__(self,minv=0,maxv=7,sampler=lambda:sysinfo.signal_bars()):
+        """ Set the scale limits (minv and maxv) and the sampling function
+        """
+        self.minv = float(minv)
+        self.maxv = float(maxv)
+        self.get_sample = sampler
         self.screen = None
         self.samples = []
         self.sampling_time = 2
@@ -39,7 +44,7 @@ class SigWatch:
         self.screen = graphics.Image.new( (self.width, self.height) )
         self.screen.clear( self.BLACK )
         self.draw_grid()
-        self.screen.text((5,15),u"Signal Watch - Press Start", fill = self.BLUE1)
+        self.screen.text((5,15),u"Signal Watch - Press Start", fill = self.BLUE)
         self.canvas.blit( self.screen )        
         app.exit_key_handler = self.quit_app        
 
@@ -51,24 +56,26 @@ class SigWatch:
         note( u"Signal Watch by\nMarcelo Barros\nmarcelobarrosalmeida@gmail.com", "info" )
 
     def start(self):
-        self.file = open(self.filename,"wt")
-        self.samples = []
-        self.sampling = True
-        self.timer.after(self.sampling_time,self.get_sample)
+        if not self.sampling:
+            self.file = open(self.filename,"wt")
+            self.samples = []
+            self.sampling = True
+            self.timer.after(self.sampling_time,self.sample_timer)
         
-    def get_sample(self):
+    def sample_timer(self):
         if self.sampling:
-            b = sysinfo.signal_bars()
+            b = self.get_sample()
             self.samples.insert( 0, b )
             self.file.write( "%d; %s\n" % (b,time.asctime()))
             self.file.flush()
             self.redraw( (self.width, self.height) )
-            self.timer.after(self.sampling_time,self.get_sample)
+            self.timer.after(self.sampling_time,self.sample_timer)
         
     def stop(self):
-        self.timer.cancel()
-        self.sampling = False
-        self.file.close()
+        if self.sampling:
+            self.timer.cancel()
+            self.sampling = False
+            self.file.close()
 
     def draw_grid(self):
         w,h = self.width, self.height
@@ -88,14 +95,14 @@ class SigWatch:
             line_bar = []
             n = int( self.width / step )
             for i in range(ns):
-                ybar = h  - int(h*(self.samples[i]/7.0))
+                ybar = h  - int(h*(self.samples[i]-self.minv)/(self.maxv-self.minv))
                 xbar = (n-i)*step
                 if xbar < 0: # only points that fit into screen
                     break
                 line_bar.append( (xbar, ybar) )
                 
-            self.draw_lines(line_bar,self.BLUE1)
-            self.screen.text((5,15),u"Signal bar: %d   [0,7]" % self.samples[0], fill = self.BLUE1)
+            self.draw_lines(line_bar,self.BLUE)
+            self.screen.text((5,15),u"Current: %d" % self.samples[0], fill = self.BLUE)
 
     def draw_lines(self,lines,color_name):
         for p in range(len(lines) - 1):
@@ -127,6 +134,14 @@ class SigWatch:
 
 if __name__ == "__main__":
 
+    # signal    
     sw = SigWatch()
     sw.run()
     
+    # free mem
+    #sw = SigWatch(0,sysinfo.total_ram(),lambda:sysinfo.free_ram())
+    #sw.run()
+
+    # battery    
+    #sw = SigWatch(0,100,lambda:sysinfo.battery())
+    #sw.run()    
