@@ -6,14 +6,12 @@
 import graphics
 import time
 from appuifw import *
-from window import Application
 import os
 import e32
 
-class MovieMaker(Application):
+class MMaker(object):
     NL = u"\u2029"
-    def __init__(self,dir=u"e:\moviemaker",etime=0.25):
-        app.screen = "normal"
+    def __init__(self,dir=u"e:\mmaker",etime=0.25):
         self.dir = dir
         self.etime = etime
         self.cnt = 0
@@ -27,15 +25,24 @@ class MovieMaker(Application):
                 (u"About", self.about),
                 (u"Quit", self.close_app)]        
         self.body = Text()
-        Application.__init__(self,
-                             u"Movie maker",
-                             self.body,
-                             menu)
+        app.screen = "normal"
+        app.body = self.body
+        app.menu = menu
+        app.tile = u"MMaker"
+        self.lock = e32.Ao_lock()
+        app.exit_handler = self.close_app
         
     def close_app(self):
         self.running = False        
         self.timer.cancel()
-        Application.close_app(self)
+        self.lock.signal()
+
+    def run(self):
+        self.lock.wait()
+        app.set_tabs( [], None )
+        app.menu = []
+        app.body = None
+        app.set_exit()
         
     def set_dir(self):
         dir = query(u"Images dir:","text",self.dir)
@@ -47,6 +54,7 @@ class MovieMaker(Application):
                     self.body.add((u"Can't create %s" % dir) + self.NL)
                     return
             self.dir = dir
+            self.body.add((u"New dir is %s" % self.dir) + self.NL)
 
     def clean_dir(self):
         yn = popup_menu([u"No",u"Yes"],u"Clean %s?" % self.dir)
@@ -88,7 +96,7 @@ class MovieMaker(Application):
             self.timer.after(self.etime,self.take_screenshot)
 
     def about(self):
-        note(u"MovieMaker by Marcelo Barros (marcelobarrosalmeida@gmail.com)","info")
+        note(u"MMaker by Marcelo Barros (marcelobarrosalmeida@gmail.com)","info")
                         
-mm = MovieMaker()
+mm = MMaker()
 mm.run()
