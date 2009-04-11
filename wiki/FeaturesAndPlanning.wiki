@@ -54,3 +54,4 @@
  # better exception handler, providing more elucidative messages
  # retry option when uploading images
  # video support
+ # custom entries for html formatting.I think it is possible to add this option and make the blogger life easier with all their tags already coded in some "custom" menu.
