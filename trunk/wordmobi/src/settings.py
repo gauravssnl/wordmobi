@@ -7,10 +7,14 @@ import simplejson as json
 if e32.in_emulator():
     import pys60_compat_socket as socket
 else:
-    if float(e32.pys60_version[:3]) >= 1.9:
-        import btsocket as socket
-    else:
-        import socket
+    import sys
+    try:
+        # http://discussion.forum.nokia.com/forum/showthread.php?p=575213
+        # Try to import 'btsocket' as 'socket' - ignored on versions < 1.9.x
+        sys.modules['socket'] = __import__('btsocket')
+    except ImportError:
+        pass
+    import socket
 from wmutil import *
 import key_codes
 from persist import DB
