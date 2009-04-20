@@ -3,11 +3,9 @@ import os
 import time
 import urllib
 from beautifulsoup import BeautifulSoup
-from xmlrpclib import DateTime
 from urllibproxy import UrllibProxy
 import simplejson as json
 import e32
-import e32dbm
 import key_codes
 from appuifw import *
 from window import Application, Dialog
