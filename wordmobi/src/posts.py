@@ -839,7 +839,8 @@ class Posts(Dialog):
                             note(LABELS.loc.pt_err_cant_send_twitter,"error")
                         else:
                             note(LABELS.loc.pt_info_twitter_updated,"info")
-                            
+
+                    self.set_title(u"")                            
                     self.unlock_ui()
                     self.refresh()
 
