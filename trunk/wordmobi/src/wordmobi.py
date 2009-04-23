@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+import sys
+try:
+    # http://discussion.forum.nokia.com/forum/showthread.php?p=575213
+    # Try to import 'btsocket' as 'socket' - ignored on versions < 1.9.x
+    sys.modules['socket'] = __import__('btsocket')
+except ImportError:
+    pass
 import os
 import time
 import urllib
