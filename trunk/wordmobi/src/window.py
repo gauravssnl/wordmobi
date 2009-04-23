@@ -548,7 +548,7 @@ class Application(Window):
             run() is overrided for controling this behavior.
         """
         if Application.__highlander:
-            raise
+            raise Exception()
         Application.__highlander = self
 
         if not Application.__lock:
