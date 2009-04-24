@@ -75,18 +75,22 @@ class CanvasListBox(Canvas):
                 self.attrs[k] = attrs[k]
             else:
                 self.attrs[k] = self.def_attrs[k]
+                
         # fixing spacing
         fh = -(graphics.Image.new((1,1)).measure_text("[qg_|^y",font=self.attrs['font_name'])[0][1])
         self.attrs['font_height'] = fh
         self.attrs['line_space'] = max(3,fh/4,self.attrs['line_space'])
+        
         # translating to origin (0,0)
         self.position = (0,
                          0,
                          self.attrs['position'][2] - self.attrs['position'][0],
                          self.attrs['position'][3] - self.attrs['position'][1])
+        
         # no images, no border
         if not self.attrs['images']:
             self.attrs['image_size'] = (0,0)
+            
         # if we have a title, add additional space for it
         if self.attrs['title']:
             self.attrs['title_position']=(0,
@@ -95,7 +99,13 @@ class CanvasListBox(Canvas):
                                           self.attrs['font_height']+2*self.attrs['line_space'])
         else:
             self.attrs['title_position']=(0,0,0,0)
-            
+
+        # degrade effect
+        self.attrs['selection_fill_light_color'] = (
+            self.attrs['selection_fill_color'][0]*0.80 | int(255*0.20),
+            self.attrs['selection_fill_color'][1]*0.80 | int(255*0.20),
+            self.attrs['selection_fill_color'][2]*0.80 | int(255*0.20))
+        
         # img_margin + img_size + text_margin
         self.lstbox_xa = self.position[0] + self.attrs['margins'][0] + \
                          self.attrs['image_size'][0] + self.attrs['image_margin']
@@ -214,6 +224,11 @@ class CanvasListBox(Canvas):
                 outline = self.attrs['even_fill_color']
                 fill = self.attrs['even_fill_color']
             self._screen.rectangle(pos,outline = outline,fill = fill)
+            # degrade effect for seelection
+            if n == self._current_sel:
+                dgdc = self.attrs['selection_fill_light_color']
+                dgdp = (pos[0],pos[1],pos[2],pos[3] - (pos[3]-pos[1])/2)
+                self._screen.rectangle(dgdp,outline = dgdc,fill = dgdc)
             ysa = ysb
             # draw image, if any
             if row['file']:
@@ -403,13 +418,19 @@ class ExplorerDemo(object):
                                      images=self.images,
                                      position=pos,
                                      margins=[6,2,2,2],
-                                     selection_border_color=(124,104,238),
+                                     selection_fill_color=(0,43,34),
+                                     selection_border_color=(0,43,34),
+                                     odd_fill_color=(0,0,0),
+                                     even_fill_color=(0,0,0),
                                      image_size=(44,44),
+                                     title_font_color=(255,255,102),
+                                     title_fill_color=(0,43,34),
                                      title=self.cur_dir)
         
         app.body = self.listbox
         self.lock.wait()
-        
+
+                          
     def fill_items(self):
         if self.cur_dir == u"":
             self.items = [ unicode(d + "\\") for d in e32.drive_list() ]
@@ -487,7 +508,7 @@ class ExplorerDemo(object):
         self.lock.signal()
         app.set_exit()
 
-if __name__ == "__main__":
-    ExplorerDemo()
+#if __name__ == "__main__":
+ExplorerDemo()
 
 
