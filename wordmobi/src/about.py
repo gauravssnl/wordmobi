@@ -5,6 +5,7 @@ import key_codes
 from wmglobals import VERSION
 from persist import DB
 from wmlocale import LABELS
+from canvaslistbox import _Listbox
 
 __all__ = [ "About" ]
 
@@ -20,7 +21,7 @@ class About(Dialog):
         values = map( lambda x: (x[0], x[1]), self.items )
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)]
         
-        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_abou, Listbox( values, self.show_info ), menu)
+        Dialog.__init__(self, cbk, LABELS.loc.wm_menu_abou, _Listbox( values, self.show_info ), menu)
         
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.show_info)
