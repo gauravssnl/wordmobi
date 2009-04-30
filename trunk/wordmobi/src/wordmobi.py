@@ -28,6 +28,7 @@ from wmglobals import VERSION, DEFDIR, MIFFILE
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
+from canvaslistbox import _Listbox
 
 __all__ = [ "WordMobi" ]
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
@@ -56,8 +57,8 @@ class BlogManager(Dialog):
                  ]
         menu = map(lambda a,b: (a,b), menu_labels, funcs)
         menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
-        items = map(lambda a,b: (a,u"",b), menu_labels, icons)  
-        Dialog.__init__(self,cbk,title,Listbox(items, self.update_value),menu)
+        items = map(lambda a,b: (a,u" \n \n",b), menu_labels, icons)  
+        Dialog.__init__(self,cbk,title,_Listbox(items,self.update_value),menu)
 
         self.dlg = None
         
@@ -102,10 +103,10 @@ class WordMobi(Application):
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
         self.wp_icon = icons = Icon(mif,16398,16398)
         self.blogs = json.loads(DB["blog_list"])
-        items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
+        items = [ (b["account"],b["blog"] + u" \n",self.wp_icon) for b in self.blogs ]
         #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)] 
-        Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
+        Application.__init__(self,  u"Wordmobi", _Listbox( items, self.check_update_value ))
         self._update_menu()
 
         self.dlg = None
@@ -146,7 +147,7 @@ class WordMobi(Application):
         if self.dlg.lang_changed:
             self._update_menu()
         self.blogs = json.loads(DB["blog_list"])
-        items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
+        items = [ (b["account"],b["blog"] + u" \n" ,self.wp_icon) for b in self.blogs ]
         self.body.set_list(items,0)
         self.refresh()
         return True

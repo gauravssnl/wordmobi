@@ -30,6 +30,7 @@ from persist import DB
 from wpwrapper import BLOG
 from wmglobals import DEFDIR
 from wmlocale import LABELS
+from canvaslistbox import _Listbox
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
@@ -414,7 +415,7 @@ class NewPost(Dialog):
         self.save = False
         self.init_dir=""
 
-        body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
+        body = _Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app ) ]
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_new_post, body, menu)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
@@ -626,7 +627,7 @@ class Posts(Dialog):
         self.last_idx = 0
         self.headlines = []
         #self.tooltip = InfoPopup()
-        body = Listbox( [ (u"", u"") ], self.check_popup_menu)
+        body = _Listbox([(u"",u"")],self.check_popup_menu)
         self.menu_items = [(LABELS.loc.pt_menu_updt, self.update),
                            (LABELS.loc.pt_menu_view, self.contents),
                            (LABELS.loc.pt_menu_cnew, self.new),
@@ -876,5 +877,5 @@ class Posts(Dialog):
                 self.headlines.append( ( line1 , line2 ) )
                                
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
-        app.body.set_list( self.headlines, self.last_idx )
+        self.body.set_list( self.headlines, self.last_idx )
 
