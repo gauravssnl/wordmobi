@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# Marcelo Barros de Almeida
+# marcelobarrosalmeida@gmail.com
+# License: GPL 3
+
 import sys
 try:
     # http://discussion.forum.nokia.com/forum/showthread.php?p=575213
