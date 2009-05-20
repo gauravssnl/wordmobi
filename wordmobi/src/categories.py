@@ -6,18 +6,13 @@ import key_codes
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
-from wmglobals import TOUCH_ENABLED
-if TOUCH_ENABLED:
-    from canvaslistbox import _Listbox
-else:
-    _Listbox = Listbox
 
 __all__ = [ "Categories" ]
 
 class Categories(Dialog):
     def __init__(self,cbk):
         self.last_idx = 0
-        body = _Listbox( [ u"" ], self.check_popup_menu )
+        body = Listbox( [ u"" ], self.check_popup_menu )
         self.menu_items = [( LABELS.loc.ca_menu_updt, self.update ),
                            ( LABELS.loc.ca_menu_dele, self.delete ),
                            ( LABELS.loc.ca_menu_cnew, self.new ) ]

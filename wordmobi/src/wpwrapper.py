@@ -660,10 +660,10 @@ class WordPressWrapper(object):
 
         if self.curr_blog["blog"].endswith(u".php"):
             # advance mode: user has different url for xmlrpc, do not change it
-            blog_url = unicode_to_utf8( self.curr_blog["blog"] )
+            blog_url = unicode_to_utf8(self.curr_blog["blog"])
         else:
             # standard mode: use type an blog address only
-            blog_url = unicode_to_utf8( self.curr_blog["blog"] ) + "/xmlrpc.php"
+            blog_url = unicode_to_utf8(self.curr_blog["blog"]) + "/xmlrpc.php"
         
         self.blog = wp.WordPressClient(blog_url,
                                        unicode_to_utf8(self.curr_blog["user"]),

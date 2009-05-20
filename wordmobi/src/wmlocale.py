@@ -168,8 +168,10 @@ class Default(object):
         self.loc.pt_list_new_tag = u"Create"
         self.loc.pt_list_sel_tag = u"Select"
         self.loc.pt_list_rem_tag = u"Remove"
+        self.loc.pt_list_lst_tag = u"List"
         self.loc.pt_list_sel_cat = u"Select"
         self.loc.pt_list_rem_cat = u"Remove"
+        self.loc.pt_list_lst_cat = u"List"
         
         # Posts info
         self.loc.pt_info_pst_pos = u"[%d/%d] Posts"
