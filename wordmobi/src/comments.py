@@ -10,7 +10,11 @@ from window import Dialog
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "NewComment", "EditComment", "Comments" ]
 
@@ -223,7 +227,7 @@ class Comments(Dialog):
         
     def update(self, post_idx=None):
         k = self.status_list.keys()
-        item = popup_menu( k, LABELS.loc.cm_pmenu_cmt_status)
+        item = popup_menu(k, LABELS.loc.cm_pmenu_cmt_status)
         if item is None:
             return False
         comment_status = k[item]
@@ -231,24 +235,24 @@ class Comments(Dialog):
         t = self.get_title()
         if not BLOG.posts:
             self.lock_ui(LABELS.loc.cm_info_downld_pt)
-            upd = BLOG.update_posts_and_cats()
-            self.set_title( t )
+            upd = BLOG.update_posts_cats_and_tags()
+            self.set_title(t)
             self.unlock_ui()
             if not upd:
                 self.refresh()
                 return False
 
         if post_idx is None:
-            comment_set = popup_menu( [ LABELS.loc.cm_list_one_post,
-                                        LABELS.loc.cm_list_all_posts ],
-                                      LABELS.loc.cm_pmenu_updt_for)
+            comment_set = popup_menu([LABELS.loc.cm_list_one_post,
+                                      LABELS.loc.cm_list_all_posts],
+                                     LABELS.loc.cm_pmenu_updt_for)
             if comment_set is None:
                 return False
             
             if comment_set == 0:
                 self.set_title( LABELS.loc.cm_info_which_post )
-                post_idx = selection_list( [ utf8_to_unicode( p['title'] )[:70] for p in BLOG.posts ], search_field=1)
-                self.set_title( t )
+                post_idx = selection_list([utf8_to_unicode( p['title'] )[:70] for p in BLOG.posts], search_field=1)
+                self.set_title(t)
                 if post_idx is None or post_idx == -1:
                     return False
             else:
@@ -263,27 +267,18 @@ class Comments(Dialog):
         return upd
 
     def update_comment(self, post_idx, comment_status):
-        BLOG.comments = []        
-        if post_idx == -1:
-            np = len(BLOG.posts)
-            for n in range(np):
-                self.set_title(LABELS.loc.cm_info_downld_cmts % (n+1,np))
-                if not BLOG.get_comment(n, self.status_list[comment_status]):
-                    yn = popup_menu( [ LABELS.loc.gm_yes, LABELS.loc.gm_no ],
-                                     LABELS.loc.cm_pmenu_downld_fail)
-                    if yn is not None:
-                        if yn == 0:
-                            continue
-                    return False
-        else:
-            self.set_title(LABELS.loc.cm_info_downld_cmt)
-            if not BLOG.get_comment(post_idx, self.status_list[comment_status]):
-                return False
+        """ Update comments for a given post (post_idx) with status comment_status
+            post_idx = -1 means comments for all posts
+        """
+        BLOG.comments = []
+        self.set_title(LABELS.loc.cm_info_downld_cmt)
+        if not BLOG.get_comment(post_idx, self.status_list[comment_status]):
+            return False
 
         if not BLOG.comments:
             note(LABELS.loc.cm_info_no_cmts_st % comment_status,"info")
             return False
-  
+    
         return True        
             
     def delete(self):
@@ -322,7 +317,7 @@ class Comments(Dialog):
             # no comments ... user need to select a post to add the comment
             if not BLOG.posts:
                 self.lock_ui(LABELS.loc.cm_info_downld_pt)
-                upd = BLOG.update_posts_and_cats()
+                upd = BLOG.update_posts_cats_and_tags()
                 self.set_title( t )
                 self.unlock_ui()
                 if not upd:
