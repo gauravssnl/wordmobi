@@ -5,7 +5,11 @@ import key_codes
 from wmglobals import VERSION
 from persist import DB
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "About" ]
 

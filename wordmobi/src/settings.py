@@ -13,7 +13,11 @@ import key_codes
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "sel_access_point", "BlogSettings", "BlogAccounts", "ProxySettings", "Settings" ]
 
