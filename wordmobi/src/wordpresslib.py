@@ -164,6 +164,7 @@ class WordPressPost:
         self.user = ''
         self.allowPings = False
         self.allowComments = False
+        self.keywords = ''
 
         
 class WordPressClient:
@@ -222,6 +223,7 @@ class WordPressClient:
     def getRecentPosts(self, numPosts=5):
         """Get recent posts
         """
+        posts = []
         try:
             posts = self._server.metaWeblog.getRecentPosts(self.blogId, self.user,self.password, numPosts)
         except xmlrpclib.Fault, fault:
@@ -237,6 +239,7 @@ class WordPressClient:
     def getRecentPostTitles(self, numPosts = 5):
         """Get recent post titles
         """
+        postTitles = []
         try:
             postTitles = self._server.mt.getRecentPostTitles(self.blogId, self.user,self.password, numPosts)
         except Exception, e:
@@ -294,7 +297,8 @@ class WordPressClient:
         """
         blogContent = {
             'title' : post.title,
-            'description' : post.description    
+            'description' : post.description,
+            'mt_keywords' : post.keywords
         }
         
         # add categories
@@ -350,13 +354,19 @@ class WordPressClient:
     def editPost(self, postId, post, publish):
         """Edit post
         """
+        def conv_bool(x):
+            if x:
+                return 1
+            else:
+                return 0
         blogcontent = {
             'title' : post.title,
             'description' : post.description,
             'permaLink' : post.permaLink,
-            'mt_allow_pings' : post.allowPings,
+            'mt_allow_pings' : conv_bool(post.allowPings),
             'mt_text_more' : post.textMore,
-            'mt_excerpt' : post.excerpt
+            'mt_excerpt' : post.excerpt,
+            'mt_keywords' : post.keywords
         }
         
         if post.date:
@@ -563,3 +573,15 @@ class WordPressClient:
             raise WordPressException(fault)
         
         return res
+
+    def getTags(self):
+        """Get all tags
+        """
+        tags = []
+        try:
+            tags = self._server.wp.getTags(self.blogId, self.user, self.password)
+        except xmlrpclib.Fault, fault:
+            raise WordPressException(fault)
+
+        return tags
+
