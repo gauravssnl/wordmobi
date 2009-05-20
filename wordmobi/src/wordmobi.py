@@ -21,6 +21,7 @@ from settings import Settings, sel_access_point
 from posts import Posts
 from comments import Comments
 from categories import Categories
+from tags import Tags
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
@@ -28,7 +29,11 @@ from wmglobals import VERSION, DEFDIR, MIFFILE
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "WordMobi" ]
 __author__ = "Marcelo Barros de Almeida (marcelobarrosalmeida@gmail.com)"
@@ -43,17 +48,17 @@ class BlogManager(Dialog):
         icons = [Icon(mif,16392,16392),
                  Icon(mif,16390,16390),
                  Icon(mif,16388,16388),
-                 #Icon(mif,16386,16386),
+                 Icon(mif,16386,16386),
                  ]
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
                         LABELS.loc.wm_menu_cats,
-                        #LABELS.loc.wm_menu_tags,
+                        LABELS.loc.wm_menu_tags,
                         ]
         funcs = [self.posts,
                  self.comments,
                  self.categories,
-                 #self.tags,
+                 self.tags,
                  ]
         menu = map(lambda a,b: (a,b), menu_labels, funcs)
         menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
@@ -72,8 +77,8 @@ class BlogManager(Dialog):
         idx = self.body.current()
         ( self.posts,
           self.comments,
-          self.categories
-          #self.tags,
+          self.categories,
+          self.tags
           )[idx]()
 
     def default_cbk(self):
@@ -93,7 +98,8 @@ class BlogManager(Dialog):
         self.dlg.run()
 
     def tags(self):
-        note(LABELS.loc.wm_err_not_supp,"info")        
+        self.dlg = Tags(self.default_cbk)
+        self.dlg.run()
 
 class WordMobi(Application):
     
@@ -196,7 +202,8 @@ class WordMobi(Application):
                 version = version[version.rfind("/")+1:]
                 num_rem_ver = self.ver2num(version)
                 num_loc_ver = self.ver2num(VERSION)
-                if num_loc_ver >= num_rem_ver:
+                if (num_loc_ver >= num_rem_ver) and (VERSION.find('RC') == -1):
+                    # RC versions gives to the user the upgrading decision
                     note(LABELS.loc.wm_info_ver_is_updt, "info")
                 else:
                     yn = popup_menu( [LABELS.loc.gm_yes,LABELS.loc.gm_no],
