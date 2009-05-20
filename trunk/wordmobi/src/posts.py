@@ -30,11 +30,6 @@ from persist import DB
 from wpwrapper import BLOG
 from wmglobals import DEFDIR
 from wmlocale import LABELS
-from wmglobals import TOUCH_ENABLED
-if TOUCH_ENABLED:
-    from canvaslistbox import _Listbox
-else:
-    _Listbox = Listbox
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
@@ -423,7 +418,7 @@ class NewPost(Dialog):
         self.save = False
         self.init_dir=""
 
-        body = _Listbox([ (u"",u"") ], self.update_value_check_lock)
+        body = Listbox([ (u"",u"") ], self.update_value_check_lock)
         menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_new_post, body, menu)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
@@ -467,7 +462,8 @@ class NewPost(Dialog):
 
     def update_categories(self):
         op = popup_menu([LABELS.loc.pt_list_sel_cat,
-                         LABELS.loc.pt_list_rem_cat],
+                         LABELS.loc.pt_list_rem_cat,
+                         LABELS.loc.pt_list_lst_cat],
                         LABELS.loc.pt_pmenu_cats)
         if op is not None:
             if op == 0:
@@ -480,13 +476,16 @@ class NewPost(Dialog):
                 if sel is not None:
                     idxs = range(len(self.categories))
                     self.categories = [ self.categories[idx] for idx in idxs if idx not in sel ]
+            elif op == 2 and self.categories:
+                selection_list(self.categories,search_field=1)
                     
         self.refresh()
 
     def update_tags(self):
         op = popup_menu([LABELS.loc.pt_list_new_tag,
                          LABELS.loc.pt_list_sel_tag,
-                         LABELS.loc.pt_list_rem_tag],
+                         LABELS.loc.pt_list_rem_tag,
+                         LABELS.loc.pt_list_lst_tag],
                          LABELS.loc.pt_pmenu_tags)
         if op is not None:
             if op == 0:
@@ -503,6 +502,8 @@ class NewPost(Dialog):
                 if sel is not None:
                     idxs = range(len(self.tags))
                     self.tags = [ self.tags[idx] for idx in idxs if idx not in sel ]
+            elif op == 3 and self.tags:
+                selection_list(self.tags,search_field=1)                    
                 
         self.refresh()
     
@@ -684,7 +685,7 @@ class Posts(Dialog):
         self.last_idx = 0
         self.headlines = []
         #self.tooltip = InfoPopup()
-        body = _Listbox([(u"",u"")],self.check_popup_menu)
+        body = Listbox([(u"",u"")],self.check_popup_menu)
         self.menu_items = [(LABELS.loc.pt_menu_updt, self.update),
                            (LABELS.loc.pt_menu_view, self.contents),
                            (LABELS.loc.pt_menu_cnew, self.new),
