@@ -30,7 +30,11 @@ from persist import DB
 from wpwrapper import BLOG
 from wmglobals import DEFDIR
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
@@ -40,8 +44,8 @@ class TakePhoto(Dialog):
         self.taken = False
         self.filename = ""
         body = Canvas()
-        menu = [ ( LABELS.loc.pt_menu_pict, self.take_photo ),
-                 ( LABELS.loc.pt_menu_canc, self.cancel_app ) ]
+        menu = [ (LABELS.loc.pt_menu_pict, self.take_photo),
+                 (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu)
         self.bind(key_codes.EKeySelect, self.take_photo)
         
@@ -55,15 +59,15 @@ class TakePhoto(Dialog):
             res = popup_menu([LABELS.loc.pt_list_320x240,
                               LABELS.loc.pt_list_640x480],
                              LABELS.loc.pt_pmenu_res)
-        self.res = ( (320,240), (640,480) )[res]
+        self.res = ((320,240), (640,480))[res]
         
         flash = None
         while flash is None:
-            flash = popup_menu( [LABELS.loc.pt_list_fsh_auto,
+            flash = popup_menu([LABELS.loc.pt_list_fsh_auto,
                                  LABELS.loc.pt_list_fsh_none,
                                  LABELS.loc.pt_list_fsh_forc],
                                 LABELS.loc.pt_pmenu_flash)
-        self.flash = ( "auto", "none", "forced" )[flash]            
+        self.flash = ("auto", "none", "forced")[flash]            
     
     def run(self):
 
@@ -71,7 +75,7 @@ class TakePhoto(Dialog):
         self.get_options()
         
         try:
-            camera.start_finder( self.redraw )
+            camera.start_finder(self.redraw)
         except:
             note(LABELS.loc.pt_err_cant_start_viewf,"error")
             return None
@@ -88,10 +92,10 @@ class TakePhoto(Dialog):
 
     def take_photo(self):
         try:
-            img = camera.take_photo( size = self.res, flash = self.flash)
+            img = camera.take_photo(size = self.res, flash = self.flash)
             self.filename = time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
             self.filename = os.path.join(DEFDIR, "images", self.filename)
-            img.save( self.filename )            
+            img.save(self.filename)            
         except:
             note(LABELS.loc.pt_err_cant_take_pic,"error")
             self.cancel_app()
@@ -107,10 +111,10 @@ class PostContents(Dialog):
     PARAGRAPH_SEPARATOR = u"\u2029"
     
     def __init__(self, cbk, contents=u""):
-        body = Text( self.html_to_text(contents) )
+        body = Text(self.html_to_text(contents))
         body.focus = True
         self.init_dir=""
-        body.set_pos( 0 )
+        body.set_pos(0)
 
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_post_contents, body,
                         [(LABELS.loc.pt_menu_canc, self.cancel_app)])
@@ -257,30 +261,30 @@ class PostContents(Dialog):
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
                        (gen_label("CODE"), gen_ckb("CODE")),
                        (gen_label("SPACE"), gen_ckb("SPACE")))
-                       #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests 
-                     ),
-                    (LABELS.loc.pt_menu_refs,(
+                       #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests
+                      ),
+                     (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
                         (gen_label("LINK"), gen_ckb("LINK")),
                         (gen_label("LINKYT"), gen_ckb("LINKYT")))
-                     ),
+                      ),
                     (LABELS.loc.pt_menu_lsts,(
                         (gen_label("OLIST"), gen_ckb("OLIST")),
                         (gen_label("ULIST"), gen_ckb("ULIST")),
                         (gen_label("ILIST"), gen_ckb("ILIST")))
                      ),                     
-                    (LABELS.loc.pt_menu_revs, (
+                    (LABELS.loc.pt_menu_revs,(
                         (gen_label("INS"), gen_ckb("INS")),
                         (gen_label("DEL"), gen_ckb("DEL")))
                      ),
-                    (LABELS.loc.pt_menu_prvw, self.preview_html ),
-                    (LABELS.loc.pt_menu_canc, self.cancel_app )]
+                     (LABELS.loc.pt_menu_prvw, self.preview_html),
+                     (LABELS.loc.pt_menu_canc, self.cancel_app)]
 
         Dialog.refresh(self)
 
     def insert_img(self, closing):
         txt =  u""
-        ir = popup_menu( [LABELS.loc.pt_list_loc_file,
+        ir = popup_menu([LABELS.loc.pt_list_loc_file,
                           LABELS.loc.pt_list_take_img,
                           LABELS.loc.pt_list_url],
                          LABELS.loc.pt_pmenu_img_src)
@@ -306,14 +310,14 @@ class PostContents(Dialog):
             elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
-                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" />' % (sel,os.path.basename( sel ))
+                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" />' % (sel,os.path.basename(sel))
             else:
                 url = query(LABELS.loc.pt_pmenu_img_url, "text", u"http://")
                 if url is not None:
                     txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" />' % (url,url)
 
         if txt:                    
-            self.body.add( txt )
+            self.body.add(txt)
 
         self.refresh()
 
@@ -328,7 +332,7 @@ class PostContents(Dialog):
 
         if txt: 
             self.text_snippets["LINK"]["MENU_STATE"] = not self.text_snippets["LINK"]["MENU_STATE"]
-            self.body.add( txt )
+            self.body.add(txt)
             self.refresh()
 
     def insert_linkyt(self):
@@ -348,7 +352,7 @@ class PostContents(Dialog):
             txt = u"<ins datetime=\"%s\">" % (localtime_iso8601())
 
         self.text_snippets["INS"]["MENU_STATE"] = not self.text_snippets["INS"]["MENU_STATE"]
-        self.body.add( txt )
+        self.body.add(txt)
         self.refresh()
 
     def insert_del(self, closing):
@@ -359,7 +363,7 @@ class PostContents(Dialog):
             txt = u"<del datetime=\"%s\">" % (localtime_iso8601())
 
         self.text_snippets["DEL"]["MENU_STATE"] = not self.text_snippets["DEL"]["MENU_STATE"]
-        self.body.add( txt )
+        self.body.add(txt)
         self.refresh()
 
     def preview_html(self):
@@ -369,10 +373,10 @@ class PostContents(Dialog):
         name = "html_" + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".html"
         name = os.path.join(DEFDIR, "cache", name)
 
-        soup = BeautifulSoup( html )
+        soup = BeautifulSoup(html)
         imgs = soup.findAll('img')
         for img in imgs:
-            if os.path.isfile( img["src"] ):
+            if os.path.isfile(img["src"]):
                 img["src"] = "file://localhost/" + img["src"]
                 
         html = soup.prettify().replace("\n","")      
@@ -389,9 +393,9 @@ class PostContents(Dialog):
             note(LABELS.loc.pt_err_cant_gen_prvw,"error")
             return
         
-        viewer = Content_handler( self.refresh )
+        viewer = Content_handler(self.refresh)
         try:
-            viewer.open( name )
+            viewer.open(name)
         except:
             note(LABELS.loc.pt_err_cant_prvw,"error")
             
@@ -402,12 +406,16 @@ class NewPost(Dialog):
                  contents=u"",
                  blog_categories = [LABELS.loc.wp_list_uncategorized],                 
                  categories = [],
+                 blog_tags = [],
+                 tags = [],
                  publish = True):
         
         self.post_title = post_title
         self.contents = contents
         self.blog_categories = blog_categories
         self.categories = categories
+        self.blog_tags = blog_tags
+        self.tags = tags
         self.images = []
         self.find_images()
         self.publish = publish
@@ -415,8 +423,8 @@ class NewPost(Dialog):
         self.save = False
         self.init_dir=""
 
-        body = _Listbox( [ (u"",u"") ], self.update_value_check_lock )
-        menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app ) ]
+        body = _Listbox([ (u"",u"") ], self.update_value_check_lock)
+        menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_new_post, body, menu)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
         self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
@@ -424,20 +432,22 @@ class NewPost(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
         
-        img = unicode(",".join(self.images))
-        cat = unicode(",".join(self.categories))
+        imgs = unicode(",".join(self.images))
+        cats = unicode(",".join(self.categories))
+        tags = unicode(",".join(self.tags))
         if self.publish:
             pub = LABELS.loc.pt_info_no_pub
         else:
             pub = LABELS.loc.pt_info_draft
 
-        lst_values = [ (LABELS.loc.pt_menu_titl, self.post_title ),
-                       (LABELS.loc.pt_menu_cont, self.contents[:50]),
-                       (LABELS.loc.pt_menu_cats, cat),
-                       (LABELS.loc.pt_menu_imgs, img ),
-                       (LABELS.loc.pt_menu_pubs, pub) ]
+        lst_values = [(LABELS.loc.pt_menu_titl, self.post_title),
+                      (LABELS.loc.pt_menu_cont, self.contents[:50]),
+                      (LABELS.loc.pt_menu_cats, cats),
+                      (LABELS.loc.pt_menu_tags, tags),
+                      (LABELS.loc.pt_menu_imgs, imgs),
+                      (LABELS.loc.pt_menu_pubs, pub)]
 
-        app.body.set_list( lst_values, self.last_idx )   
+        app.body.set_list(lst_values, self.last_idx)   
                 
     def update_post_title(self):
         post_title = query(LABELS.loc.pt_pmenu_post_title, "text", self.post_title)
@@ -448,21 +458,56 @@ class NewPost(Dialog):
     def update_contents(self):
         def cbk():
             if not self.dlg.cancel :
-                self.contents = self.dlg.text_to_html( self.dlg.body.get() )
+                self.contents = self.dlg.text_to_html(self.dlg.body.get())
                 self.find_images()
             self.refresh()
             return True
-        self.dlg = PostContents( cbk, self.contents )
+        self.dlg = PostContents(cbk, self.contents)
         self.dlg.run()
 
     def update_categories(self):
-        sel = multi_selection_list( self.blog_categories, style='checkbox', search_field=1 )
-        if sel:
-            self.categories = [ self.blog_categories[idx] for idx in sel ]        
+        op = popup_menu([LABELS.loc.pt_list_sel_cat,
+                         LABELS.loc.pt_list_rem_cat],
+                        LABELS.loc.pt_pmenu_cats)
+        if op is not None:
+            if op == 0:
+                sel = multi_selection_list(self.blog_categories, style='checkbox', search_field=1)
+                if sel is not None:
+                    cats = [ self.blog_categories[idx] for idx in sel ]
+                    self.categories += cats
+            elif op == 1 and self.categories:
+                sel = multi_selection_list(self.categories, style='checkbox', search_field=1)
+                if sel is not None:
+                    idxs = range(len(self.categories))
+                    self.categories = [ self.categories[idx] for idx in idxs if idx not in sel ]
+                    
         self.refresh()
-        
+
+    def update_tags(self):
+        op = popup_menu([LABELS.loc.pt_list_new_tag,
+                         LABELS.loc.pt_list_sel_tag,
+                         LABELS.loc.pt_list_rem_tag],
+                         LABELS.loc.pt_pmenu_tags)
+        if op is not None:
+            if op == 0:
+                new_tag = query(LABELS.loc.pt_pmenu_tags, "text", u"")
+                if new_tag is not None:
+                    self.tags.append(new_tag)
+            elif op == 1 and self.blog_tags:
+                sel = multi_selection_list(self.blog_tags, style='checkbox', search_field=1)
+                if sel is not None:
+                    new_tags = [ self.blog_tags[idx] for idx in sel ]
+                    self.tags += new_tags
+            elif op == 2 and self.tags:
+                sel = multi_selection_list(self.tags, style='checkbox', search_field=1)
+                if sel is not None:
+                    idxs = range(len(self.tags))
+                    self.tags = [ self.tags[idx] for idx in idxs if idx not in sel ]
+                
+        self.refresh()
+    
     def update_images(self):
-        ir = popup_menu( [LABELS.loc.pt_list_ins_img,
+        ir = popup_menu([LABELS.loc.pt_list_ins_img,
                           LABELS.loc.pt_list_take_img,
                           LABELS.loc.pt_list_view_img,
                           LABELS.loc.pt_list_rem_img],
@@ -514,31 +559,32 @@ class NewPost(Dialog):
         
     def update_value_check_lock(self):
         if self.ui_is_locked() == False:
-            self.update( app.body.current() )
+            self.update(app.body.current())
             
     def update(self,idx):
         self.last_idx = idx
-        updates = ( self.update_post_title, self.update_contents, \
-                    self.update_categories, self.update_images, \
-                    self.update_publish )
+        updates = (self.update_post_title,
+                   self.update_contents,
+                   self.update_categories,
+                   self.update_tags,
+                   self.update_images,
+                   self.update_publish)
         if idx < len(updates):
             updates[idx]()
 
-    def view_image( self, img):
-        if os.path.isfile( img ):
+    def view_image(self, img):
+        if os.path.isfile(img):
             local = True
         else:
             local = False
             
         if local:
-            viewer = Content_handler( self.refresh )
+            viewer = Content_handler(self.refresh)
             try:
-                viewer.open( img )
+                viewer.open(img)
             except:
                 note(LABELS.loc.pt_err_cant_open % img,"error") 
         else:
-            # urllib seems not to support proxy authentication
-            # so, download will fail in these cases
             local_file = "img_" + time.strftime("%Y%m%d_%H%M%S", time.localtime())
             local_file = os.path.join(DEFDIR, "cache", local_file)
             d = img.rfind(".")
@@ -547,15 +593,15 @@ class NewPost(Dialog):
                 self.lock_ui(LABELS.loc.pt_info_downld_img % img)
                 try:
                     urlprx = UrllibProxy(BLOG.get_proxy())
-                    urlprx.urlretrieve( img, local_file )
+                    urlprx.urlretrieve(img, local_file)
                 except:
                     note(LABELS.loc.pt_err_cant_downld % img,"error")
                     self.unlock_ui()
                     return
                 self.unlock_ui()
-                viewer = Content_handler( self.refresh )
+                viewer = Content_handler(self.refresh)
                 try:
-                    viewer.open( local_file )
+                    viewer.open(local_file)
                 except:
                     note(LABELS.loc.pt_err_cant_open % img,"error") 
             else:
@@ -565,22 +611,22 @@ class NewPost(Dialog):
         self.refresh()
 
     def find_images(self):
-        soup = BeautifulSoup( self.contents.encode('utf-8') )
+        soup = BeautifulSoup(self.contents.encode('utf-8'))
         imgs = soup.findAll('img')
         self.images = []
         for img in imgs:
             try:
-                self.images.append( img['src'] )
+                self.images.append(img['src'])
             except:
                 pass
             
     def remove_image(self,del_img):
-        soup = BeautifulSoup( self.contents.encode('utf-8') )
+        soup = BeautifulSoup(self.contents.encode('utf-8'))
         imgs = soup.findAll('img')
         for img in imgs:
             if img["src"] == del_img:
                 img.extract()
-        self.contents = utf8_to_unicode( soup.prettify().replace("\n","") )
+        self.contents = utf8_to_unicode(soup.prettify().replace("\n",""))
 
     def close_app(self):
         if not self.cancel:
@@ -603,20 +649,31 @@ class NewPost(Dialog):
         Dialog.close_app(self)
         
 class EditPost(NewPost):
-    def __init__(self, cbk, cats, post_idx, publish ):
-        cats_post = []
+    def __init__(self, cbk, blog_cats, blog_tags, post_idx, publish):
+        post_cats = []
         for c in BLOG.posts[post_idx]['categories']:
+            # spliting an empty string will return a vector, this is not desired
             try:
-                cats_post.append(decode_html(c))
+                post_cats.append(decode_html(c))
             except:
-                cats_post.append(utf8_to_unicode(c))
+                post_cats.append(utf8_to_unicode(c))
+                
+        post_tags = []
+        if BLOG.posts[post_idx]['mt_keywords']:
+            for t in BLOG.posts[post_idx]['mt_keywords'].split(','):
+                try:
+                    post_tags.append(decode_html(t))
+                except:
+                    post_tags.append(utf8_to_unicode(t))        
                 
         NewPost.__init__(self,cbk,
-                          utf8_to_unicode(BLOG.posts[post_idx]['title']),
-                          utf8_to_unicode(BLOG.posts[post_idx]['description']),
-                          cats,
-                          cats_post,
-                          publish )
+                         utf8_to_unicode(BLOG.posts[post_idx]['title']),
+                         utf8_to_unicode(BLOG.posts[post_idx]['description']),
+                         blog_cats,
+                         post_cats,
+                         blog_tags,
+                         post_tags,
+                         publish)
         
         self.set_title(LABELS.loc.pt_info_edit_post)
         self.post_idx = post_idx
@@ -634,9 +691,9 @@ class Posts(Dialog):
                            (LABELS.loc.pt_menu_dele, self.delete),
                            (LABELS.loc.pt_menu_lstc, self.comments)]
         if DB["twitter_enabled"] == u"True":
-            self.menu_items += [(LABELS.loc.pt_menu_s2tw, self.send2twitter )]
+            self.menu_items += [(LABELS.loc.pt_menu_s2tw, self.send2twitter)]
         self.menu_items += [(LABELS.loc.pt_menu_offl_publ, self.offline_publish)]
-        menu = self.menu_items + [(LABELS.loc.pt_menu_clos, self.close_app )]
+        menu = self.menu_items + [(LABELS.loc.pt_menu_clos, self.close_app)]
         
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_post, body, menu)
 
@@ -652,20 +709,20 @@ class Posts(Dialog):
     def key_up(self):
         if not self.ui_is_locked():
             p = app.body.current() - 1
-            m = len( self.headlines )
+            m = len(self.headlines)
             if p < 0:
                 p = m - 1
-            self.set_title( LABELS.loc.pt_info_pst_pos % (p+1,m) )
-            #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
+            self.set_title(LABELS.loc.pt_info_pst_pos % (p+1,m))
+            #self.tooltip.show(self.headlines[p][1], (30,30), 2000, 0.25)
 
     def key_down(self):
         if not self.ui_is_locked():
             p = app.body.current() + 1
-            m = len( self.headlines )
+            m = len(self.headlines)
             if p >= m:
                 p = 0
-            self.set_title( LABELS.loc.pt_info_pst_pos % (p+1,m) )
-            #self.tooltip.show( self.headlines[p][1], (30,30), 2000, 0.25 )
+            self.set_title(LABELS.loc.pt_info_pst_pos % (p+1,m))
+            #self.tooltip.show(self.headlines[p][1], (30,30), 2000, 0.25)
 
     def key_right(self):
         if not self.ui_is_locked():
@@ -689,7 +746,7 @@ class Posts(Dialog):
                     menu += [(LABELS.loc.pt_menu_s2tw, self.send2twitter)]
             if BLOG.post_is_local(idx):
                 menu += [(LABELS.loc.pt_menu_offl_publ,self.offline_publish)]
-        op = popup_menu(map( lambda x: x[0], menu) , LABELS.loc.pt_pmenu_posts)
+        op = popup_menu(map(lambda x: x[0], menu) , LABELS.loc.pt_pmenu_posts)
         if op is not None:
             map(lambda x: x[1], menu)[op]()
     
@@ -706,11 +763,11 @@ class Posts(Dialog):
     
     def update(self):
         self.lock_ui(LABELS.loc.pt_info_downld_pt)
-        BLOG.update_posts_and_cats()
+        BLOG.update_posts_cats_and_tags()
         self.unlock_ui()            
 
         if not BLOG.posts:
-            note(LABELS.loc.pt_info_no_posts, "info" )
+            note(LABELS.loc.pt_info_no_posts, "info")
         
         self.refresh()
     
@@ -747,6 +804,7 @@ class Posts(Dialog):
             np = BLOG.new_post(self.dlg.post_title,
                                self.dlg.contents,
                                self.dlg.categories,
+                               self.dlg.tags,
                                self.dlg.publish)
             self.unlock_ui()
             
@@ -757,13 +815,17 @@ class Posts(Dialog):
             BLOG.save_new_post(self.dlg.post_title,
                                self.dlg.contents,
                                self.dlg.categories,
+                               self.dlg.tags,
                                self.dlg.publish)
             
         self.refresh()
         return True
             
     def new(self):
-        self.dlg = NewPost(self.new_cbk, u"", u"", BLOG.categoryNamesList(), [], True)
+        self.dlg = NewPost(self.new_cbk, u"", u"",
+                           BLOG.category_names_list(), [],
+                           BLOG.tag_names_list(), [],
+                           True)
         self.dlg.run()
 
     def contents_cbk(self):
@@ -773,6 +835,7 @@ class Posts(Dialog):
             ok = BLOG.edit_post(self.dlg.post_title,
                                 self.dlg.contents,
                                 self.dlg.categories,
+                                self.dlg.tags,
                                 self.dlg.post_idx,
                                 self.dlg.publish)
             self.unlock_ui()
@@ -784,6 +847,7 @@ class Posts(Dialog):
             BLOG.save_exist_post(self.dlg.post_title,
                                  self.dlg.contents,
                                  self.dlg.categories,
+                                 self.dlg.tags,
                                  self.dlg.post_idx,
                                  self.dlg.publish)
         self.refresh()
@@ -795,7 +859,8 @@ class Posts(Dialog):
             if self.download_contents(idx):
                 publish = BLOG.posts[idx]['post_status'] == 'publish' # 'publish' or 'draft'
                 self.dlg = EditPost(self.contents_cbk,
-                                    BLOG.categoryNamesList(),
+                                    BLOG.category_names_list(),
+                                    BLOG.tag_names_list(),
                                     idx,
                                     publish)
                 self.dlg.run()
@@ -808,7 +873,7 @@ class Posts(Dialog):
             ok = BLOG.get_post(idx)
             self.unlock_ui()
             if not ok:
-                note(LABELS.loc.pt_err_cant_pst_cont, "error" )
+                note(LABELS.loc.pt_err_cant_pst_cont, "error")
                 return False
             
         return True
@@ -863,7 +928,7 @@ class Posts(Dialog):
             self.headlines = []
             for p in BLOG.posts:
                 status = u""
-                (y, mo, d, h, m, s) = parse_iso8601( p['dateCreated'].value )
+                (y, mo, d, h, m, s) = parse_iso8601(p['dateCreated'].value)
                 if BLOG.post_is_only_local(p):
                     status = u"[@] "
                 elif BLOG.post_is_local(p):
@@ -873,9 +938,9 @@ class Posts(Dialog):
                         status = u"[#]"
 
                 line1 = status + u"%02d/%s/%02d  %02d:%02d " % (d,MONTHS[mo-1],y,h,m) 
-                line2 = utf8_to_unicode( p['title'] )
-                self.headlines.append( ( line1 , line2 ) )
+                line2 = utf8_to_unicode(p['title'])
+                self.headlines.append((line1 , line2))
                                
-        self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
-        self.body.set_list( self.headlines, self.last_idx )
+        self.last_idx = min(self.last_idx, len(self.headlines)-1) # avoiding problems after removing
+        self.body.set_list(self.headlines, self.last_idx)
 
