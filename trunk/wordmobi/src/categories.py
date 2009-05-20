@@ -6,7 +6,11 @@ import key_codes
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
-from canvaslistbox import _Listbox
+from wmglobals import TOUCH_ENABLED
+if TOUCH_ENABLED:
+    from canvaslistbox import _Listbox
+else:
+    _Listbox = Listbox
 
 __all__ = [ "Categories" ]
 
@@ -85,7 +89,7 @@ class Categories(Dialog):
     def refresh(self):
         Dialog.refresh(self) # must be called *before* 
         
-        self.headlines = BLOG.categoryNamesList()
+        self.headlines = BLOG.category_names_list()
         self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
         self.set_title( LABELS.loc.ca_info_cat_pos % ( self.body.current()+1,len(self.headlines) ) )
 
