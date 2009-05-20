@@ -60,11 +60,20 @@ class Tags(Dialog):
         self.refresh()
 
     def refresh(self):
+        #Dialog.refresh(self) # must be called *before*        
+        #self.headlines = BLOG.tag_names_list()
         Dialog.refresh(self) # must be called *before* 
-        
-        self.headlines = BLOG.tag_names_list()
-        self.last_idx = min(self.last_idx, len(self.headlines)-1) # avoiding problems after removing
-        self.set_title(LABELS.loc.tg_info_tag_pos % (self.body.current()+1,len(self.headlines)))
 
-        self.body.set_list(self.headlines, self.last_idx)
+        self.headlines = BLOG.tag_names_list()
+        if not self.headlines:
+            self.headlines = [ LABELS.loc.tg_info_udt_tags_lst ]
+            
+        #self.headlines = []
+        #for t in BLOG.tags:
+        #    line = u"%s (%s)" % (t['name'],t['count'])
+        #    self.headlines.append(line)
+                               
+        self.last_idx = min( self.last_idx, len(self.headlines)-1 ) # avoiding problems after removing
+        app.body.set_list( self.headlines, self.last_idx )
+
         

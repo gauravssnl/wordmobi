@@ -324,6 +324,7 @@ class Default(object):
         # Tags info messages
         self.loc.tg_info_tag_pos = u"[%d/%d] Tags"
         self.loc.tg_info_downld_tags = u"Downloading tags..."
+        self.loc.tg_info_udt_tags_lst = u"Please, update the tag list."
 
         # Tags error messages        
         self.loc.tg_err_cant_updt_tags = u"Impossible to update tags."
