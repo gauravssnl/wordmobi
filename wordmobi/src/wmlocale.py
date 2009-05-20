@@ -18,6 +18,7 @@ class Default(object):
         self.loc.wm_menu_comm = u"Comments"
         self.loc.wm_menu_tags = u"Tags"
         self.loc.wm_menu_cats = u"Categories"
+        self.loc.wm_menu_tags = u"Tags"
         self.loc.wm_menu_sets = u"Settings"
         self.loc.wm_menu_upgr = u"Upgrade"
         self.loc.wm_menu_abou = u"About"
@@ -122,6 +123,8 @@ class Default(object):
         self.loc.cm_pmenu_send_cmt = u"Send comment ?"
         self.loc.cm_pmenu_updt_cmt = u"Update comment ?"
         self.loc.cm_pmenu_comts = u"Comments:"
+        self.loc.pt_pmenu_tags = u"Tags:"
+        self.loc.pt_pmenu_cats = u"Categories:"
 
         # Posts main menu
         self.loc.pt_menu_updt = u"Update"
@@ -141,6 +144,7 @@ class Default(object):
         self.loc.pt_menu_titl = u"Title"
         self.loc.pt_menu_cont = u"Contents"
         self.loc.pt_menu_cats = u"Categories"
+        self.loc.pt_menu_tags = u"Tags"
         self.loc.pt_menu_imgs = u"Images"
         self.loc.pt_menu_pubs = u"Publish"
         self.loc.pt_menu_s2tw = u"Send to Twitter"
@@ -161,6 +165,11 @@ class Default(object):
         self.loc.pt_list_yes_rem_pst = u"Yes, just remote post"
         self.loc.pt_list_yes_loc_ch = u"Yes, just local changes"
         self.loc.pt_list_yes_del_all = u"Yes, delete all"
+        self.loc.pt_list_new_tag = u"Create"
+        self.loc.pt_list_sel_tag = u"Select"
+        self.loc.pt_list_rem_tag = u"Remove"
+        self.loc.pt_list_sel_cat = u"Select"
+        self.loc.pt_list_rem_cat = u"Remove"
         
         # Posts info
         self.loc.pt_info_pst_pos = u"[%d/%d] Posts"
@@ -305,7 +314,21 @@ class Default(object):
         
         # Wpwrapper list
         self.loc.wp_list_uncategorized = u"Uncategorized"
-        
+
+        # Tags main menu
+        self.loc.tg_menu_updt = u"Update"
+        self.loc.tg_menu_clos = u"Close"
+
+        # Tags info messages
+        self.loc.tg_info_tag_pos = u"[%d/%d] Tags"
+        self.loc.tg_info_downld_tags = u"Downloading tags..."
+
+        # Tags error messages        
+        self.loc.tg_err_cant_updt_tags = u"Impossible to update tags."
+
+        # Tags popup menu
+        self.loc.tg_pmenu_cats = u"Tags:"
+
 class Locale(Default):
     "Multiple language support class"
     
