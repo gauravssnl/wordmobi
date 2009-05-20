@@ -26,6 +26,7 @@ class WordPressWrapper(object):
         self.posts = []
         self.comments = []
         self.categories = []
+        self.tags = []
         self.cat_dict = {}
         self.cat_default = []
         self.curr_blog =  {}
@@ -52,7 +53,7 @@ class WordPressWrapper(object):
         if not self.categories:
             self.categories = self.cat_default
 
-    def categoryNamesList(self):
+    def category_names_list(self):
         """ Return a list with all category names. The name order must match with
             self.categories, so it is not possible to use dict keys.
         """
@@ -131,9 +132,38 @@ class WordPressWrapper(object):
             note(LABELS.loc.wp_err_cant_create_cat % cat_name,"error")
             return False
         return True
-    
 
-    def update_posts_and_cats(self):
+    def tag_names_list(self):
+        """ Return a list with all tags names. The name order must match with
+            self.tags, so it is not possible to use dict keys.
+        """
+        return map(lambda x:  x['name'] , self.tags)
+    
+    def update_tags(self):
+        """ Download all tags from wordpress site and update local data.
+            Return True (tags updates) or False (tags not updated)
+        """
+        try:
+            self.tags = self.blog.getTags()
+        except:
+            note(LABELS.loc.tg_err_cant_updt_tags,"error")
+            return False
+
+        for i in range(len(self.tags)):
+            try:
+                self.tags[i]['name'] = decode_html(self.tags[i]['name'])
+            except:
+                self.tags[i]['name'] = utf8_to_unicode(self.tags[i]['name'])
+
+        self.tags.sort(lambda x,y:cmp(x['name'],y['name']))
+        
+        return True
+        
+    def update_posts_cats_and_tags(self):
+        """ Update local information about post titles, categories and tags.
+            If all three as updated without error, return True. Otherwise,
+            return False.
+        """
         try:
             posts = self.blog.getRecentPostTitles(self.num_posts)
         except:
@@ -170,8 +200,8 @@ class WordPressWrapper(object):
                 return 0
         self.posts.sort(_time_sort)
         del posts
-        return self.update_categories()
-
+        return self.update_categories() and self.update_tags()
+        
     def get_post(self,item):
         try:
             self.posts[item] = self.blog.getPost( self.posts[item]['postid'] )
@@ -191,8 +221,17 @@ class WordPressWrapper(object):
         
         return img_src
     
-    def new_post(self, title, contents, categories, publish, offline_idx=-1):
-        """ Upload a new post
+    def new_post(self, title, contents, categories, tags, publish, offline_idx=-1):
+        """ Upload a new post, where:
+        
+            - title: post title, in unicode
+            - contents: post contents, in unicode
+            - categories: array of category names in unicode
+            - tags: array of tag names in unicode
+            - publish: draft post (False, not published) or final post (True, published)
+            - offline_idx: post index, if it is offline,
+            
+            Return the new post ID (success) or -1 (error)
         """
         app.title = LABELS.loc.wp_info_upld_post_cont
                       
@@ -211,6 +250,7 @@ class WordPressWrapper(object):
                       
         post.title = unicode_to_utf8( title )
         post.categories = [ self.categoryName2Id(c)[0] for c in categories ]
+        post.keywords = ",".join([ unicode_to_utf8(t) for t in tags ])
         post.allowComments = True
 
         try:
@@ -233,12 +273,13 @@ class WordPressWrapper(object):
             self.save()
         return npost
 
-    def save_new_post(self, title, contents, categories, publish):
-        """ We need to create a post like that one provided by xmlrpclib.
-            Otherwise, WM will fail when decoding this post. Just a new
-            dict is added (wordmobi), for controlling.
+    def save_new_post(self, title, contents, categories, tags, publish):
+        """ Instead posting, save the post locally.
+            We need to create a post like that one provided by xmlrpclib (utf8).
+            Otherwise, WM will fail when decoding this post.
+            Just a new dict is added (wordmobi), for controlling.
+            See parameters in new_post.
         """
-        cats = [ unicode_to_utf8(c) for c in categories ]
         if publish:
             pub = 'publish'
         else:
@@ -246,7 +287,8 @@ class WordPressWrapper(object):
         dt = time.gmtime()
         pst = { 'title': unicode_to_utf8(title),
                 'description': unicode_to_utf8(contents),
-                'categories':cats,
+                'categories':[ unicode_to_utf8(c) for c in categories ],
+                'mt_keywords':",".join([ unicode_to_utf8(t) for t in tags ]),
                 'post_status':pub,
                 'dateCreated':DateTime(time.mktime(dt)),
                 'wordmobi':True
@@ -287,14 +329,14 @@ class WordPressWrapper(object):
         """
         return (self.post_is_local(obj) and (not self.post_is_remote(obj)))
     
-    def edit_post(self, title, contents, categories, post_idx, publish):
+    def edit_post(self, title, contents, categories, tags, post_idx, publish):
         """ Update a post. Return True or False, indicating if the updating
-            operation was completed sucessfuly or not
+            operation was sucessfuly completed or not
         """
         # when local post is edited it does not have a postid, in such case we need to
         # create a new post instead updating an existing one
         if self.post_is_only_local(post_idx):
-            np_id = self.new_post(title, contents, categories, publish, post_idx)
+            np_id = self.new_post(title, contents, categories, tags, publish, post_idx)
             return (np_id >= 0)
         app.title = LABELS.loc.wp_info_upld_post_cont
         soup = BeautifulSoup( unicode_to_utf8(contents) )
@@ -312,11 +354,12 @@ class WordPressWrapper(object):
         post.title = unicode_to_utf8( title )
         post.description = contents
         post.categories = [ self.categoryName2Id(c)[0] for c in categories ]
+        post.keywords = ",".join([ unicode_to_utf8(t) for t in tags ])
         post.allowComments = True
         post.permaLink = self.posts[post_idx]['permaLink']
         post.textMore = self.posts[post_idx]['mt_text_more']
         post.excerpt = self.posts[post_idx]['mt_excerpt']
-
+       
         try:
             npost = self.blog.editPost(post.id, post, publish)
         except:
@@ -334,15 +377,15 @@ class WordPressWrapper(object):
         self.save()
         return True
 
-    def save_exist_post(self, title, contents, categories, post_idx, publish):
-        cats = [ unicode_to_utf8(c) for c in categories ]
+    def save_exist_post(self, title, contents, categories, tags, post_idx, publish):
         if publish:
             pub = 'publish'
         else:
             pub = 'draft'         
         self.posts[post_idx]['title'] = unicode_to_utf8(title)
         self.posts[post_idx]['description'] = unicode_to_utf8(contents)
-        self.posts[post_idx]['categories'] = cats
+        self.posts[post_idx]['categories'] = [ unicode_to_utf8(c) for c in categories ]
+        self.posts[post_idx]['mt_keywords'] = ",".join([ unicode_to_utf8(t) for t in tags ])
         self.posts[post_idx]['post_status'] = pub
         if not self.posts[post_idx].has_key('wordmobi'):
             self.posts[post_idx]['wordmobi'] = True
@@ -399,17 +442,32 @@ class WordPressWrapper(object):
             except:
                 cats.append(utf8_to_unicode(c))
 
+        tags = []
+        if self.posts[idx]['mt_keywords']:
+            # spliting an empty string will return a vector, this is not desired
+            for t in self.posts[idx]['mt_keywords'].split(','):
+                try:
+                    tags.append(decode_html(t))
+                except:
+                    tags.append(utf8_to_unicode(t))
+                
         title = utf8_to_unicode(BLOG.posts[idx]['title'])
         conts = utf8_to_unicode(BLOG.posts[idx]['description'])
         publish = self.posts[idx]['post_status'] == 'publish'
         
         if self.post_is_only_local(idx):
-            BLOG.new_post(title,conts,cats,publish,idx)
+            BLOG.new_post(title,conts,cats,tags,publish,idx)
         else:
-            self.edit_post(title,conts,cats,idx,publish)
+            self.edit_post(title,conts,cats,tags,idx,publish)
 
     def get_comment(self, post_idx, comment_status):
-        post_id = self.posts[post_idx]['postid']
+        """ Download comments for post with index post_idx with status comment_status.
+            If post_idx is -1, download comments for all posts
+        """
+        if post_idx == -1:
+            post_id = ''
+        else:
+            post_id = self.posts[post_idx]['postid']
         comm_info = wp.WordPressComment()
         comm_info.post_id = post_id
         comm_info.status = comment_status
@@ -536,7 +594,8 @@ class WordPressWrapper(object):
     def save(self):
         self.blog_data[self.blog_key] = {'categories':self.categories,
                                          'posts':self.posts,
-                                         'comments':self.comments}
+                                         'comments':self.comments,
+                                         'tags':self.tags}
         f = open(self.persist_name,"wb")
         pickle.dump(VERSION,f)
         pickle.dump(self.blog_data,f)
@@ -553,8 +612,9 @@ class WordPressWrapper(object):
             self.categories = []
             self.posts = []
             self.comments = []
+            self.tags = []
             if self.blog_data.has_key(self.blog_key):
-                for k in ['categories', 'posts', 'comments']:
+                for k in ['categories', 'posts', 'comments', 'tags']:
                     if hasattr(self,k):
                         self.__setattr__(k,self.blog_data[self.blog_key][k])
             # avoid empty categories and create a valid dict
@@ -597,8 +657,14 @@ class WordPressWrapper(object):
             self.proxy = ""
             os.environ["http_proxy"] = ""
             del os.environ["http_proxy"]
-            
-        blog_url = unicode_to_utf8( self.curr_blog["blog"] ) + "/xmlrpc.php"
+
+        if self.curr_blog["blog"].endswith(u".php"):
+            # advance mode: user has different url for xmlrpc, do not change it
+            blog_url = unicode_to_utf8( self.curr_blog["blog"] )
+        else:
+            # standard mode: use type an blog address only
+            blog_url = unicode_to_utf8( self.curr_blog["blog"] ) + "/xmlrpc.php"
+        
         self.blog = wp.WordPressClient(blog_url,
                                        unicode_to_utf8(self.curr_blog["user"]),
                                        unicode_to_utf8(self.curr_blog["pass"]),
