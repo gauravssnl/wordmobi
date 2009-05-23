@@ -10,8 +10,8 @@ promo_phrase = u"<br><br>Publicado pelo <a href=\"http://wordmobi.googlecode.com
 # Wordmobi main menu
 wm_menu_post = u"Posts"
 wm_menu_comm = u"Comentários"
-wm_menu_tags = u"Tags"
 wm_menu_cats = u"Categorias"
+wm_menu_tags = u"Tags"
 wm_menu_sets = u"Configurações"
 wm_menu_upgr = u"Atualização"
 wm_menu_abou = u"Sobre"
@@ -116,6 +116,8 @@ cm_pmenu_del_cmt = u"Apagar comentário ?"
 cm_pmenu_send_cmt = u"Enviar comentário ?"
 cm_pmenu_updt_cmt = u"Atualizar comentário ?"
 cm_pmenu_comts = u"Comentários:"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Categorieas:"
 
 # Posts main menu
 pt_menu_updt = u"Atualizar"
@@ -135,6 +137,7 @@ pt_menu_prvw = u"Pré-visualizar"
 pt_menu_titl = u"Título"
 pt_menu_cont = u"Conteúdo"
 pt_menu_cats = u"Categorias"
+pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Imagens"
 pt_menu_pubs = u"Publicar"
 pt_menu_s2tw = u"Enviar para o Twitter"
@@ -155,6 +158,13 @@ pt_list_save_it = u"Não, mas salve-o"
 pt_list_yes_rem_pst = u"Sim, só o post"
 pt_list_yes_loc_ch = u"Sim, só mudanças locais"
 pt_list_yes_del_all = u"Sim, tudo"
+pt_list_new_tag = u"Criar"
+pt_list_sel_tag = u"Selecionar"
+pt_list_rem_tag = u"Remover"
+pt_list_lst_tag = u"Listar"
+pt_list_sel_cat = u"Selecionar"
+pt_list_rem_cat = u"Remover"
+pt_list_lst_cat = u"Listar"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Posts"
@@ -298,3 +308,17 @@ wp_info_cmt_del = u"Comentário apagado."
         
 # Wpwrapper list
 wp_list_uncategorized = u"Sem categoria"
+# Tags main menu
+tg_menu_updt = u"Atualizar"
+tg_menu_clos = u"Sair"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Tags"
+tg_info_downld_tags = u"Baixando tags..."
+tg_info_udt_tags_lst = u"Por favor, atualize a lista de tags."
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"Impossível atualizar a lista de tags."
+
+# Tags popup menu
+tg_pmenu_cats = u"Tags:"

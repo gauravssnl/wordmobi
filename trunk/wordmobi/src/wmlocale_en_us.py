@@ -10,8 +10,8 @@ promo_phrase = u"<br><br>Posted by <a href=\"http://wordmobi.googlecode.com\">Wo
 # Wordmobi main menu
 wm_menu_post = u"Posts"
 wm_menu_comm = u"Comments"
-wm_menu_tags = u"Tags"
 wm_menu_cats = u"Categories"
+wm_menu_tags = u"Tags"
 wm_menu_sets = u"Settings"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"About"
@@ -116,6 +116,8 @@ cm_pmenu_del_cmt = u"Delete comment ?"
 cm_pmenu_send_cmt = u"Send comment ?"
 cm_pmenu_updt_cmt = u"Update comment ?"
 cm_pmenu_comts = u"Comments:"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Categories:"
 
 # Posts main menu
 pt_menu_updt = u"Update"
@@ -135,10 +137,11 @@ pt_menu_prvw = u"Preview"
 pt_menu_titl = u"Title"
 pt_menu_cont = u"Contents"
 pt_menu_cats = u"Categories"
+pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Images"
 pt_menu_pubs = u"Publish"
 pt_menu_s2tw = u"Send to Twitter"
-
+        
 # Posts lists
 pt_list_320x240 = u"(320x240)"
 pt_list_640x480 = u"(640x480)"
@@ -155,6 +158,13 @@ pt_list_save_it = u"No, but save it"
 pt_list_yes_rem_pst = u"Yes, just remote post"
 pt_list_yes_loc_ch = u"Yes, just local changes"
 pt_list_yes_del_all = u"Yes, delete all"
+pt_list_new_tag = u"Create"
+pt_list_sel_tag = u"Select"
+pt_list_rem_tag = u"Remove"
+pt_list_lst_tag = u"List"
+pt_list_sel_cat = u"Select"
+pt_list_rem_cat = u"Remove"
+pt_list_lst_cat = u"List"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Posts"
@@ -189,7 +199,7 @@ pt_err_cant_pst_cont = u"Impossible to download post contents"
 pt_err_unknown_ext = u"Unkown externsion for %s"
 pt_err_cant_tiny_url = u"Impossible to create tiny URL."
 pt_err_cant_send_twitter = u"Impossible to send post title to twitter."
-
+        
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
 pt_pmenu_del_post = u"Delete post ?"
@@ -210,11 +220,11 @@ st_info_blog_set = u"Blog settings"
 st_info_proxy_set = u"Proxy settings"
 st_info_twitter_set = u"Twitter settings"
 st_info_blog_acc_set = u"Blog account settings"
-
+        
 # Settings error
 st_err_no_access_point = u"Could't find any access point."
 st_err_one_ap_req = u"At least one access point is required."
-
+        
 # Settings query
 st_query_access_points = u"Access points:"
 st_query_proxy_add = u"Proxy address:"
@@ -223,7 +233,7 @@ st_query_proxy_usr = u"Proxy username:"
 st_query_proxy_pwd = u"Proxy password:"
 st_query_twitter_usr = u"Twitter user:"
 st_query_twitter_pwd = u"Twitter password:"
-
+        
 # Settings menu
 st_menu_canc = u"Cancel"
 st_menu_blog = u"Blog Accounts"
@@ -253,7 +263,7 @@ st_menu_new_blog = u"New"
 st_menu_cpy_blog = u"Copy"
 st_menu_del_blog = u"Delete"
 st_menu_edt_blog = u"Edit"
-        
+            
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese (Brazil)"
@@ -264,7 +274,7 @@ st_menu_nl = u"Dutch"
 st_menu_de = u"German"
 st_menu_ro = u"Romanian"
 st_menu_zh_cn = u"Simplified Chinese"
-
+        
 # Setting popup menu
 st_pmenu_lang = u"Language:"
 
@@ -295,6 +305,21 @@ wp_info_upld_post_cont = u"Uploading post contents..."
 wp_info_updt_post_list = u"Updating post list..."
 wp_info_cmt_approved = u"Comment approved."
 wp_info_cmt_del = u"Comment deleted."
-
+        
 # Wpwrapper list
 wp_list_uncategorized = u"Uncategorized"
+
+# Tags main menu
+tg_menu_updt = u"Update"
+tg_menu_clos = u"Close"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Tags"
+tg_info_downld_tags = u"Downloading tags..."
+tg_info_udt_tags_lst = u"Please, update the tag list."
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"Impossible to update tags."
+
+# Tags popup menu
+tg_pmenu_cats = u"Tags:"
