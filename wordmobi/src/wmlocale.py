@@ -123,8 +123,6 @@ class Default(object):
         self.loc.cm_pmenu_send_cmt = u"Send comment ?"
         self.loc.cm_pmenu_updt_cmt = u"Update comment ?"
         self.loc.cm_pmenu_comts = u"Comments:"
-        self.loc.pt_pmenu_tags = u"Tags:"
-        self.loc.pt_pmenu_cats = u"Categories:"
 
         # Posts main menu
         self.loc.pt_menu_updt = u"Update"
@@ -221,6 +219,8 @@ class Default(object):
         self.loc.pt_pmenu_images = u"Images"
         self.loc.pt_pmenu_scale_img = u"Scale this image?"
         self.loc.pt_pmenu_scale_factor = u"Scale factor (%)"
+        self.loc.pt_pmenu_tags = u"Tags:"
+        self.loc.pt_pmenu_cats = u"Categories:"
 
         # Settings info
         self.loc.st_info_blog_set = u"Blog settings"

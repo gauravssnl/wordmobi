@@ -138,6 +138,7 @@ pt_menu_cats = u"Categorías"
 pt_menu_imgs = u"Imágenes"
 pt_menu_pubs = u"Publicar"
 pt_menu_s2tw = u"Enviar a Twitter"
+pt_menu_tags = u"Etiquetas"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -155,6 +156,13 @@ pt_list_save_it = u"No, pero guardarlo"
 pt_list_yes_rem_pst = u"Sí, solo entrada remota"
 pt_list_yes_loc_ch = u"Sí, solo cambios locales"
 pt_list_yes_del_all = u"Sí, borrar todo"
+pt_list_new_tag = u"Crear"
+pt_list_sel_tag = u"Seleccionar"
+pt_list_rem_tag = u"Eliminar"
+pt_list_lst_tag = u"Lista"
+pt_list_sel_cat = u"Seleccionar"
+pt_list_rem_cat = u"Eliminar"
+pt_list_lst_cat = u"Lista"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Entradas"
@@ -204,6 +212,8 @@ pt_pmenu_post_title = u"Título de la entrada:"
 pt_pmenu_images = u"Imágenes"
 pt_pmenu_scale_img = u"¿Cambiar tamaño?"
 pt_pmenu_scale_factor = u"Porcentaje (%)"
+pt_pmenu_tags = u"Etiquetas:"
+pt_pmenu_cats = u"Categorías:"
 
 # Settings info
 st_info_blog_set = u"Configuración del Blog"
@@ -298,3 +308,18 @@ wp_info_cmt_del = u"Comentario eliminado."
         
 # Wpwrapper list
 wp_list_uncategorized = u"sin categoría"
+
+# Tags main menu
+tg_menu_updt = u"Actualizar"
+tg_menu_clos = u"Cerrar"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Etiquetas"
+tg_info_downld_tags = u"Descargando etiquetas..."
+tg_info_udt_tags_lst = u"Por favor, actualice la lista de etiquetas."
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"No es posible actualizar la lista de etiquetas."
+
+# Tags popup menu
+tg_pmenu_cats = u"Etiquetas:"

@@ -10,8 +10,8 @@ promo_phrase = u"<br><br>使用<a href=\"http://wordmobi.googlecode.com\">Wordmo
 # Wordmobi main menu
 wm_menu_post = u"文章"
 wm_menu_comm = u"评论"
-wm_menu_tags = u"标签"
 wm_menu_cats = u"分类"
+wm_menu_tags = u"标签"
 wm_menu_sets = u"设置"
 wm_menu_upgr = u"升级"
 wm_menu_abou = u"关于"
@@ -32,7 +32,7 @@ wm_info_downloading = u"正在下载..."
 wm_info_downld_ok = u"%s 已在 %s 更新中下载。请安装。"
 
 # Wordmobi popup menus
-wm_pmenu_download = "是否下载 %s ？"
+wm_pmenu_download = u"是否下载 %s ？"
 wm_pmenu_exit = u"是否退出？"
 
 # General messages
@@ -135,6 +135,7 @@ pt_menu_prvw = u"预览"
 pt_menu_titl = u"标题"
 pt_menu_cont = u"内容"
 pt_menu_cats = u"分类"
+pt_menu_tags = u"Tags"
 pt_menu_imgs = u"图片"
 pt_menu_pubs = u"发布"
 pt_menu_s2tw = u"发送至 Twitter"
@@ -155,6 +156,13 @@ pt_list_save_it = u"否，但是保存文章"
 pt_list_yes_rem_pst = u"是，立即删除文章"
 pt_list_yes_loc_ch = u"是，仅本地改动"
 pt_list_yes_del_all = u"是，全部删除"
+pt_list_new_tag = u"新建"
+pt_list_sel_tag = u"选择"
+pt_list_rem_tag = u"移除"
+pt_list_lst_tag = u"列表"
+pt_list_sel_cat = u"选择"
+pt_list_rem_cat = u"移除"
+pt_list_lst_cat = u"列表"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] 文章"
@@ -204,6 +212,8 @@ pt_pmenu_post_title = u"文章标题："
 pt_pmenu_images = u"图片"
 pt_pmenu_scale_img = u"是否缩放此图片？"
 pt_pmenu_scale_factor = u"缩放比例 (%)"
+pt_pmenu_tags = u"标签:"
+pt_pmenu_cats = u"分类:"
 
 # Settings info
 st_info_blog_set = u"Blog 设置"
@@ -298,3 +308,18 @@ wp_info_cmt_del = u"评论已删除。"
 
 # Wpwrapper list
 wp_list_uncategorized = u"未分类"
+
+# Tags main menu
+tg_menu_updt = u"更新"
+tg_menu_clos = u"关闭"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] 标签"
+tg_info_downld_tags = u"正在下载标签..."
+tg_info_udt_tags_lst = u"请更新标签列表."
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"无法更新列表."
+
+# Tags popup menu
+tg_pmenu_cats = u"标签:"
