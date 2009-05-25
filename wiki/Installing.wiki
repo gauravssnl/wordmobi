@@ -3,13 +3,13 @@
 
 = Installing wordmobi =
 
-*Wordmobi and Python must be installed in memory phone*. This is the only use case tested and users are reporting problems when Python is not installed on memory phone. 
+<font color="red">*Wordmobi and Python must be installed in memory phone*</font>. This is the only use case tested and users are reporting problems when Python is not installed on memory phone. 
 
-First install Python for your S60 mobile phone and appropriated Wordmobi version. I tested the current version only in S60 3rd edition phones (N95 and E71), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [https://garage.maemo.org/frs/download.php/5325/Python_1.9.2_3rdEd.sis PythonForS60 1.9.2]. If you running a feature pack 2 device, like Nokia XM 5800, install [https://garage.maemo.org/frs/download.php/5326/Python_1.9.2_3rdEdFP2.sis PythonForS60 FP2 1.9.2]
+First install Python for your S60 mobile phone. I tested the current version with S60 3rd and 5th edition phones (E71 and XM 5800), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [http://wordmobi.googlecode.com/files/Python_1.9.5.sis PythonForS60 1.9.5]. 
 
-After, install Wordmobi for Python [http://wordmobi.googlecode.com/files/Wordmobi-0.7.0.sis 1.4.5] or for [http://wordmobi.googlecode.com/files/Wordmobi-0.7.0-py19.sis 1.9.2].
+After, install [http://wordmobi.googlecode.com/files/Wordmobi-0.8.1.sis Wordmobi 0.8.1 for Python 1.4.5] or [http://wordmobi.googlecode.com/files/Wordmobi-0.8.1-py19.sis Wordmobi 0.8.1 for Python 1.9.5].
 
-There requirements for Wordpress as well. Comments will work only with wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
+There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
 Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required). The following directories are used:
 
@@ -19,21 +19,23 @@ Wordmobi saves all relevant data in memory card. So, do not forget to insert one
 
 = Setup =
 
-Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. It is important to fill up all fields, like your email and full name. They will be used when you add a new comment. Proxy is supported, even if using  authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
+Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. Proxy is supported, even if using  authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
 
-Wordmobi was designed to support any domain running wordpress with compatible xmlrpc API. In fact, the only think Wormobi needs is the file xmlrpc.php. It uses the url you set (for instance, http://www.mydomain.com) and add 'xmlrpc.php' to it, so http://www.mydomain.com/xmlrpc.php is the key for the access. Or, if you have your blog running inside some subdirectory, like /my/blog, use http://www.mydomain.com/my/blog. Do not put any trailing slash as well.
+Wordmobi was designed to support any domain running wordpress with compatible XMLRPC API. <font color="red">*Just set your blog address*</font> (for instance, http://www.mydomain.com or http://myblog.wordpress.com). If you have your blog running inside some subdirectory, like /my/blog, use http://www.mydomain.com/my/blog. <font color="red">*Do not put any trailing slash and do not put xmlrpc.php at the end*</font> (they are automatically removed and just added when accessing your blog). 
 
-Usernames are case sensitive for wordpress, so take care when typing your username. Check if all fields does not have any trailer space.
+However, if your blog has a customized URL for XMLRPC API (not ending with xmlrpc.php), this URL will not be replaced. Just fill the blog address with you customized URL, including the php file name.
+
+<font color="red">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
 
 Also enable installation of any application in your mobile phone, not only the certificated ones. In Settings->Applications->App. Manager allow all applications and disable certification checks.
 
-I read somewhere that there is an option in wordpress for activating xmlrpc. Check 
+<font color="red">*It is necessary to activate xmlrpc support in wordpress for people running blogs in their own domains*</font>. Check 
 
 http://blogname/wp-admin/options-writing.php
 
 for enabling it.
 
-I couldn´t see any, however, in my wordpress version. See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]
+See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]. Blog running in wordpress domains have this already set.
 
 
 [http://media.share.ovi.com/m1/medium/0516/3fe35acf02a441e6884d01dde82c33b9.jpg]
