@@ -12,6 +12,8 @@ import key_codes
 from math import ceil, floor
 #import time
 
+__all__ = [ "_Listbox" ]
+ 
 class CanvasListBox(Canvas):
     """ This classes creates a listbox with variable row size on canvas.
     """
@@ -60,7 +62,9 @@ class CanvasListBox(Canvas):
                           'scrollbar_width':20,
                           'margins':(2,2,2,2),
                           'font_name':'dense',
-                          'font_size':24,
+                          'font_size':22,
+                          'font_name_header':'dense',
+                          'font_size_header':28,
                           'font_color':(255,255,255),
                           'font_fill_color':(0,0,0),
                           'line_space': 0,
@@ -94,7 +98,11 @@ class CanvasListBox(Canvas):
         f=(self.attrs['font_name'],self.attrs['font_size'],graphics.FONT_ANTIALIAS)
         fh = -(graphics.Image.new((1,1)).measure_text(u"[qg_|^y",font=f)[0][1])
         self.attrs['font_height'] = fh
-        self.attrs['line_space'] = max(3,fh/4,self.attrs['line_space'])
+        
+        f=(self.attrs['font_name_header'],self.attrs['font_size_header'],graphics.FONT_ANTIALIAS)
+        fh = -(graphics.Image.new((1,1)).measure_text(u"[qg_|^y",font=f)[0][1])
+        self.attrs['font_height_header'] = fh
+        self.attrs['line_space'] = max(3,fh/2,self.attrs['line_space'])
         
         # translating to origin (0,0)
         self.position = (0,
@@ -215,7 +223,8 @@ class CanvasListBox(Canvas):
     def redraw_items(self):
         """ Redraw current visible listbox items
         """
-        f=(self.attrs['font_name'],self.attrs['font_size'],graphics.FONT_ANTIALIAS)
+        fh=(self.attrs['font_name_header'],self.attrs['font_size_header'],graphics.FONT_ANTIALIAS)
+        fn=(self.attrs['font_name'],self.attrs['font_size'],graphics.FONT_ANTIALIAS)
         xa = self.lstbox_xa
         xb = self.lstbox_xb
         y = self.lstbox_ya + self.attrs['font_height']
@@ -232,7 +241,7 @@ class CanvasListBox(Canvas):
                 pos = (self.selbox_xa,ysa-int(ceil(self.attrs['line_space']/2)),
                        self.selbox_xb,ysb + 1 -int(floor(self.attrs['line_space']/2)))
                 outline = self.attrs['selection_border_color']
-                fill = fill = self.attrs['selection_fill_color']
+                fill = self.attrs['selection_fill_color']
             elif n % 2:
                 pos = (self.selbox_xa,ysa,self.selbox_xb,ysb)
                 outline = self.attrs['odd_fill_color']
@@ -242,7 +251,7 @@ class CanvasListBox(Canvas):
                 outline = self.attrs['even_fill_color']
                 fill = self.attrs['even_fill_color']
             self._screen.rectangle(pos,outline = outline,fill = fill)
-            # degrade effect for seelection
+            # degrade effect for selection
             if n == self._current_sel:
                 dgdc = self.attrs['selection_fill_light_color']
                 dgdp = (pos[0],pos[1],pos[2],pos[3] - (pos[3]-pos[1])/2)
@@ -263,17 +272,18 @@ class CanvasListBox(Canvas):
                         row['image'].text((1,self.attrs['image_size'][1]/2+self.attrs['font_height']/2),
                                           u"X",
                                           fill=font_color,
-                                          font=f)
+                                          font=fh)
                 self._screen.blit(row['image'],
                                   target=(self.images_xa,y-self.attrs['font_height']-1),
                                   source=((0,0),self.attrs['image_size']))
             #draw text
             yh = 0
-            for line in row['text']:
-                self._screen.text((xa,y+yh),
-                                  line,fill=font_color,
-                                  font=f)
+            self._screen.text((xa,y+yh),row['text'][0],fill=font_color,font=fh)
+            yh += self.attrs['font_height_header'] + self.attrs['line_space']
+            if len(row['text']) > 1:
+                self._screen.text((xa,y+yh),row['text'][1],fill=font_color,font=fn)
                 yh += self.attrs['font_height'] + self.attrs['line_space']
+
             y += row['height']
             n += 1
 
@@ -362,22 +372,34 @@ class CanvasListBox(Canvas):
             # num_line: len of array
             # height: how much height is necessary for displaying
             #           this text including line space
-            if len(item) == 2:
-                item = "\n".join(item)
-            elif len(item) == 3:
-                item = "\n".join(item[:2])
+            line2 = None
+            if isinstance(item,list) or isinstance(item,tuple):
+                line1 = item[0]
+                if len(item) > 1:
+                    line2 = item[1]
+            else:
+                line1 = item
+                
             reg = {}
-            lines = item.split(u'\n')
             reg['text'] = []
             reg['num_lines'] = 0
             reg['height'] = 0
-            for line in lines:
-                splt_lines = self.split_text(line,width)
-                reg['text'] += splt_lines
-                num_lines = len(splt_lines)
-                reg['num_lines'] += num_lines
-                reg['height'] += num_lines*(self.attrs['font_height'] + \
-                                            self.attrs['line_space'])
+            
+            f = (self.attrs['font_name_header'],
+                 self.attrs['font_size_header'],graphics.FONT_ANTIALIAS)
+            splt_lines = self.split_text(line1,f,width)
+            reg['text'] += splt_lines[0]
+            reg['num_lines'] += 1
+            reg['height'] += (self.attrs['font_height_header'] + self.attrs['line_space'])
+
+            if line2:
+                f = (self.attrs['font_name'],
+                     self.attrs['font_size'],graphics.FONT_ANTIALIAS)
+                splt_lines = self.split_text(line2,f,width)
+                reg['text'] += splt_lines[0]
+                reg['num_lines'] += 1
+                reg['height'] += (self.attrs['font_height'] + self.attrs['line_space'])
+            
             reg['file'] = None
             if have_images:
                 if self.attrs['images'][n]:
@@ -388,13 +410,12 @@ class CanvasListBox(Canvas):
             self.lstbox_items.append(reg)
             n += 1
    
-    def split_text(self, text, width):
+    def split_text(self, text, f, width):
         """ modified version of TextRenderer.chop for splitting text
             http://discussion.forum.nokia.com/forum/showthread.php?t=124666
         """
         lines = []
         text_left = text
-        f=(self.attrs['font_name'],self.attrs['font_size'],graphics.FONT_ANTIALIAS)
         while len(text_left) > 0:
             bounding, to_right, fits = self.measure_text(text_left,
                                                          font=f,
@@ -452,119 +473,3 @@ class _Listbox(CanvasListBox):
         attrs = self.get_config()
         attrs['items'] = items
         self.reconfigure(attrs)
-
-class ExplorerDemo(object):
-    """ Demo explorer class
-    """
-    def __init__(self,init_dir = ""):       
-        self.lock = e32.Ao_lock()
-        app.title = u"Explorer demo"
-        app.screen = "full"
-        self.show_images = False        
-        app.menu = [(u"Hide images", lambda: self.images_menu(False)),
-                    (u"About", self.about),
-                    (u"Quit", self.close_app)]
-        self.cur_dir = unicode(init_dir)
-        if not os.path.exists(self.cur_dir):
-            self.cur_dir = u""
-        self.fill_items()
-        #pos = (0,0) + sysinfo.display_pixels()
-        self.listbox = CanvasListBox(items=self.items,
-                                     cbk=self.item_selected,
-                                     images=self.images,
-                                     position="auto",
-                                     margins=[6,2,2,2],
-                                     selection_fill_color=(0,43,34),
-                                     selection_border_color=(0,43,34),
-                                     odd_fill_color=(0,0,0),
-                                     even_fill_color=(0,0,0),
-                                     image_size=(44,44),
-                                     title_font_color=(255,255,102),
-                                     title_fill_color=(0,43,34),
-                                     title=self.cur_dir)
-        
-        app.body = self.listbox
-        self.lock.wait()
-
-                          
-    def fill_items(self):
-        if self.cur_dir == u"":
-            self.items = [ unicode(d + "\\") for d in e32.drive_list() ]
-            self.images = [None for d in self.items]
-        else:
-            entries = [ e.decode('utf-8')
-                        for e in os.listdir( self.cur_dir.encode('utf-8') ) ]
-            entries.sort()
-            d = self.cur_dir
-            dirs = []
-            files = []
-            dimages = []
-            fimages = []
-            for e in entries:
-                f = os.path.join(d,e)
-                if os.path.isdir(f.encode('utf-8')):
-                    dirs.append(e.upper())
-                    dimages.append(None)
-                elif os.path.isfile(f.encode('utf-8')):
-                    desc = e.lower() + "\n"
-                    desc += "%d bytes" % os.path.getsize(f)
-                    files.append(desc)
-                    if f.endswith(".jpg") or f.endswith(".png") or f.endswith(".gif"):
-                        fimages.append(f)
-                    else:
-                        fimages.append(None)
-            dirs.insert(0, u".." )
-            dimages.insert(0,None)
-            self.items = dirs + files
-            self.images = dimages + fimages       
-
-    def images_menu(self,val):
-        self.show_images = val
-        menu = []
-        if val:
-            menu += [(u"Hide images", lambda: self.images_menu(False))]
-        else:
-            menu += [(u"Show images", lambda: self.images_menu(True))]
-        menu += [(u"About", self.about),
-                 (u"Quit", self.close_app)]
-        app.menu = menu
-        self.update_list()
-                    
-    def item_selected(self):
-        item = self.listbox.current()
-        f = self.items[item]
-        self.update_list(f)
-
-    def update_list(self,f=u""):
-        if f:
-            d = os.path.abspath( os.path.join(self.cur_dir,f) )
-        else:
-            d = self.cur_dir
-        if os.path.isdir(d.encode('utf-8')):
-            if f == u".." and len(self.cur_dir) == 3:
-                self.cur_dir = u""
-            else:
-                self.cur_dir = d 
-            self.fill_items()
-            attrs = self.listbox.get_config()
-            attrs['items'] = self.items
-            attrs['title'] = u" " + self.cur_dir
-            if self.show_images:
-                attrs['images'] = self.images
-                attrs['image_size'] = (44,44)
-            else:
-                attrs['images'] = []
-                
-            self.listbox.reconfigure(attrs)
-
-    def about(self):
-        note(u"Explorer demo by Marcelo Barros (marcelobarrosalmeida@gmail.com)","info")
-        
-    def close_app(self):
-        self.lock.signal()
-        app.set_exit()
-
-if __name__ == "__main__":
-    ExplorerDemo()
-
-

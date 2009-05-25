@@ -7,13 +7,14 @@ from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
 from wmglobals import TOUCH_ENABLED
-    
+from canvaslistbox import _Listbox
+
 __all__ = [ "Tags" ]
 
 class Tags(Dialog):
     def __init__(self,cbk):
         self.last_idx = 0
-        body = Listbox([u""], self.check_popup_menu)
+        body = _Listbox([u""], self.check_popup_menu)
         self.menu_items = [(LABELS.loc.tg_menu_updt, self.update)]
         menu = self.menu_items + [(LABELS.loc.tg_menu_clos, self.close_app)]
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_tags, body, menu)
