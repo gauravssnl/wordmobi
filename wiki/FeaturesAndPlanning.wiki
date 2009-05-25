@@ -20,7 +20,7 @@
  * Support for Python 1.4.x and 1.9.x
  * multiples wordpress accounts supported
  * percentage size when adding images
- # TAGs support
+ * TAGs support
 
 = Partially implemented =
 
@@ -57,3 +57,4 @@
  # custom entries for html formatting.I think it is possible to add this option and make the blogger life easier with all their tags already coded in some "custom" menu.
  # multiple twitter accounts
  # support to "more" wordpress tag
+ # better camera support when taking photos
