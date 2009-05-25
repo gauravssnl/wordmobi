@@ -20,6 +20,7 @@
  * Support for Python 1.4.x and 1.9.x
  * multiples wordpress accounts supported
  * percentage size when adding images
+ # TAGs support
 
 = Partially implemented =
 
@@ -27,7 +28,6 @@
 
 = Next feature to be implemented =
 
- # TAGs support
  # access point persistence
  # "test connection" option in access point selection/proxy/twitter setup
  # Offline comments
@@ -53,6 +53,7 @@
  # add title in html (post preview)
  # better exception handler, providing more elucidative messages
  # retry option when uploading images
- # video support
+ # video support (Add support to Qik video)
  # custom entries for html formatting.I think it is possible to add this option and make the blogger life easier with all their tags already coded in some "custom" menu.
  # multiple twitter accounts
+ # support to "more" wordpress tag
