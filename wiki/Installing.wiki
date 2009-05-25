@@ -3,7 +3,7 @@
 
 = Installing wordmobi =
 
-<font color="red">*Wordmobi and Python must be installed in memory phone*</font>. This is the only use case tested and users are reporting problems when Python is not installed on memory phone. 
+<font color="blue">*Wordmobi and Python must be installed in memory phone*</font>. This is the only use case tested and users are reporting problems when Python is not installed on memory phone. 
 
 First install Python for your S60 mobile phone. I tested the current version with S60 3rd and 5th edition phones (E71 and XM 5800), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [http://wordmobi.googlecode.com/files/Python_1.9.5.sis PythonForS60 1.9.5]. 
 
@@ -11,7 +11,7 @@ After, install [http://wordmobi.googlecode.com/files/Wordmobi-0.8.1.sis Wordmobi
 
 There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
-Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required). The following directories are used:
+<font color="red">Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required)</font>. The following directories are used:
 
  * e:\wordmobi => settings database
  * e:\wordmobi\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
