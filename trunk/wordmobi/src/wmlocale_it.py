@@ -19,7 +19,6 @@ wm_menu_exit = u"Esci"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Non ancora supportato."
-wm_err_no_proxy = u"Autenticazione proxy non supportata per questa feature."
 wm_err_upd_page = u"Impossibile accedere alla pagina di aggiornamento %s"
 wm_err_downld_fail = u"Impossibile scaricare %s"
 wm_err_upd_info = u"Informazioni di aggiornamento mancanti."
@@ -136,6 +135,7 @@ pt_menu_prvw = u"Anteprima"
 pt_menu_titl = u"Titolo"
 pt_menu_cont = u"Contenuto"
 pt_menu_cats = u"Categorie"
+pt_menu_tags = u"Tag"
 pt_menu_imgs = u"Immagini"
 pt_menu_pubs = u"Pubblica"
 pt_menu_s2tw = u"Invia a Twitter"
@@ -156,6 +156,13 @@ pt_list_save_it = u"No, ma salvalo"
 pt_list_yes_rem_pst = u"Si, solo articolo remoto"
 pt_list_yes_loc_ch = u"Si, solo le modifiche locali"
 pt_list_yes_del_all = u"Si, cancella tutto"
+pt_list_new_tag = u"Crea"
+pt_list_sel_tag = u"Seleziona"
+pt_list_rem_tag = u"Rimuovi"
+pt_list_lst_tag = u"Elenca"
+pt_list_sel_cat = u"Seleziona"
+pt_list_rem_cat = u"Rimuovi"
+pt_list_lst_cat = u"Elenca"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Articoli"
@@ -203,11 +210,16 @@ pt_pmenu_linkyt_url = u"URL Youtube:"
 pt_pmenu_send_post = u"Pubblicare post ?"
 pt_pmenu_post_title = u"Titolo del post:"
 pt_pmenu_images = u"Immagini"
+pt_pmenu_scale_img = u"Scala di questa immagine?"
+pt_pmenu_scale_factor = u"Fattore di scala (%)"
+pt_pmenu_tags = u"Tag:"
+pt_pmenu_cats = u"Categorie:"
 
 # Settings info
 st_info_blog_set = u"Impostazioni blog"
 st_info_proxy_set = u"Impostazioni proxy"
 st_info_twitter_set = u"Impostazioni Twitter"
+st_info_blog_acc_set = u"Impostazioni blog di conto"
 
 # Settings error
 st_err_no_access_point = u"Impossibile trovare punti di accesso."
@@ -291,3 +303,18 @@ wp_info_cmt_del = u"Commento cancellato."
 
 # Wpwrapper list
 wp_list_uncategorized = u"Senza categoria"
+
+# Tags main menu
+tg_menu_updt = u"Aggiorna"
+tg_menu_clos = u"Chiudi"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Tag"
+tg_info_downld_tags = u"Scaricamento tag..."
+tg_info_udt_tags_lst = u"Aggiornare la lista di tag."
+
+# Tags error messages  
+tg_err_cant_updt_tags = u"Impossibile aggiornare i tag."
+
+# Tags popup menu
+tg_pmenu_cats = u"Tag:"

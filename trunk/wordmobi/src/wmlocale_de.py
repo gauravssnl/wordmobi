@@ -10,8 +10,8 @@ promo_phrase = u"<br><br>geschrieben mit <a href=\"http://wordmobi.googlecode.co
 # Wordmobi main menu
 wm_menu_post = u"Artikel"
 wm_menu_comm = u"Kommentare"
-wm_menu_tags = u"Tags"
 wm_menu_cats = u"Kategorien"
+wm_menu_tags = u"Tags"
 wm_menu_sets = u"Einstellungen"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"Über"
@@ -19,7 +19,6 @@ wm_menu_exit = u"Ende"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Nicht unterstützt."
-wm_err_no_proxy = u"Proxy Authentifizierung nicht unterstützt."
 wm_err_upd_page = u"Kein Zugriff auf die Update-Seite %s"
 wm_err_downld_fail = u"Download nicht möglich %s"
 wm_err_upd_info = u"Upgrade Informationen fehlen."
@@ -136,6 +135,7 @@ pt_menu_prvw = u"Vorschau"
 pt_menu_titl = u"Titel"
 pt_menu_cont = u"Inhalte"
 pt_menu_cats = u"Kategorien"
+pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Bilder"
 pt_menu_pubs = u"Veröffentlichen"
 pt_menu_s2tw = u"Senden an Twitter"
@@ -156,6 +156,13 @@ pt_list_save_it = u"Nein, aber speichern"
 pt_list_yes_rem_pst = u"Ja, nur veröffentl. Artikel"
 pt_list_yes_loc_ch = u"Ja, nur lokale Änderungen"
 pt_list_yes_del_all = u"Ja, alles löschen"
+pt_list_new_tag = u"Erstellen"
+pt_list_sel_tag = u"Auswählen"
+pt_list_rem_tag = u"Entfernen"
+pt_list_lst_tag = u"Liste"
+pt_list_sel_cat = u"Auswählen"
+pt_list_rem_cat = u"Entfernen"
+pt_list_lst_cat = u"Liste"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Artikel"
@@ -203,11 +210,16 @@ pt_pmenu_linkyt_url = u"Youtube-URL:"
 pt_pmenu_send_post = u"Artikel veröffentlichen ?"
 pt_pmenu_post_title = u"Artikel-Überschrift:"
 pt_pmenu_images = u"Bilder"
+pt_pmenu_scale_img = u"Maßstab dieses Bild?"
+pt_pmenu_scale_factor = u"Skalierungsfaktor (%)"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Kategorien:"
 
 # Settings info
 st_info_blog_set = u"Blog Einstellungen"
 st_info_proxy_set = u"Proxy Einstellungen"
 st_info_twitter_set = u"Twitter Einstellungen"
+st_info_blog_acc_set = u"Blog-Konto-Einstellungen"
 
 # Settings error
 st_err_no_access_point = u"Zugangspunkt nicht gefunden."
@@ -229,6 +241,7 @@ st_menu_proxy = u"Proxy"
 st_menu_access_point = u"Zugriffspunkt"
 st_menu_lang = u"Sprache"
 st_menu_twitter = u"Twitter"
+st_menu_blog_acc = u"Blog-Name:"
 st_menu_blog_url = u"Blog-URL:"
 st_menu_blog_usr = u"Benutzername:"
 st_menu_blog_pwd = u"Passwort:"
@@ -246,6 +259,10 @@ st_menu_proxy_off = u"Deaktiviert"
 st_menu_twitter_ena = u"Sende an Twitter"
 st_menu_twitter_on = u"Ja"
 st_menu_twitter_off = u"Nein"
+st_menu_new_blog = u"Neu"
+st_menu_cpy_blog = u"Kopieren"
+st_menu_del_blog = u"Löschen"
+st_menu_edt_blog = u"Bearbeiten"
 
 # languages support
 st_menu_en_us = u"English (USA)"
@@ -291,3 +308,18 @@ wp_info_cmt_del = u"Kommentar gelöscht."
 
 # Wpwrapper list
 wp_list_uncategorized = u"Allgemein"
+
+# Tags main menu
+tg_menu_updt = u"Update"
+tg_menu_clos = u"Schließen"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Tags"
+tg_info_downld_tags = u"Tags herunterladen..."
+tg_info_udt_tags_lst = u"Bitte Tag-Liste aktualisieren"
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"Tags können nicht aktualisiert werden."
+
+# Tags popup menu
+tg_pmenu_cats = u"Tags:"

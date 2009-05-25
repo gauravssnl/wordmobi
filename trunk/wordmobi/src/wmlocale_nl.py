@@ -10,8 +10,8 @@ promo_phrase = u"<br><br>Gepost met <a href=\"http://wordmobi.googlecode.com\">W
 # Wordmobi main menu
 wm_menu_post = u"Berichten"
 wm_menu_comm = u"Reacties"
-wm_menu_tags = u"Tags"
 wm_menu_cats = u"Categorieën"
+wm_menu_tags = u"Tags"
 wm_menu_sets = u"Instellingen"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"Over"
@@ -135,6 +135,7 @@ pt_menu_prvw = u"Preview"
 pt_menu_titl = u"Titel"
 pt_menu_cont = u"Inhoud"
 pt_menu_cats = u"Categorieën"
+pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Afbeeldingen"
 pt_menu_pubs = u"Publiceren"
 pt_menu_s2tw = u"Naar Twitter verstsuren"
@@ -155,6 +156,13 @@ pt_list_save_it = u"Nee, maar sla op"
 pt_list_yes_rem_pst = u"Ja, alleen bericht"
 pt_list_yes_loc_ch = u"Ja, alleen lokale wijzigingen"
 pt_list_yes_del_all = u"Ja, verwijder alles"
+pt_list_new_tag = u"Nieuw"
+pt_list_sel_tag = u"Seleceteer"
+pt_list_rem_tag = u"Verwijder"
+pt_list_lst_tag = u"Lijst"
+pt_list_sel_cat = u"Selecteer"
+pt_list_rem_cat = u"Verwijder"
+pt_list_lst_cat = u"Lijst"
 
 # Posts info
 pt_info_pst_pos = u"[%d/%d] Berichten"
@@ -204,6 +212,8 @@ pt_pmenu_post_title = u"Bericht titel:"
 pt_pmenu_images = u"Afbeeldingen"
 pt_pmenu_scale_img = u"Deze afbeelding schalen?"
 pt_pmenu_scale_factor = u"Schalings factor (%)"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Categorieën:"
 
 # Settings info
 st_info_blog_set = u"Blog instellingen"
@@ -286,7 +296,7 @@ wp_err_cant_updt_cmt = u"Kan reactie niet bijwerken. Probeer opnieuw."
 wp_err_cant_updt_cmt_list = u"Kan reactielijst neit bijwerken. Probeer opnieuw."
 wp_err_cant_pub_cmt = u"Kan reactie niet publiceren. Probeer opnieuw."
 wp_err_cant_appr_cmt = u"Kan reactie niet goedkeuren. Probeer opnieuw."
-wp_err_cant_del_cmt = u"Kann reactie niet verwijderen. Probeer opnieuw."
+wp_err_cant_del_cmt = u"Kan reactie niet verwijderen. Probeer opnieuw."
 
 # Wpwrapper info
 wp_info_cat_del = u"Categorie %s verwijderd."
@@ -298,3 +308,18 @@ wp_info_cmt_del = u"Reactie verwijderd."
 
 # Wpwrapper list
 wp_list_uncategorized = u"Ongecategoriseerd"
+
+# Tags main menu
+tg_menu_updt = u"Bijwerken"
+tg_menu_clos = u"Sluiten"
+
+# Tags info messages
+tg_info_tag_pos = u"[%d/%d] Tags"
+tg_info_downld_tags = u"Tags downloaden..."
+tg_info_udt_tags_lst = u"Werk a.u.b. de tag-lijst bij."
+
+# Tags error messages        
+tg_err_cant_updt_tags = u"Fout bij bijwerken tags."
+
+# Tags popup menu
+tg_pmenu_cats = u"Tags:"

@@ -116,8 +116,6 @@ cm_pmenu_del_cmt = u"Apagar comentário ?"
 cm_pmenu_send_cmt = u"Enviar comentário ?"
 cm_pmenu_updt_cmt = u"Atualizar comentário ?"
 cm_pmenu_comts = u"Comentários:"
-pt_pmenu_tags = u"Tags:"
-pt_pmenu_cats = u"Categorieas:"
 
 # Posts main menu
 pt_menu_updt = u"Atualizar"
@@ -214,6 +212,8 @@ pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
 pt_pmenu_scale_img = u"Reduzir esta imagem?"
 pt_pmenu_scale_factor = u"Fator de escala (%)"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Categorias:"
 
 # Settings info
 st_info_blog_set = u"Config. do blog"
@@ -308,6 +308,7 @@ wp_info_cmt_del = u"Comentário apagado."
         
 # Wpwrapper list
 wp_list_uncategorized = u"Sem categoria"
+
 # Tags main menu
 tg_menu_updt = u"Atualizar"
 tg_menu_clos = u"Sair"

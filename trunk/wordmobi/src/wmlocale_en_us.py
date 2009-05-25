@@ -116,8 +116,6 @@ cm_pmenu_del_cmt = u"Delete comment ?"
 cm_pmenu_send_cmt = u"Send comment ?"
 cm_pmenu_updt_cmt = u"Update comment ?"
 cm_pmenu_comts = u"Comments:"
-pt_pmenu_tags = u"Tags:"
-pt_pmenu_cats = u"Categories:"
 
 # Posts main menu
 pt_menu_updt = u"Update"
@@ -214,6 +212,8 @@ pt_pmenu_post_title = u"Post title:"
 pt_pmenu_images = u"Images"
 pt_pmenu_scale_img = u"Scale this image?"
 pt_pmenu_scale_factor = u"Scale factor (%)"
+pt_pmenu_tags = u"Tags:"
+pt_pmenu_cats = u"Categories:"
 
 # Settings info
 st_info_blog_set = u"Blog settings"
