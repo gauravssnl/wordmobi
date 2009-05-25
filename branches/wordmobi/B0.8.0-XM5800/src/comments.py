@@ -10,6 +10,7 @@ from window import Dialog
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
+from canvaslistbox import _Listbox
 
 __all__ = [ "NewComment", "EditComment", "Comments" ]
 
@@ -53,7 +54,7 @@ class NewComment(Dialog):
         self.contents = contents
         self.last_idx = 1
         
-        body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
+        body = _Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ ( LABELS.loc.cm_menu_canc, self.cancel_app ) ]
         Dialog.__init__(self, cbk, LABELS.loc.cm_info_new_cmt, body, menu)
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
@@ -156,7 +157,7 @@ class Comments(Dialog):
                              LABELS.loc.cm_list_unmoderated:"hold" }
         self.last_idx = 0
         self.headlines = []
-        body = Listbox( [ (u"", u"") ], self.check_popup_menu )
+        body = _Listbox( [ (u"", u"") ], self.check_popup_menu )
         self.menu_items = [( LABELS.loc.cm_menu_updt, self.update ),
                            ( LABELS.loc.cm_menu_view, self.contents ),
                            ( LABELS.loc.cm_menu_dele, self.delete ),
