@@ -206,7 +206,30 @@ class PostContents(Dialog):
                                          "CLOSE_TAG":u"",
                                          "OPEN_FUNC":lambda: self.insert_del(False),
                                          "CLOSE_FUNC":lambda: self.insert_del(True) }
-
+        self.text_snippets["H1"]     = { "MENU_NAME":u"H1",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"<h1>",
+                                         "CLOSE_TAG":u"</h1>",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }
+        self.text_snippets["H2"]     = { "MENU_NAME":u"H2",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"<h2>",
+                                         "CLOSE_TAG":u"</h2>",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }
+        self.text_snippets["H3"]     = { "MENU_NAME":u"H3",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"<h3>",
+                                         "CLOSE_TAG":u"</h3>",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }
+        self.text_snippets["H4"]     = { "MENU_NAME":u"H4",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"<h4>",
+                                         "CLOSE_TAG":u"</h4>",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }        
     def html_to_text(self,msg):
         msg = msg.replace(u"<br>",PostContents.PARAGRAPH_SEPARATOR)
         msg = msg.replace(u"<br/>",PostContents.PARAGRAPH_SEPARATOR)
@@ -253,10 +276,14 @@ class PostContents(Dialog):
         self.menu = [(LABELS.loc.pt_menu_text,(
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
+                       (gen_label("H1"), gen_ckb("H1")),
+                       (gen_label("H2"), gen_ckb("H2")),
+                       (gen_label("H3"), gen_ckb("H3")),
+                       (gen_label("H4"), gen_ckb("H4")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
                        (gen_label("CODE"), gen_ckb("CODE")),
                        (gen_label("SPACE"), gen_ckb("SPACE")))
-                       #(gen_label("MORE"), gen_ckb("MORE"))) # TODO need more tests
+                       #(gen_label("MORE"), gen_ckb("MORE")))
                       ),
                      (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
