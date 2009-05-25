@@ -9,7 +9,7 @@
   * 1.9.5 support added (touch devices like XM 5800 now working)
   
 = 0.8.0 - 2009/05/25 =
-  * Same changelog of 0.8.1 but only for Python 1.9.4. No sis were generated.
+  * Same changelog of 0.8.1 but only for Python 1.9.4. No sis generated.
   
 = 0.7.0 - 2009/04/04 =
  * Multi wordpress accounts support
