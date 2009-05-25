@@ -6,6 +6,7 @@
   * Tags support added.
   * Recent comments for all post now are fetched with just one command.
   * HTML tags for H1, H2, H3 and H4 added to post edit dialog.
+  * It was necessary to remove listbox icons for a while due to some PyS60 1.9.5 incompatibility. We must have them working again soon.
   * 1.9.5 support added (touch devices like XM 5800 now working)
   
 = 0.8.0 - 2009/05/25 =
