@@ -576,8 +576,8 @@ class Window(object):
         " Update the application itens (menu, body and exit handler) "
         if self.tabbed:
             app.set_tabs([b[0] for b in self.bodies],self.tab_handler)
-            self.tab_handler(self.last_tab)
             app.activate_tab(self.last_tab)
+            self.tab_handler(self.last_tab)
         else:
             app.set_tabs([], None)
             app.menu = self.global_menu
