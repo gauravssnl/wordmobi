@@ -273,7 +273,7 @@ class PostContents(Dialog):
                 else:
                     return self.text_snippets[menu]["CLOSE_FUNC"]                
                     
-        self.menu = [(LABELS.loc.pt_menu_text,(
+        self.global_menu = [(LABELS.loc.pt_menu_text,(
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
                        (gen_label("H1"), gen_ckb("H1")),
