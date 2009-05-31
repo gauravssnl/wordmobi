@@ -142,8 +142,8 @@ class WordMobi(Application):
         return True
 
     def _update_menu(self):
-        self.menu = map(lambda a,b: (a,b), self._get_menu_labels(), self._get_menu_functions())
-        self.menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
+        self.global_menu = map(lambda a,b: (a,b), self._get_menu_labels(), self._get_menu_functions())
+        self.global_menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
             
     def settings_cbk(self):
         if self.dlg.lang_changed:
