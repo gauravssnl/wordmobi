@@ -40,10 +40,10 @@ class BlogManager(Dialog):
     def __init__(self,cbk,title):
         # TODO Better icons or remove them
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        icons = [Icon(mif,16392,16392),
-                 Icon(mif,16390,16390),
-                 Icon(mif,16388,16388),
-                 Icon(mif,16386,16386),
+        icons = [Icon(mif,8,8),
+                 Icon(mif,6,6),
+                 Icon(mif,4,4),
+                 Icon(mif,2,2),
                  ]
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
@@ -57,8 +57,8 @@ class BlogManager(Dialog):
                  ]
         menu = map(lambda a,b: (a,b), menu_labels, funcs)
         menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
-        #items = map(lambda a,b: (a,u"",b), menu_labels, icons)
-        items = map(lambda a: (a,u""), menu_labels)  
+        items = map(lambda a,b: (a,u"",b), menu_labels, icons)
+        #items = map(lambda a: (a,u""), menu_labels)  
         Dialog.__init__(self,cbk,title,Listbox(items,self.update_value),menu)
 
         self.dlg = None
@@ -103,10 +103,10 @@ class WordMobi(Application):
         app.screen='normal' # TODO check all app.xyz use
         LABELS.set_locale(DB["language"])
         mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        self.wp_icon = Icon(mif,16398,16398)
+        self.wp_icon = Icon(mif,14,14)
         self.blogs = json.loads(DB["blog_list"])
-        #items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
-        items = [ (b["account"],b["blog"]) for b in self.blogs ]
+        items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
+        #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)] 
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
         self._update_menu()
@@ -149,8 +149,8 @@ class WordMobi(Application):
         if self.dlg.lang_changed:
             self._update_menu()
         self.blogs = json.loads(DB["blog_list"])
-        #items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
-        items = [ (b["account"],b["blog"]) for b in self.blogs ]
+        items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
+        #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         self.body.set_list(items,0)
         self.refresh()
         return True
