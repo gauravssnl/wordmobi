@@ -443,6 +443,55 @@ if __name__ == "__main__":
     app.run()
 </code>
 
+== Tabbed dialogs ==
+
+Tabbed dialogs are supporting as well. In this case, the body must be replace
+by a list of bodies with the following format:
+
+  [(tab_text, body, menu),(tab_text, body, menu),...]
+            
+where:
+    tab_text: unicode string used in tab
+    body: a valid body (Listbox, Text or Canvas)
+    menu: menu for that body
+
+The tabs will be created and body's menu will be merged with global menu.
+
+<code python>
+# -*- coding: utf-8 -*-
+#
+# Marcelo Barros de Almeida
+# marcelobarrosalmeida (at) gmail.com
+#
+from window import Application
+from window import Dialog
+from appuifw import *
+
+def msg(m):print m
+def cbk(): print "cbk"
+def my_cbk():
+    global dlg
+    dlg.refresh()
+    
+def lb_dlg():
+    my_dlg = Dialog(my_cbk,u"DLG",Listbox([u"1",u"2",u"3"]))
+    my_dlg.run()
+    
+a=Listbox([u"a",u"b",u"c"],lb_dlg)
+b=Canvas()
+c=Text(u"text")
+
+ma=[(u"menu a",lambda:msg("menu a"))]
+mb=[(u"menu b",lambda:msg("menu b"))]
+mc=[(u"menu c",lambda:msg("menu c"))]
+
+mg=[(u"global",lambda:msg("global"))]
+
+dlg=Application(u"Demo tab",[(u"aaa",a,ma),(u"bbb",b,mb),(u"ccc",c,mc)],mg)
+dlg.run()
+</code>
+
+
 == Locking UI ==
 
 For time consuming operations, like network connections, it is interesting
@@ -476,22 +525,40 @@ class Window(object):
     """
     __ui_lock = False
     
-    def __init__(self, title, body, menu = None, exit_handler = None):
-        """ Creates a new window given a title, body and optional
-            menu and exit handler. 
+    def __init__(self, title, body, global_menu = None, exit_handler = None):
+        """ Creates a new window given a title, body or a set of bodies (for tabbed
+            window) and optional global_menu and exit handler. Global menu is
+            available for all tabs at bottom or it is used as the default
+            menu for non tabbed window
+
+            The list of bodies must have the following format:
+                [(tab_text, body, menu),(tab_text, body, menu),...]
+            
+            where:
+                tab_text: unicode string used in tab
+                body: a valid body (Listbox, Text or Canvas)
+                menu: typical menu            
         """
-    
         self.title = title
-        self.body = body
+        
+        if isinstance(body,list):
+            self.tabbed = True
+            self.bodies = body
+            self.body = None
+        else:
+            self.tabbed = False
+            self.bodies = None
+            self.body = body
     
-        if menu is None:
-            menu = [(LABELS.loc.wi_info_exit, self.close_app)]
+        if global_menu is None:
+            global_menu = [(LABELS.loc.wi_info_exit, self.close_app)]
 
         if exit_handler is None:
             exit_handler = self.close_app
 
-        self.menu =  menu
+        self.global_menu = global_menu
         self.exit_handler = exit_handler
+        self.last_tab = 0
 
     def set_title(self,title):
         " Sets the current application title "
@@ -507,11 +574,26 @@ class Window(object):
         
     def refresh(self):
         " Update the application itens (menu, body and exit handler) "
+        if self.tabbed:
+            app.set_tabs([b[0] for b in self.bodies],self.tab_handler)
+            self.tab_handler(self.last_tab)
+            app.activate_tab(self.last_tab)
+        else:
+            app.set_tabs([], None)
+            app.menu = self.global_menu
+            app.body = self.body
+        app.title = self.title
+        app.exit_key_handler = self.exit_handler
+
+    def tab_handler(self,idx):
+        " Update tab and its related contents "
+        self.last_tab = idx
+        self.body = self.bodies[idx][1]
+        self.menu = self.bodies[idx][2] + self.global_menu
         app.title = self.title
         app.menu = self.menu
         app.body = self.body
-        app.exit_key_handler = self.exit_handler
-
+        
     def run(self):
         " Show the dialog/application "
         self.refresh()
@@ -522,6 +604,7 @@ class Window(object):
         """
         Window.__ui_lock = True
         app.menu = []
+        app.set_tabs([], None)
         app.exit_key_handler = lambda: None
         if title:
             app.title = title
