@@ -46,7 +46,7 @@ class CanvasToolbar(object):
     """
     # Possible orientations
     def __init__(self,canvas,sel_cbk,redraw_cbk,imgs,position=(0,0),bg=(255,255,128),
-                 orientation=O_VERTICAL,margin=3,img_border=2):
+                 orientation=O_VERTICAL,transparency=0,margin=3,img_border=2):
         """ Created the toolbar object.
             Parameters:
                 - canvas (Image): image buffer where toolbar will be drawn
@@ -56,6 +56,7 @@ class CanvasToolbar(object):
                 - position ((int,int)): initial position for drawing the toolbar
                 - background color ((int,int,int)): toolbar background color
                 - orientation (int): O_HORIZONTAL or O_VERTICAL
+                - transparency (int): transparency percentage (0 = no transparent, 100 = totally transparent)
                 - margin (int): external margin
                 - img_border (int): border to be added to images
         """
@@ -66,6 +67,7 @@ class CanvasToolbar(object):
         self.position = [position[0],position[1],0,0]
         self.bcolor = bg
         self.orientation = orientation
+        self.transparency = (255*(100-transparency)/100,)*3
         self.margin = margin
         self.img_border = img_border
         self.img_selected = 0
@@ -90,12 +92,15 @@ class CanvasToolbar(object):
         self.position[2] = self.position[0] + mx
         self.position[3] = self.position[1] + my
         self.create_sel_img(self.img_size+2*self.img_border)
-
+        self.tlb_img = graphics.Image.new(self.size)
+        self.msk_img = graphics.Image.new(self.size,'L')
+        self.msk_img.clear(self.transparency)
+        
     def create_sel_img(self,sz):
         """ Creates selection image (small square with dashed border)
         """
-        self.img_sel = graphics.Image.new((sz,sz))
-        self.img_sel.clear(self.bcolor)
+        self.sel_img = graphics.Image.new((sz,sz))
+        self.sel_img.clear(self.bcolor)
         cb = self.bcolor
         cf = (0,0,0)
         c = cb
@@ -107,10 +112,10 @@ class CanvasToolbar(object):
                 else:
                     c = cb
             for b in range(self.img_border):
-                self.img_sel.point((p,b),outline=c)
-                self.img_sel.point((p,sz-self.img_border+b),outline=c)
-                self.img_sel.point((b,p),outline=c)
-                self.img_sel.point((sz-self.img_border+b,p),outline=c)
+                self.sel_img.point((p,b),outline=c)
+                self.sel_img.point((p,sz-self.img_border+b),outline=c)
+                self.sel_img.point((b,p),outline=c)
+                self.sel_img.point((sz-self.img_border+b,p),outline=c)
                 
     def move(self,pos):
         """ Move toolbar to a new position given by pos  (int,int)
@@ -133,8 +138,32 @@ class CanvasToolbar(object):
             return True
         else:
             return False
-        
+
     def redraw(self,rect=None):
+        """ Redraw the toolbar
+        """
+        if not self.visible:
+            return
+        self.tlb_img.clear(self.bcolor)
+        x = self.margin + self.img_border
+        y = self.margin + self.img_border
+        for n in range(len(self.imgs)):
+            img = self.imgs[n]
+            if self.img_selected == n:
+                self.tlb_img.blit(self.sel_img,
+                                  target=(x-self.img_border,y-self.img_border),
+                                  source=((0,0),self.sel_img.size))
+            self.tlb_img.blit(img,target=(x,y),source=((0,0),img.size))
+            if self.orientation == O_HORIZONTAL:
+                x += self.img_size + 2*self.img_border
+            else:
+                y += self.img_size + 2*self.img_border
+        self.canvas.blit(self.tlb_img,
+                         target=self.position[:2],
+                         source=((0,0),self.tlb_img.size),
+                         mask=self.msk_img)
+
+    def redraw2(self,rect=None):
         """ Redraw the toolbar
         """
         if not self.visible:
@@ -147,9 +176,9 @@ class CanvasToolbar(object):
         for n in range(len(self.imgs)):
             img = self.imgs[n]
             if self.img_selected == n:
-                self.canvas.blit(self.img_sel,
+                self.canvas.blit(self.sel_img,
                                  target=(x-self.img_border,y-self.img_border),
-                                 source=((0,0),self.img_sel.size))
+                                 source=((0,0),self.sel_img.size))
             self.canvas.blit(img,target=(x,y),source=((0,0),img.size))
             if self.orientation == O_HORIZONTAL:
                 x += self.img_size + 2*self.img_border
