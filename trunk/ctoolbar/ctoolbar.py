@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# (c) Marcelo Barros de Almeida
+# marcelobarrosalmeida@gmail.com
+# License: GPL3
 import graphics
 import key_codes
 
