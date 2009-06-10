@@ -14,22 +14,25 @@ except:
     key_codes.EButton1Up=0x102
     key_codes.EDrag=0x107
     key_codes.EModifierDoubleClick=0x00080000
+
+O_HORIZONTAL = 1
+O_VERTICAL = 2
     
 class CanvasToolbar(object):
     """ Creates a toolbar given a set of square images with same size.
         Toolbar is draw as below:
         
-                    IMG_BORDER   MARGIN   
+                    img_border   margin   
                            |---|---|
             +----------------------+ --
-            |                      |  | <-- MARGIN (external margin)
+            |                      |  | <-- margin (external margin)
             |   +--------------+   | --
-            |   |              |   |  | <-- IMG_BORDER (image border, for drawing selection)
+            |   |              |   |  | <-- img_border (image border, for drawing selection)
             |   |   +------+   |   | --
             |   |   | ICON |   |   |
             |   |   |      |   |   |
             |   |   +------+   |   | --
-            |   |              |   |  | <-- 2*IMG_BORDER
+            |   |              |   |  | <-- 2*img_border
             |   |              |   |  | 
             |   |   +------+   |   | --
             |   |   | ICON |   |   |
@@ -41,9 +44,9 @@ class CanvasToolbar(object):
             +----------------------+         
     
     """
-    MARGIN = 3
-    IMG_BORDER = 2
-    def __init__(self,canvas,sel_cbk,redraw_cbk,imgs,position,bg=(255,255,128)):
+    # Possible orientations
+    def __init__(self,canvas,sel_cbk,redraw_cbk,imgs,position=(0,0),bg=(255,255,128),
+                 orientation=O_VERTICAL,margin=3,img_border=2):
         """ Created the toolbar object.
             Parameters:
                 - canvas (Image): image buffer where toolbar will be drawn
@@ -52,6 +55,9 @@ class CanvasToolbar(object):
                 - imgs (list of Images): image list with icons
                 - position ((int,int)): initial position for drawing the toolbar
                 - background color ((int,int,int)): toolbar background color
+                - orientation (int): O_HORIZONTAL or O_VERTICAL
+                - margin (int): external margin
+                - img_border (int): border to be added to images
         """
         self.canvas = canvas
         self.sel_cbk = sel_cbk
@@ -59,6 +65,9 @@ class CanvasToolbar(object):
         self.imgs = imgs
         self.position = [position[0],position[1],0,0]
         self.bcolor = bg
+        self.orientation = orientation
+        self.margin = margin
+        self.img_border = img_border
         self.img_selected = 0
         self.selected = -1
         self.last_img_selected = -1
@@ -71,12 +80,16 @@ class CanvasToolbar(object):
         """
         n = len(self.imgs)
         self.img_size = self.imgs[0].size[0]
-        mx = self.img_size + 2*(self.IMG_BORDER + self.MARGIN)
-        my = self.img_size*n + 2*(self.IMG_BORDER*n + self.MARGIN)
+        if self.orientation == O_HORIZONTAL:
+            my = self.img_size + 2*(self.img_border + self.margin)
+            mx = self.img_size*n + 2*(self.img_border*n + self.margin)
+        else:
+            mx = self.img_size + 2*(self.img_border + self.margin)
+            my = self.img_size*n + 2*(self.img_border*n + self.margin)            
         self.size = (mx,my)
         self.position[2] = self.position[0] + mx
         self.position[3] = self.position[1] + my
-        self.create_sel_img(self.img_size+2*self.IMG_BORDER)
+        self.create_sel_img(self.img_size+2*self.img_border)
 
     def create_sel_img(self,sz):
         """ Creates selection image (small square with dashed border)
@@ -93,11 +106,11 @@ class CanvasToolbar(object):
                     c = cf
                 else:
                     c = cb
-            for b in range(self.IMG_BORDER):
+            for b in range(self.img_border):
                 self.img_sel.point((p,b),outline=c)
-                self.img_sel.point((p,sz-self.IMG_BORDER+b),outline=c)
+                self.img_sel.point((p,sz-self.img_border+b),outline=c)
                 self.img_sel.point((b,p),outline=c)
-                self.img_sel.point((sz-self.IMG_BORDER+b,p),outline=c)
+                self.img_sel.point((sz-self.img_border+b,p),outline=c)
                 
     def move(self,pos):
         """ Move toolbar to a new position given by pos  (int,int)
@@ -129,16 +142,19 @@ class CanvasToolbar(object):
         self.canvas.rectangle(self.position,
                               outline = self.bcolor,
                               fill = self.bcolor)
-        x = self.position[0] + self.MARGIN + self.IMG_BORDER
-        y = self.position[1] + self.MARGIN + self.IMG_BORDER
+        x = self.position[0] + self.margin + self.img_border
+        y = self.position[1] + self.margin + self.img_border
         for n in range(len(self.imgs)):
             img = self.imgs[n]
             if self.img_selected == n:
                 self.canvas.blit(self.img_sel,
-                                 target=(x-self.IMG_BORDER,y-self.IMG_BORDER),
+                                 target=(x-self.img_border,y-self.img_border),
                                  source=((0,0),self.img_sel.size))
             self.canvas.blit(img,target=(x,y),source=((0,0),img.size))
-            y += self.img_size + 2*self.IMG_BORDER
+            if self.orientation == O_HORIZONTAL:
+                x += self.img_size + 2*self.img_border
+            else:
+                y += self.img_size + 2*self.img_border
 
     def show(self):
         """ Make the toolbar visible
@@ -176,7 +192,10 @@ class CanvasToolbar(object):
             or if we are just changing the focus (typing over a new icon)
         """
         if pos:
-            n = int((pos[1] - self.MARGIN - self.position[1])/(self.img_size+2*self.IMG_BORDER))
+            if self.orientation == O_HORIZONTAL:
+                n = int((pos[0] - self.margin - self.position[0])/(self.img_size+2*self.img_border))
+            else:
+                n = int((pos[1] - self.margin - self.position[1])/(self.img_size+2*self.img_border))
             self.img_selected = min(max(n,0),len(self.imgs)-1)
             if self.img_selected == self.last_img_selected:
                 self.selected = self.img_selected
