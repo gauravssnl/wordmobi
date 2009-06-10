@@ -7,7 +7,7 @@ import graphics
 import key_codes
 from appuifw import *
 import sysinfo
-from ctoolbar import CanvasToolbar
+import ctoolbar
 
 class ToolbarDemo(object):
     """ Toolbar demo for touch UI
@@ -23,11 +23,11 @@ class ToolbarDemo(object):
         self.scr_buf = graphics.Image.new((sz,sz))        
         self.canvas = Canvas(redraw_callback=self.redraw,
                              event_callback=self.event)
-        self.toolbar = CanvasToolbar(self.scr_buf,
-                                     self.item_selected,
-                                     self.redraw,
-                                     self.imgs,
-                                     (0,0))
+        self.toolbar = ctoolbar.CanvasToolbar(self.scr_buf,
+                                              self.item_selected,
+                                              self.redraw,
+                                              self.imgs)
+                                              #orientation=ctoolbar.O_HORIZONTAL)
         app.body = self.canvas
         app.menu = [(u"Show toolbar", lambda: self.toolbar.show()),
                     (u"Hide toolbar", lambda: self.toolbar.hide()),
