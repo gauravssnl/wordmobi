@@ -28,6 +28,7 @@ class ToolbarDemo(object):
         self.prev_x = 0
         self.prev_y = 0
         self.saving = False
+        self.drag_started = False
         self.load_imgs()
         sz = max(sysinfo.display_pixels())
         self.drw_buf = graphics.Image.new((sz,sz))
@@ -40,21 +41,24 @@ class ToolbarDemo(object):
                                              self.redraw,
                                              self.maintb_imgs,
                                              (0,0),
-                                             (200,200,200))#(236,233,216))
+                                             (200,200,200),
+                                             transparency=20)
         self.ticktb = ctoolbar.CanvasToolbar(self.scr_buf,
                                              self.ticktb_selected,
                                              self.redraw,
                                              self.ticktb_imgs,
                                              (54,97),
                                              (200,200,200),
-                                             orientation=ctoolbar.O_HORIZONTAL)
+                                             orientation=ctoolbar.O_HORIZONTAL,
+                                             transparency=20)
         self.colortb = ctoolbar.CanvasToolbar(self.scr_buf,
                                               self.colortb_selected,
                                               self.redraw,
                                               self.colortb_imgs,
                                               (54,145),
                                               (200,200,200),
-                                              orientation=ctoolbar.O_HORIZONTAL)
+                                              orientation=ctoolbar.O_HORIZONTAL,
+                                              transparency=20)
         app.body = self.canvas
         app.menu = []
         self.maintb.show()
@@ -93,34 +97,47 @@ class ToolbarDemo(object):
                               key_codes.EButton1Down,
                               key_codes.EDrag]:
             return
+        # Did the even happen inside any toolbar ?
         mtb = self.maintb.is_inside(ev['pos']) and self.maintb.is_visible()
         ttb = self.ticktb.is_inside(ev['pos']) and self.ticktb.is_visible()
         ctb = self.colortb.is_inside(ev['pos']) and self.colortb.is_visible()
-        # toolbar or screen click ?
-        if mtb or ttb or ctb:
-            if ev['type'] == key_codes.EButton1Down:
-                if mtb:
-                    self.maintb.set_sel(ev['pos'])
-                elif ttb:
-                    self.ticktb.set_sel(ev['pos'])
-                elif ctb:
-                    self.colortb.set_sel(ev['pos'])
-        else:
+        int_tlb = mtb or ttb or ctb
+        # reset any drag indication if othe event takes place
+        if ev['type'] != key_codes.EDrag:
+            self.drag_started = False
+        # toolbar clicks
+        if int_tlb and (ev['type'] == key_codes.EButton1Down):
+            if mtb:
+                self.maintb.set_sel(ev['pos'])
+            elif ttb:
+                self.ticktb.set_sel(ev['pos'])
+            elif ctb:
+                self.colortb.set_sel(ev['pos'])
+        # drag inside toolbar or click or drag outside toolbar
+        elif (int_tlb and (ev['type'] != key_codes.EButton1Down)) or (not int_tlb):
+            # clicks outside toolbar
             if ev['type'] == key_codes.EButton1Down:
                 self.drw_buf.point((ev['pos'][0], ev['pos'][1]),
                                    outline=self.line_colors[self.line_color],
                                    width=self.line_ticks[self.line_tick],
                                    fill=self.line_colors[self.line_color])
+            # drags, inside or outside toolbars
             elif ev['type'] == key_codes.EDrag:
-                rect = (self.prev_x, self.prev_y, ev['pos'][0], ev['pos'][1])
-                self.canvas.line(rect,
-                                 outline=self.line_colors[self.line_color],
-                                 width=self.line_ticks[self.line_tick],
-                                 fill=self.line_colors[self.line_color])
-                self.drw_buf.line(rect,
-                                  outline=self.line_colors[self.line_color],
-                                  width=self.line_ticks[self.line_tick],
-                                  fill=self.line_colors[self.line_color])
+                # do not start drag inside toolbars, only outside !
+                if self.drag_started or (not int_tlb):
+                    self.drag_started = True
+                    rect = (self.prev_x, self.prev_y, ev['pos'][0], ev['pos'][1])
+                    # draw on canvas and into buffer, this way it is not necessary to call
+                    # an explicit redraw
+                    self.canvas.line(rect,
+                                     outline=self.line_colors[self.line_color],
+                                     width=self.line_ticks[self.line_tick],
+                                     fill=self.line_colors[self.line_color])
+                    self.drw_buf.line(rect,
+                                      outline=self.line_colors[self.line_color],
+                                      width=self.line_ticks[self.line_tick],
+                                      fill=self.line_colors[self.line_color])
+        # always save last position for drag operations
         self.prev_x = ev['pos'][0]
         self.prev_y = ev['pos'][1]
 
@@ -162,11 +179,9 @@ class ToolbarDemo(object):
 
     def ticktb_selected(self):
         self.line_tick = self.ticktb.get_sel()
-        self.ticktb.hide()
         
     def colortb_selected(self):
         self.line_color = self.colortb.get_sel()
-        self.colortb.hide()
 
     def new_img(self):
         self.drw_buf.clear((255,255,255))
