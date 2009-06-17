@@ -1,21 +1,34 @@
 # -*- coding: utf-8 -*-
+import sys
+import os
+import e32
 
 __all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST", "TOUCH_ENABLED" ]
 
 # always 3 numbers with two digits each maximum, e.g. 3.44.2, 4.2.33 ...
-VERSION = "0.8.1" 
-import e32
+VERSION = "0.8.2"
+
+# looking for install dir and default paths/files
+DEFDIR = u""
+MIFFILE = u""
+PERSIST = u""
 if e32.in_emulator():
-    import sys
-    import os
     DEFDIR = os.path.join(os.path.dirname(sys.argv[0]),"wordmobi_tmp")
     if not os.path.exists(DEFDIR):
         os.makedirs(DEFDIR)
 else:
-    DEFDIR = "e:\\wordmobi\\"
-MIFFILE = "wordmobi2.mif"
-PERSIST = "persist.bin"
+    for d in e32.drive_list():
+        appd = d + u"\\data\\python\\wordmobidir\\"
+        if os.path.exists(appd + u"wordmobi.py"):
+            DEFDIR = appd
+            break
+if DEFDIR:
+    sys.path.append(DEFDIR)
+    sys.path.append(os.path.join(DEFDIR,u"loc"))
+    MIFFILE = os.path.join(DEFDIR,u"wordmobi.mif")
+    PERSIST = os.path.join(DEFDIR,u"persist.bin")
 
+# checking touch UI
 try:
     from appuifw import touch_enabled
     TOUCH_ENABLED = touch_enabled()

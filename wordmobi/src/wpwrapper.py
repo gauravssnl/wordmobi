@@ -22,7 +22,7 @@ __all__ = [ "WordPressWrapper", "BLOG" ]
 
 class WordPressWrapper(object):
     def __init__(self):
-        self.persist_name = os.path.join(DEFDIR,PERSIST)
+        self.persist_name = PERSIST
         self.posts = []
         self.comments = []
         self.categories = []

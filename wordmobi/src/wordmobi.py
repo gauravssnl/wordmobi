@@ -39,11 +39,10 @@ __license__ = "GPLv3"
 class BlogManager(Dialog):
     def __init__(self,cbk,title):
         # TODO Better icons or remove them
-        mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        icons = [Icon(mif,8,8),
-                 Icon(mif,6,6),
-                 Icon(mif,4,4),
-                 Icon(mif,2,2),
+        icons = [Icon(MIFFILE,8,8),
+                 Icon(MIFFILE,6,6),
+                 Icon(MIFFILE,4,4),
+                 Icon(MIFFILE,2,2),
                  ]
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
@@ -102,8 +101,7 @@ class WordMobi(Application):
     def __init__(self):
         app.screen='normal' # TODO check all app.xyz use
         LABELS.set_locale(DB["language"])
-        mif = unicode(os.path.join(DEFDIR,MIFFILE))
-        self.wp_icon = Icon(mif,14,14)
+        self.wp_icon = Icon(MIFFILE,14,14)
         self.blogs = json.loads(DB["blog_list"])
         items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
         #items = [ (b["account"],b["blog"]) for b in self.blogs ]
