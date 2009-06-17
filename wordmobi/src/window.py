@@ -445,52 +445,56 @@ if __name__ == "__main__":
 
 == Tabbed dialogs ==
 
-Tabbed dialogs are supporting as well. In this case, the body must be replace
-by a list of bodies with the following format:
+Tabbed dialogs are supporting as well. In this case, the body must be replaced by a list of bodies with the following format:
 
-  [(tab_text, body, menu),(tab_text, body, menu),...]
+[(tab_text, body, menu),(tab_text, body, menu),...]
+
             
 where:
-    tab_text: unicode string used in tab
-    body: a valid body (Listbox, Text or Canvas)
-    menu: menu for that body
+ * tab_text: unicode string used in tab
+ * body: a valid body (Listbox, Text or Canvas)
+ * menu: menu for that body
 
-The tabs will be created and body's menu will be merged with global menu.
+Each entry in this list will be displayed in a tab. You can specify a global menu to be added to the bottom of each tab menu. This way, it is simple to share common function (like exit) among all tabs. Just specify this menu when calling Dialog() or Application.
 
 <code python>
 # -*- coding: utf-8 -*-
 #
 # Marcelo Barros de Almeida
 # marcelobarrosalmeida (at) gmail.com
-#
+# License: GPL3
+
 from window import Application
-from window import Dialog
 from appuifw import *
 
-def msg(m):print m
-def cbk(): print "cbk"
-def my_cbk():
-    global dlg
-    dlg.refresh()
-    
-def lb_dlg():
-    my_dlg = Dialog(my_cbk,u"DLG",Listbox([u"1",u"2",u"3"]))
-    my_dlg.run()
-    
-a=Listbox([u"a",u"b",u"c"],lb_dlg)
-b=Canvas()
-c=Text(u"text")
+class MyApp(Application):
+    def __init__(self):
+        # defining menus for each tab/body
+        ma=[(u"menu a",lambda:self.msg(u"menu a"))]
+        mb=[(u"menu b",lambda:self.msg(u"menu b"))]
+        mc=[(u"menu c",lambda:self.msg(u"menu c"))]
+        md=[(u"menu d",lambda:self.msg(u"menu d"))]
+        # common menu for all tabs
+        common_menu=[(u"common menu",lambda:self.msg(u"common menu"))]
+        # bodies
+        ba=Listbox([u"a",u"b",u"c"])
+        bb=Canvas()
+        bc=Text(u"Text")
+        bd=Listbox([u"1",u"2",u"3"])
+        
+        Application.__init__(self,
+                             u"MyApp title",
+                             [(u"Tab a",ba,ma),(u"Tab b",bb,mb),
+                              (u"Tab c",bc,mc),(u"Tab d",bd,md)],
+                             common_menu)
 
-ma=[(u"menu a",lambda:msg("menu a"))]
-mb=[(u"menu b",lambda:msg("menu b"))]
-mc=[(u"menu c",lambda:msg("menu c"))]
-
-mg=[(u"global",lambda:msg("global"))]
-
-dlg=Application(u"Demo tab",[(u"aaa",a,ma),(u"bbb",b,mb),(u"ccc",c,mc)],mg)
-dlg.run()
+    def msg(self,m):
+        note(m,"info")
+        
+if __name__ == "__main__":
+    app = MyApp()
+    app.run()
 </code>
-
 
 == Locking UI ==
 
@@ -576,8 +580,8 @@ class Window(object):
         " Update the application itens (menu, body and exit handler) "
         if self.tabbed:
             app.set_tabs([b[0] for b in self.bodies],self.tab_handler)
-            app.activate_tab(self.last_tab)
             self.tab_handler(self.last_tab)
+            app.activate_tab(self.last_tab)
         else:
             app.set_tabs([], None)
             app.menu = self.global_menu
