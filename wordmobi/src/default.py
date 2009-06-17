@@ -16,5 +16,3 @@ if DEFDIR:
     sys.path.append(os.path.join(DEFDIR,u"loc"))    
     import wordmobi
     wordmobi.WordMobi().run()
-
-    
