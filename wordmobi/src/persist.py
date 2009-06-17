@@ -8,12 +8,7 @@ __all__ = [ "Persist", "DB" ]
 
 class Persist(dict):
     DBNAME = unicode(os.path.join(DEFDIR,"wordmobi"))
-    DEFVALS = {#"user":u"username",
-               #"pass":u"password",
-               #"blog":u"http://blogname.wordpress.com",
-               #"num_posts":u"10",
-               #"num_comments":u"20",
-               "blog_list":u'[{"account":"Account name","user":"user name","pass":"password","blog":"http://blogname.wordpress.com","num_posts":10,"num_comments":20}]',
+    DEFVALS = {"blog_list":u'[{"account":"Account name","user":"user name","pass":"password","blog":"http://blogname.wordpress.com","num_posts":10,"num_comments":20}]',
                "proxy_user":u"",
                "proxy_pass":u"",
                "proxy_addr":u"",
@@ -59,22 +54,6 @@ class Persist(dict):
                     os.makedirs(d)
                 except:
                     note(u"Could't create directory %s" % d,"error")
-
-        mif = os.path.join(DEFDIR,MIFFILE)
-        if not os.path.exists(mif):
-            from icons import ICONS
-            import zlib
-            
-            fo = open(mif,'wb')
-
-            data = "".join(ICONS.split("\n"))
-            data = [ "%c" % chr(int(data[p:p+2],16)) for p in range(0,len(data),2) ]
-            data = "".join(data)
-            fo.write( zlib.decompress(data) )
-            fo.close()
-
-            del ICONS
-            del zlib
         
 DB = Persist()
 
