@@ -289,8 +289,8 @@ class PostContents(Dialog):
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
                        (gen_label("CODE"), gen_ckb("CODE")),
                        (gen_label("STRIKE"), gen_ckb("STRIKE")),
-                       (gen_label("SPACE"), gen_ckb("SPACE")))
-                       #(gen_label("MORE"), gen_ckb("MORE")))
+                       (gen_label("SPACE"), gen_ckb("SPACE")),
+                       (gen_label("MORE"), gen_ckb("MORE")))
                       ),
                      (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
@@ -700,7 +700,14 @@ class EditPost(NewPost):
                     post_tags.append(decode_html(t))
                 except:
                     post_tags.append(utf8_to_unicode(t))        
-                
+        # check for more tag. The idea is to reconstruct the post with <!--more--> added
+        # to the right position and to eliminate mt_text_more
+        if BLOG.posts[post_idx]['mt_text_more']:
+            BLOG.posts[post_idx]['description'] = BLOG.posts[post_idx]['description'] + \
+                                                  "<!--more-->" + \
+                                                  BLOG.posts[post_idx]['mt_text_more']
+            BLOG.posts[post_idx]['mt_text_more'] = ""
+            
         NewPost.__init__(self,cbk,
                          utf8_to_unicode(BLOG.posts[post_idx]['title']),
                          utf8_to_unicode(BLOG.posts[post_idx]['description']),
