@@ -8,10 +8,6 @@ Credits:
   does not support yield statement. I have added some new
   methods as well.
 
-* datetime module for S60
-  http://wiki.opensource.nokia.com/projects/PyS60_python_modules
-  http://cyke64.googlepages.com/datetime.py
-
 * xmlrpclib.py and xmllib.py from standard python 2.2.3 distribution
   http://www.python.org/download/releases/2.2.3/
 
@@ -34,9 +30,7 @@ Credits:
   It was necessary to remove any reference for sets (only available since
   python 2.3)
 
-* Simple Json for S60 by Aaron Straup Cope
-  http://aaronland.info/python/s60-simplejson/
-  s60simplejson is derived from Bob Ippolito's simplejson
+* s60simplejson is derived from Bob Ippolito's simplejson
   http://cheeseshop.python.org/pypi/simplejson
   
 * Safe unicode routine from ASPY Player by Douglas Fernando da Silva
