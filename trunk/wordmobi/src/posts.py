@@ -230,6 +230,12 @@ class PostContents(Dialog):
                                          "CLOSE_TAG":u"</h4>",
                                          "OPEN_FUNC":None,
                                          "CLOSE_FUNC":None }        
+        self.text_snippets["STRIKE"] = { "MENU_NAME":u"Strike",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"<strike>",
+                                         "CLOSE_TAG":u"</strike>",
+                                         "OPEN_FUNC":None,
+                                         "CLOSE_FUNC":None }        
     def html_to_text(self,msg):
         msg = msg.replace(u"<br>",PostContents.PARAGRAPH_SEPARATOR)
         msg = msg.replace(u"<br/>",PostContents.PARAGRAPH_SEPARATOR)
@@ -282,6 +288,7 @@ class PostContents(Dialog):
                        (gen_label("H4"), gen_ckb("H4")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
                        (gen_label("CODE"), gen_ckb("CODE")),
+                       (gen_label("STRIKE"), gen_ckb("STRIKE")),
                        (gen_label("SPACE"), gen_ckb("SPACE")))
                        #(gen_label("MORE"), gen_ckb("MORE")))
                       ),

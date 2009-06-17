@@ -1,8 +1,20 @@
 import e32
 import sys
-if float(e32.pys60_version[:3]) >= 1.9:
-    sys.path.append("c:\\data\\python")
+import os
 
-import wordmobi
+# looking for install dir   
+DEFDIR = u""
+for d in e32.drive_list():
+    appd = d + u"\\data\\python\\wordmobidir\\"
+    if os.path.exists(appd + u"wordmobi.py"):
+        DEFDIR = appd
+        break
 
-wordmobi.WordMobi().run()
+if DEFDIR:
+    # running wordmobi
+    sys.path.append(DEFDIR)
+    sys.path.append(os.path.join(DEFDIR,u"loc"))    
+    import wordmobi
+    wordmobi.WordMobi().run()
+
+    
