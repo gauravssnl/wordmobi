@@ -213,7 +213,7 @@ def conv2weekly(stat):
         (y,m,d) = [ int(x) for x in s[0].split('-') ]
         dt = datetime.date(y,m,d)
         (isoy,isown,isowd) = dt.isocalendar()
-        yw = "%d-%d" % (isoy,isown)
+        yw = "%d-%02d" % (isoy,isown)
         if not weekly.has_key(yw):
             weekly[yw] = 0
         weekly[yw] = weekly[yw] + v
