@@ -1,0 +1,14 @@
+chres - an utility for image size conversion
+version alpha 1
+
+Copyright (C) 2007- 
+  Marcelo Barros de Almeida
+  <marcelobarrosalmeida@gmail.com>
+
+License:
+- GPLv2, for non-profit use.
+- For profit use, you must contact the author
+  for discussing licensing model.
+
+
+
