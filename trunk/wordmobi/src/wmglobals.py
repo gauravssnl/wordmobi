@@ -3,7 +3,7 @@ import sys
 import os
 import e32
 
-__all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST", "TOUCH_ENABLED" ]
+__all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST", "TOUCH_ENABLED", "FULL_SCR" ]
 
 # always 3 numbers with two digits each maximum, e.g. 3.44.2, 4.2.33 ...
 VERSION = "0.8.2"
@@ -35,4 +35,9 @@ try:
 except:
     # python < 1.9.3 does not support touch ui
     TOUCH_ENABLED = False
+    
+if TOUCH_ENABLED:
+    FULL_SCR = 'full_max'
+else:
+    FULL_SCR = 'full'
     

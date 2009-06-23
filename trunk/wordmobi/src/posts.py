@@ -282,15 +282,15 @@ class PostContents(Dialog):
         self.global_menu = [(LABELS.loc.pt_menu_text,(
                        (gen_label("BOLD"), gen_ckb("BOLD")),
                        (gen_label("ITALIC"), gen_ckb("ITALIC")),
-                       (gen_label("H1"), gen_ckb("H1")),
-                       (gen_label("H2"), gen_ckb("H2")),
-                       (gen_label("H3"), gen_ckb("H3")),
-                       (gen_label("H4"), gen_ckb("H4")),
                        (gen_label("QUOTE"), gen_ckb("QUOTE")),
+                       (gen_label("MORE"), gen_ckb("MORE")),
                        (gen_label("CODE"), gen_ckb("CODE")),
                        (gen_label("STRIKE"), gen_ckb("STRIKE")),
                        (gen_label("SPACE"), gen_ckb("SPACE")),
-                       (gen_label("MORE"), gen_ckb("MORE")))
+                       (gen_label("H1"), gen_ckb("H1")),
+                       (gen_label("H2"), gen_ckb("H2")),
+                       (gen_label("H3"), gen_ckb("H3")),
+                       (gen_label("H4"), gen_ckb("H4")))
                       ),
                      (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
