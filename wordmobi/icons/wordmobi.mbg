@@ -10,5 +10,6 @@ enum TMifWordmobi
 	EMbmWordmobiSetup44 = 16394,
 	EMbmWordmobiUpdate44 = 16396,
 	EMbmWordmobiWpaccount44 = 16398,
+	EMbmWordmobiStats44 = 16400,
 	EMbmWordmobiLastElement
 	};
