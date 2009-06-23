@@ -43,21 +43,23 @@ class BlogManager(Dialog):
                  Icon(MIFFILE,6,6),
                  Icon(MIFFILE,4,4),
                  Icon(MIFFILE,2,2),
+                 Icon(MIFFILE,16,16),
                  ]
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
                         LABELS.loc.wm_menu_cats,
                         LABELS.loc.wm_menu_tags,
+                        LABELS.loc.wm_menu_stat,
                         ]
         funcs = [self.posts,
                  self.comments,
                  self.categories,
                  self.tags,
+                 self.stats,
                  ]
         menu = map(lambda a,b: (a,b), menu_labels, funcs)
         menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
         items = map(lambda a,b: (a,u"",b), menu_labels, icons)
-        #items = map(lambda a: (a,u""), menu_labels)  
         Dialog.__init__(self,cbk,title,Listbox(items,self.update_value),menu)
 
         self.dlg = None
@@ -73,7 +75,8 @@ class BlogManager(Dialog):
         ( self.posts,
           self.comments,
           self.categories,
-          self.tags
+          self.tags,
+          self.stats
           )[idx]()
 
     def default_cbk(self):
@@ -96,6 +99,9 @@ class BlogManager(Dialog):
         self.dlg = Tags(self.default_cbk)
         self.dlg.run()
 
+    def stats(self):
+        pass
+    
 class WordMobi(Application):
     
     def __init__(self):
@@ -104,7 +110,6 @@ class WordMobi(Application):
         self.wp_icon = Icon(MIFFILE,14,14)
         self.blogs = json.loads(DB["blog_list"])
         items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
-        #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)] 
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
         self._update_menu()
@@ -148,7 +153,6 @@ class WordMobi(Application):
             self._update_menu()
         self.blogs = json.loads(DB["blog_list"])
         items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
-        #items = [ (b["account"],b["blog"]) for b in self.blogs ]
         self.body.set_list(items,0)
         self.refresh()
         return True

@@ -43,13 +43,15 @@ class BlogSettings(Dialog):
                  passwd=u"",
                  blog=u"http://blogname.wordpress.com",
                  np=10,
-                 nc=20):
+                 nc=20,
+                 api_key=u""):
         self.account = account
         self.user = user
         self.passw = passwd
         self.blog = blog
         self.num_posts = np
         self.num_comments = nc
+        self.api_key = api_key
         self.last_idx = 0
         body =  Listbox( [ (u"",u"") ], self.update_value )
         menu = [( LABELS.loc.st_menu_canc, self.cancel_app )]
@@ -68,9 +70,10 @@ class BlogSettings(Dialog):
         values = [ (LABELS.loc.st_menu_blog_acc, self.account ),
                    (LABELS.loc.st_menu_blog_url, self.blog ),
                    (LABELS.loc.st_menu_blog_usr, self.user ),
-                   (LABELS.loc.st_menu_blog_pwd, u"*"*len( self.passw )),
-                   (LABELS.loc.st_menu_blog_npt, unicode( self.num_posts )),
-                   (LABELS.loc.st_menu_blog_cpp, unicode( self.num_comments ))]
+                   (LABELS.loc.st_menu_blog_pwd, u"*"*len(self.passw)),
+                   (LABELS.loc.st_menu_blog_npt, unicode(self.num_posts)),
+                   (LABELS.loc.st_menu_blog_cpp, unicode(self.num_comments)),
+                   (LABELS.loc.st_menu_blog_key, u"*"*len(self.api_key))]
 
         app.body.set_list( values, self.last_idx )
 
@@ -83,21 +86,24 @@ class BlogSettings(Dialog):
                  "user",
                  "passw",
                  "num_posts",
-                 "num_comments")
+                 "num_comments",
+                 "api_key")
         
         labels = ( LABELS.loc.st_menu_blog_acc,
                    LABELS.loc.st_menu_blog_url,
                    LABELS.loc.st_menu_blog_usr,
                    LABELS.loc.st_menu_blog_pwd,
                    LABELS.loc.st_menu_blog_npt,
-                   LABELS.loc.st_menu_blog_cpp)
+                   LABELS.loc.st_menu_blog_cpp,
+                   LABELS.loc.st_menu_blog_key)
 
         formats = ( "text",
                     "text",
                     "text",
                     "code",
                     "number",
-                    "number" )
+                    "number",
+                    "code")
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
@@ -135,6 +141,7 @@ class BlogAccounts(Dialog):
             self.blogs[idx]["pass"] = self.dlg.passw
             self.blogs[idx]["num_posts"] = self.dlg.num_posts
             self.blogs[idx]["num_comments"] = self.dlg.num_comments
+            self.blogs[idx]["api_key"] = self.dlg.api_key
         self.unlock_ui()
         self.refresh()
         return True
@@ -149,7 +156,8 @@ class BlogAccounts(Dialog):
                                 b["pass"],
                                 b["blog"],
                                 b["num_posts"],
-                                b["num_comments"])
+                                b["num_comments"],
+                                b["api_key"])
         self.dlg.run()
 
     def copy(self):

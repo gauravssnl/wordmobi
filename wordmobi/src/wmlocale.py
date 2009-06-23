@@ -23,6 +23,7 @@ class Default(object):
         self.loc.wm_menu_upgr = u"Upgrade"
         self.loc.wm_menu_abou = u"About"
         self.loc.wm_menu_exit = u"Exit"
+        self.loc.wm_menu_stat = u"Statistics"
 
         # Wordmobi error messages
         self.loc.wm_err_not_supp = u"Not supported yet."
@@ -254,8 +255,7 @@ class Default(object):
         self.loc.st_menu_blog_pwd = u"Password:"
         self.loc.st_menu_blog_npt = u"Number of posts:"
         self.loc.st_menu_blog_cpp = u"Number of comments per post:"
-        self.loc.st_menu_blog_eml = u"Email (for comments):"
-        self.loc.st_menu_blog_rnm = u"Real name (for comments):"
+        self.loc.st_menu_blog_key = u"API key:"
         self.loc.st_menu_proxy_ena = u"Enabled"
         self.loc.st_menu_proxy_add = u"Address"
         self.loc.st_menu_proxy_prt = u"Port"
