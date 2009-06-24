@@ -73,6 +73,7 @@ class SMSFind(Application):
                     lst.append((dt,txt[:50]))
         if self.results:
             self.body = Listbox(lst,self.lst_cbk)
+            app.screen='normal'
             self.refresh()
         else:
             note(u"No results for " + self.terms,"info")
