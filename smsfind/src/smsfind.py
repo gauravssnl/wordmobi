@@ -68,12 +68,16 @@ class SMSFind(Application):
                 txt_utf8 = txt.encode('utf-8')
                 pattern_utf8 = pattern.encode('utf-8')
                 if self.bmh_search(pattern_utf8.lower(),txt_utf8.lower()) > -1:
-                    dt = unicode(time.ctime(ibx.time(sms_id)),'utf-8',errors='ignore')
+                    tm = ibx.time(sms_id)
+                    dt = unicode(time.ctime(tm),'utf-8',errors='ignore')
                     self.results.append((sms_id,txt,dt,ibx.address(sms_id),fn))
-                    lst.append((dt,txt[:50]))
+                    lst.append((tm,dt,txt[:50]))
         if self.results:
+            # order following unix time and remove it after
+            lst.sort(reverse=True)
+            lst = map(lambda x: x[1:],lst)
             self.body = Listbox(lst,self.lst_cbk)
-            app.screen='normal'
+            app.screen = 'normal' # avoid wrong screen redraw
             self.refresh()
         else:
             note(u"No results for " + self.terms,"info")
