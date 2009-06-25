@@ -14,5 +14,5 @@ copy  .\src\*.py   .\smsearch_sis\root\data\python\smsearch
 move  .\smsearch_sis\root\data\python\smsearch\default.py   .\smsearch_sis
 
 %PYTHON% .\ensymble.py py2sis --version="%VERSION%" --heapsize=4k,5M ^
-          --appname="%APPNAME%" --caps="%CAPBLS%" ^
+          --appname="%APPNAME%" --caps="%CAPBLS%" --icon=smsearch.svg ^
           --extrasdir=root smsearch_sis "%APPNAME%%VERSION%.sis"
