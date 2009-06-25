@@ -12,19 +12,19 @@ class ShowSMS(Dialog):
     def __init__(self,cbk,title,msg):
         Dialog.__init__(self,cbk,title,Text(msg))
         
-class SMSFind(Application):
+class SMSearch(Application):
     def __init__(self):
         self.dlg = None
         self.results = [u""]
         self.terms = u""
         body = Canvas()
-        menu = [(u"Find", self.get_pattern),
+        menu = [(u"Search", self.get_pattern),
                 (u"About", self.about),
                 (u"Exit", self.close_app)]
-        Application.__init__(self,u"SMS Find",body,menu)
+        Application.__init__(self,u"SMSearch",body,menu)
 
     def about(self):
-        note( u"SMS Find.\nMarcelo Barros de Almeida\nmarcelobarrosalmeida@gmail.com", "info" )
+        note( u"SMSearch.\nMarcelo Barros de Almeida\nmarcelobarrosalmeida@gmail.com", "info" )
 
     def lst_cbk(self):
         idx = self.body.current()
@@ -54,7 +54,7 @@ class SMSFind(Application):
             k += skip[ord(text[k])]
         return -1
         
-    def find(self,pattern):
+    def search(self,pattern):
         self.results = []
         lst = []
         folders = {inbox.EInbox:u"Inbox",
@@ -88,8 +88,8 @@ class SMSFind(Application):
             if pattern:
                 pattern = pattern.strip()
                 self.terms = pattern
-                self.find(pattern)  
+                self.search(pattern)  
 
 if __name__ == "__main__":
-    sms = SMSFind()
+    sms = SMSearch()
     sms.run()
