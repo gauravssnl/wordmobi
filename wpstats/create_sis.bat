@@ -1,6 +1,6 @@
 @echo off
 
-SET VERSION=1.0.1
+SET VERSION=1.0.2
 SET PYTHON=C:\Python25\python
 SET APPNAME=WPStats
 SET CAPBLS=NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment
