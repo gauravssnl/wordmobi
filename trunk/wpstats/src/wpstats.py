@@ -25,11 +25,6 @@ except:
     # python < 1.9.3 does not support touch ui
     TOUCH_ENABLED = False
 
-if TOUCH_ENABLED:
-    FULL_SCR = 'full_max'
-else:
-    FULL_SCR = 'full'
-
 APP_DIR = os.path.dirname(sys.modules['wpstats'].__file__)
 APP_DRV = APP_DIR[0]
 IMG_DIR = APP_DRV + u":\\data\\python\\wpstats\\res\\"
@@ -96,7 +91,8 @@ class WPStatsGUI(Application):
         self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days)
         self.scr_buf = None
         self.toolbar = None
-        app.screen = FULL_SCR
+        app.screen = 'full'
+        app.directional_pad = False
         self.body = Canvas(redraw_callback = self.stats_canvas_redraw,
                            event_callback = self.stats_event,
                            resize_callback = self.stats_resize)
@@ -364,7 +360,7 @@ class WPStatsGUI(Application):
                                      max_days=self.max_days)
                 self.save()
             self.stats_canvas_redraw()
-            app.screen = FULL_SCR
+            app.screen = 'full'
             self.refresh()
         self.dlg = WPStatsSettings(cbk,self.api_key,self.blog_uri,self.max_days)
         app.screen = 'normal'
