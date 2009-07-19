@@ -27,7 +27,7 @@ However, if your blog has a customized URL for XMLRPC API (not ending with xmlrp
 
 <font color="blue">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
 
-Also enable installation of any application in your mobile phone, not only the certificated ones. In Settings->Applications->App. Manager allow all applications and disable certification checks.
+Also <font color="blue">*enable installation of any application in your mobile phone, not only the certificated ones*</font>. In Settings->Applications->App. Manager allow all applications and disable certification checks.
 
 <font color="blue">*It is necessary to activate xmlrpc support in wordpress for people running blogs in their own domains*</font>. Check 
 
