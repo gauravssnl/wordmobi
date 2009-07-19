@@ -22,6 +22,7 @@ from posts import Posts
 from comments import Comments
 from categories import Categories
 from tags import Tags
+from wpstats import Stats
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
@@ -61,6 +62,7 @@ class BlogManager(Dialog):
         menu += [(LABELS.loc.wm_menu_exit, self.close_app)]
         items = map(lambda a,b: (a,u"",b), menu_labels, icons)
         Dialog.__init__(self,cbk,title,Listbox(items,self.update_value),menu)
+        Dialog.__init__(self,cbk,title,self.body,menu)
 
         self.dlg = None
         
@@ -80,6 +82,7 @@ class BlogManager(Dialog):
           )[idx]()
 
     def default_cbk(self):
+        app.screen = 'normal'
         self.refresh()
         return True
         
@@ -100,7 +103,8 @@ class BlogManager(Dialog):
         self.dlg.run()
 
     def stats(self):
-        pass
+        self.dlg = Stats(self.default_cbk)
+        self.dlg.run()
     
 class WordMobi(Application):
     
@@ -114,8 +118,22 @@ class WordMobi(Application):
         Application.__init__(self,  u"Wordmobi", Listbox( items, self.check_update_value ))
         self._update_menu()
 
+        # TODO
+        # {
+        # Temporary fix before changing how persistence is treated.
+        # New persistence module must be created to avoid this line and e32db.
+        __changed = False
+        for n in range(len(self.blogs)):
+            if not self.blogs[n].has_key("api_key"):
+                self.blogs[n]["api_key"] = ""
+                __changed = True
+        if __changed:
+            DB["blog_list"]=json.dumps(self.blogs)
+            DB.save()
+        #
+        # }
+        #
         self.dlg = None
-
         sel_access_point()
 
         self.bind(key_codes.EKeyRightArrow, self.check_update_value)
