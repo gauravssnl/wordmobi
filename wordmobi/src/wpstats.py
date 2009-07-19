@@ -6,7 +6,7 @@
 from appuifw import *
 from appuifw import InfoPopup 
 import graphics
-from window import Application, Dialog
+from window import Dialog
 import key_codes
 import e32
 import sysinfo
@@ -17,75 +17,36 @@ from ctoolbar import *
 import sys
 from types import StringTypes
 import pickle
-from wmglobals import TOUCH_ENABLED, FULL_SCR
+from wmglobals import TOUCH_ENABLED,DEFDIR, RESDIR
+from wpwrapper import BLOG
 
-APP_DIR = os.path.dirname(sys.modules['wpstats'].__file__)
-APP_DRV = APP_DIR[0]
-IMG_DIR = APP_DRV + u":\\data\\python\\wpstats\\res\\"
-PRG_BIN = os.path.join(APP_DRV+u":\\data\\python\\wpstats",u"wpstats.bin")
+# TODO
+# add this persistence info into global persistency strategy
+PRG_BIN = os.path.join(DEFDIR,u"stats.bin")
 BIN_VER = 1
-
-class WPStatsSettings(Dialog):
-    def __init__(self,cbk,
-                 api_key=u"",
-                 blog_uri=u"http://blogname.wordpress.com",
-                 max_days=365):
-        self.api_key = api_key
-        self.blog_uri = blog_uri
-        self.max_days = max_days
-        self.last_idx = 0
-        body = Listbox([(u"",u"")],self.update_value)
-        menu = [( u"Cancel",self.cancel_app)]
-        Dialog.__init__(self,cbk,u"Settings",body,menu)
-           
-    def refresh(self):
-        if self.blog_uri.endswith(u"/"):
-            self.blog_uri = self.blog_uri[:-1]
-        values = [(u"Blog URI",self.blog_uri),
-                  (u"API Key",u"*"*len(self.api_key)),
-                  (u"Days",unicode(self.max_days))]
-        self.body.set_list(values,self.last_idx)
-        Dialog.refresh(self)
-               
-    def update_value(self):
-        idx = self.body.current()
-        self.last_idx = idx
-
-        vars = ("blog_uri","api_key","max_days")
-        labels = (u"Blog URI",u"API Key",u"Days")
-        formats = ("text","text","number")
-        
-        val = query(labels[idx],formats[idx],self.__getattribute__(vars[idx]))
-        if val is not None:
-            if isinstance(val, StringTypes):
-                val = val.strip()
-            self.__setattr__( vars[idx],val )
-            
-        self.refresh()
-        
-class WPStatsGUI(Application):
+      
+class Stats(Dialog):
     """
     """
     MARGIN = 7
     SRD = 4 # SAMPLE_RADIUS
     SLW = 4 # SAMPLE_LINE_WIDTH
-    def __init__(self):
+    def __init__(self,cbk):
         """
         """
         self.update_in_progress = False
         if not self.load():
-            self.api_key = u"api_key"
-            self.blog_uri = u"http://blog_name.wordpress.com"
+            self.blog_uri = BLOG.curr_blog["blog"]
+            self.api_key = BLOG.curr_blog["api_key"]
             self.max_days = 365
             self.stats = {"daily"  :{"data":[],"title":u"Blog views per day"},
                           "weekly" :{"data":[],"title":u"Blog views per week"},
                           "monthly":{"data":[],"title":u"Blog views per month"},
                           "current":"daily"}
-        self.dlg = None
         self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days)
         self.scr_buf = None
         self.toolbar = None
-        app.screen = FULL_SCR
+        app.screen = 'full'
         self.body = Canvas(redraw_callback = self.stats_canvas_redraw,
                            event_callback = self.stats_event,
                            resize_callback = self.stats_resize)
@@ -106,7 +67,7 @@ class WPStatsGUI(Application):
         self.set_new_data(self.stats[self.stats["current"]]["title"],
                           self.stats[self.stats["current"]]["data"])
         self.create_toolbar(sz < 400)
-        Application.__init__(self,u"WP Stats",self.body)
+        Dialog.__init__(self,cbk,u"Stats",self.body)
 
     def load(self):
         if os.path.exists(PRG_BIN):
@@ -163,19 +124,17 @@ class WPStatsGUI(Application):
             self.stats["current"] = ('daily','weekly','monthly')[item-1]
             self.set_new_data(self.stats[self.stats["current"]]["title"],
                               self.stats[self.stats["current"]]["data"])
-        elif item == 4:
-            self.setup()
         else:
             self.close_app()
             
     def create_toolbar(self,small_icons):
         if small_icons:
-            imgs = ["refresh22.png","day22.png","week22.png","month22.png","setup22.png","back22.png"]
+            imgs = ["refresh22.png","day22.png","week22.png","month22.png","back22.png"]
         else:
-            imgs = ["refresh44.png","day44.png","week44.png","month44.png","setup44.png","back44.png"]
+            imgs = ["refresh44.png","day44.png","week44.png","month44.png","back44.png"]
         self.icons = []
         for img in imgs:
-            self.icons.append(graphics.Image.open(os.path.join(IMG_DIR,img)))
+            self.icons.append(graphics.Image.open(os.path.join(RESDIR,img)))
         self.toolbar = CanvasToolbar(self.scr_buf,
                                      self.toolbar_selected,
                                      self.stats_buffer_redraw,
@@ -342,24 +301,4 @@ class WPStatsGUI(Application):
             self.calc_points()
             # when rotating, first redraw is called and resize is called after. Why, S60 ?
             self.stats_buffer_redraw()
-    def setup(self):
-        def cbk():
-            if not self.dlg.cancel:
-                self.api_key = self.dlg.api_key
-                self.blog_uri = self.dlg.blog_uri
-                self.max_days = self.dlg.max_days
-                self.wps.reconfigure(api_key=self.api_key,
-                                     blog_uri=self.blog_uri,
-                                     max_days=self.max_days)
-                self.save()
-            self.stats_canvas_redraw()
-            app.screen = FULL_SCR
-            self.refresh()
-        self.dlg = WPStatsSettings(cbk,self.api_key,self.blog_uri,self.max_days)
-        app.screen = 'normal'
-        self.dlg.run()
-        
-if __name__ == "__main__":
-    app = WPStatsGUI()
-    app.run()
-    
+   
