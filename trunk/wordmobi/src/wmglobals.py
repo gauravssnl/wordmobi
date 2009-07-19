@@ -3,15 +3,16 @@ import sys
 import os
 import e32
 
-__all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST", "TOUCH_ENABLED", "FULL_SCR" ]
+__all__ = [ "VERSION", "DEFDIR", "MIFFILE", "PERSIST", "TOUCH_ENABLED", "RESDIR" ]
 
 # always 3 numbers with two digits each maximum, e.g. 3.44.2, 4.2.33 ...
-VERSION = "0.8.2"
+VERSION = "0.9.0"
 
 # looking for install dir and default paths/files
 DEFDIR = u""
 MIFFILE = u""
 PERSIST = u""
+RESDIR = u""
 if e32.in_emulator():
     DEFDIR = os.path.join(os.path.dirname(sys.argv[0]),"wordmobi_tmp")
     if not os.path.exists(DEFDIR):
@@ -27,7 +28,8 @@ if DEFDIR:
     sys.path.append(os.path.join(DEFDIR,u"loc"))
     MIFFILE = os.path.join(DEFDIR,u"wordmobi.mif")
     PERSIST = os.path.join(DEFDIR,u"persist.bin")
-
+    RESDIR = os.path.join(DEFDIR,u"res")
+    
 # checking touch UI
 try:
     from appuifw import touch_enabled
@@ -35,9 +37,4 @@ try:
 except:
     # python < 1.9.3 does not support touch ui
     TOUCH_ENABLED = False
-    
-if TOUCH_ENABLED:
-    FULL_SCR = 'full_max'
-else:
-    FULL_SCR = 'full'
     
