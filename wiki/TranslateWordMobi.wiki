@@ -32,7 +32,7 @@ If you want to see your language supported, follow the steps below.
 
 You will need to choose one language for starting from. In source files (e:\python\lib), these translations are available as files that start with *wmlocale_* (see table in previous section).
 
-These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letters code for representing language names and ISO 3166-1 is another two letters code for country names. Country name may be omitted if the language does not have any variation. 
+These file names follow the nomenclature wmlocale[http://pt.wikipedia.org/wiki/ISO_639-1 _<ISO 639-1 code>_][http://pt.wikipedia.org/wiki/ISO_3166-1 <ISO 3166-1 code>]. ISO 639-1 is a two letters code for representing language names and ISO 3166-1 is another two letters code for country names. Country name may be omitted if the language does not have any variation or Wordmobi does not have this variation yet. 
 
 Using this pattern, copy one translation available and rename it according to your language\country (if any). For instance, a UK user could create the file *wmlocale_en_uk.py*.
 
