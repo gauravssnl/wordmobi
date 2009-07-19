@@ -291,6 +291,7 @@ class WordPressWrapper(object):
                 'mt_keywords':",".join([ unicode_to_utf8(t) for t in tags ]),
                 'post_status':pub,
                 'dateCreated':DateTime(time.mktime(dt)),
+                'mt_text_more':'',
                 'wordmobi':True
                 }
         self.posts.insert(0,pst)
