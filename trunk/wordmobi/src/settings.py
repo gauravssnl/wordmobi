@@ -125,7 +125,6 @@ class BlogAccounts(Dialog):
                 (LABELS.loc.st_menu_canc, self.cancel_app)]
 
         body =  Listbox( [ (u"",u"") ], self.edit )
-
         Dialog.__init__(self, cbk, LABELS.loc.st_info_blog_acc_set, body,  menu)
 
         self.bind(key_codes.EKeyLeftArrow, self.close_app)
@@ -403,7 +402,8 @@ class Settings(Dialog):
                  (LABELS.loc.st_menu_nl, u"nl"),
                  (LABELS.loc.st_menu_de, u"de"),
                  (LABELS.loc.st_menu_ro, u"ro"),
-                 (LABELS.loc.st_menu_zh_cn, u"zh_cn")]
+                 (LABELS.loc.st_menu_zh_cn, u"zh_cn"),
+                 (LABELS.loc.st_menu_fr, u"fr")]
         langs.sort()
         item = popup_menu(map(lambda x:x[0], langs), LABELS.loc.st_pmenu_lang )
         if item is not None:
