@@ -29,6 +29,10 @@ If you want to use blog view statistics, pay attention in the following points:
  * For people running blogs in wordpress.com, just take note of your [http://faq.wordpress.com/2005/10/19/api-key/ API key] and setup your account with it. 
  * For blogs not hosted by wordpress, please read [http://en.wordpress.com/features/stats/ this page] for tips about configuring the required plugin. Feedback is welcome since I do not have blogs outside wordpress.
 
+If you are not receiving the blog view statistics, please do the following:
+ * Put the following URL in your browser <font color="blue">*http://stats.wordpress.com/csv.php?api_key={your_api}&blog_uri={your_blog_uri}&blog_id=0&days=365&limit=-1*</font>  replacing {your_api} for you API key (remove brackets for both fields) and {your_blog_uri} for your blog URL (the same string you put at account setup dialog, like http://yourblog.wordpress.com). 
+ * Check if you are receiving a valid response with statistics or just a help page. 
+
 <font color="blue">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
 
 Also <font color="blue">*enable installation of any application in your mobile phone, not only the certificated ones*</font>. In Settings->Applications->App. Manager allow all applications and disable certification checks.
