@@ -2,6 +2,11 @@
 
 = Change log =
 
+= 0.9.1 - 2009/07/21 =
+  * Fixing bug related to "api key missing" in new blog accounts
+  * Adding proxy support for wp stats api
+  * Not hiding anymore the api key in setup dialog
+
 = 0.9.0 - 2009/07/21 =
   * Support for tag "more"
   * Adding blog view statistics. Persistence missing yet.
