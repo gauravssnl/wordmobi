@@ -34,12 +34,13 @@ class Stats(Dialog):
         """
         self.blog_uri = BLOG.curr_blog["blog"]
         self.api_key = BLOG.curr_blog["api_key"]
+        self.proxy = BLOG.proxy
         self.max_days = 365
         self.stats = {"daily"  :{"data":[],"title":u"Blog views per day"},
                       "weekly" :{"data":[],"title":u"Blog views per week"},
                       "monthly":{"data":[],"title":u"Blog views per month"},
                       "current":"daily"}
-        self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days)
+        self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days,proxy=self.proxy)
         self.scr_buf = None
         self.toolbar = None
         app.screen = 'normal'

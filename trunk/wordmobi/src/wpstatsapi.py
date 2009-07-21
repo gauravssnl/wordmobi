@@ -30,6 +30,7 @@ class WPStats(object):
                 max_days: all accesses will provided statistics for the last max_days
                 end_day : The last day of the desired time frame.
                           Format is 'Y-m-d' (e.g. 2007-05-01) and default is UTC date.
+                proxy: Standard proxy string, like http://user:pass@proxy:port
         """
         self.api_key = api_key
         self.blog_uri = blog_uri
