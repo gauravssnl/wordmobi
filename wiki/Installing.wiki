@@ -3,7 +3,7 @@
 
 = Installing wordmobi =
 
-Wordmobi and Python runtime must be installed in the same location, phone memory or memory card. Python runtime does not support applications in different locations.
+<font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
 
 First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] and after [http://wordmobi.googlecode.com/files/Wordmobi-0.9.0.sis Wordmobi 0.9.0]. I tested the current version in S60 3rd and 5th edition phones (E71 and XM 5800)
 
