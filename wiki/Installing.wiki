@@ -3,19 +3,19 @@
 
 = Installing wordmobi =
 
-<font color="blue">*Wordmobi and Python must be installed in memory phone*</font>. This is the only use case tested and users arere reporting problems when Python is not installed on memory phone. 
+Wordmobi and Python runtime must be installed in the same location, phone memory or memory card. Python runtime does not support applications in different locations.
 
-First install Python for your S60 mobile phone. I tested the current version with S60 3rd and 5th edition phones (E71 and XM 5800), using [http://downloads.sourceforge.net/pys60/PythonForS60_1_4_5_3rdEd.sis PythonForS60 1.4.5] and [http://wordmobi.googlecode.com/files/Python_1.9.5.sis PythonForS60 1.9.5]. 
-
-After, install [http://wordmobi.googlecode.com/files/Wordmobi-0.8.1.sis Wordmobi 0.8.1 for Python 1.4.5] or [http://wordmobi.googlecode.com/files/Wordmobi-0.8.1-py19.sis Wordmobi 0.8.1 for Python 1.9.5].
+First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] and after [http://wordmobi.googlecode.com/files/Wordmobi-0.9.0.sis Wordmobi 0.9.0]. I tested the current version in S60 3rd and 5th edition phones (E71 and XM 5800)
 
 There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
-<font color="blue">Wordmobi saves all relevant data in memory card. So, do not forget to insert one (drive e:\ is required)</font>. The following directories are used:
+Wordmobi saves all relevant data in the drive you have chosen, under directory <drive>:\data\python\wordmobidir. The following directories are used:
 
- * e:\wordmobi => settings database
- * e:\wordmobi\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
- * e:\wordmobi\images => snapshots taken
+ * <drive>:\data\python\wordmobidir => wordmobi python files and configuration files
+ * <drive>:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
+ * <drive>:\data\python\wordmobidir\images => snapshots taken
+ * <drive>:\data\python\wordmobidir\loc => locales
+ * <drive>:\data\python\wordmobidir\res => resource images
 
 = Setup =
 
@@ -24,6 +24,10 @@ Before using wordmobi, please setup your blog account, user details, proxy (if a
 Wordmobi was designed to support any domain running wordpress with compatible XMLRPC API. <font color="blue">*Just set your blog address*</font> (for instance, http://www.mydomain.com or http://myblog.wordpress.com). If you have your blog running inside some subdirectory, like /my/blog, use http://www.mydomain.com/my/blog. <font color="blue">*Do not put any trailing slash and do not put xmlrpc.php at the end*</font> (they are automatically removed and just added when accessing your blog). 
 
 However, if your blog has a customized URL for XMLRPC API (not ending with xmlrpc.php), this URL will not be replaced. Just fill the blog address with you customized URL, including the php file name.
+
+If you want to use blog view statistics, pay attention in the following points:
+ * For people running blogs in wordpress.com, just take note of your [http://faq.wordpress.com/2005/10/19/api-key/ API key] and setup your account with it. 
+ * For blogs not hosted by wordpress, please read [http://en.wordpress.com/features/stats/ this page] for tips about configuring the required plugin. Feedback is welcome since I do not have blogs outside wordpress.
 
 <font color="blue">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
 
