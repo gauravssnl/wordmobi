@@ -21,6 +21,8 @@
  * multiples wordpress accounts supported
  * percentage size when adding images
  * TAGs support
+ * Tag more supported
+ * Blog view statistics
 
 = Partially implemented =
 
@@ -28,8 +30,6 @@
 
 = Next feature to be implemented =
 
- # more tag
- # statistics
  # access point persistence
  # "test connection" option in access point selection/proxy/twitter setup
  # upload to flickr or other providers with xmlrpc/REST support
