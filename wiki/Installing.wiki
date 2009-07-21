@@ -9,7 +9,7 @@ First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.
 
 There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
-Wordmobi saves all relevant data in the drive you have chosen, under directory <drive>:\data\python\wordmobidir. The following directories are used:
+Wordmobi saves all relevant data in the drive you have chosen, under directory {drive}:\data\python\wordmobidir. The following directories are used:
 
  * <drive>:\data\python\wordmobidir => wordmobi python files and configuration files
  * <drive>:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
