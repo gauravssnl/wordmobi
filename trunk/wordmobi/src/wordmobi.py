@@ -110,6 +110,7 @@ class WordMobi(Application):
     
     def __init__(self):
         app.screen='normal' # TODO check all app.xyz use
+        app.directional_pad = False
         LABELS.set_locale(DB["language"])
         self.wp_icon = Icon(MIFFILE,14,14)
         self.blogs = json.loads(DB["blog_list"])
