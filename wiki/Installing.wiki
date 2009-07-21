@@ -11,11 +11,11 @@ There are requirements for Wordpress as well. Comments will work only with Wordp
 
 Wordmobi saves all relevant data in the drive you have chosen, under directory {drive}:\data\python\wordmobidir. The following directories are used:
 
- * <drive>:\data\python\wordmobidir => wordmobi python files and configuration files
- * <drive>:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
- * <drive>:\data\python\wordmobidir\images => snapshots taken
- * <drive>:\data\python\wordmobidir\loc => locales
- * <drive>:\data\python\wordmobidir\res => resource images
+ * {drive}:\data\python\wordmobidir => wordmobi python files and configuration files
+ * {drive}:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
+ * {drive}:\data\python\wordmobidir\images => snapshots taken
+ * {drive}:\data\python\wordmobidir\loc => locales
+ * {drive}:\data\python\wordmobidir\res => resource images
 
 = Setup =
 
