@@ -73,7 +73,7 @@ class BlogSettings(Dialog):
                    (LABELS.loc.st_menu_blog_pwd, u"*"*len(self.passw)),
                    (LABELS.loc.st_menu_blog_npt, unicode(self.num_posts)),
                    (LABELS.loc.st_menu_blog_cpp, unicode(self.num_comments)),
-                   (LABELS.loc.st_menu_blog_key, u"*"*len(self.api_key))]
+                   (LABELS.loc.st_menu_blog_key, self.api_key)]
 
         app.body.set_list( values, self.last_idx )
 
@@ -103,7 +103,7 @@ class BlogSettings(Dialog):
                     "code",
                     "number",
                     "number",
-                    "code")
+                    "text")
         
         val = query(labels[idx], formats[idx], self.__getattribute__(vars[idx]))
         if val is not None:
@@ -174,7 +174,8 @@ class BlogAccounts(Dialog):
                                "user":self.dlg.user,
                                "pass":self.dlg.passw,
                                "num_posts":self.dlg.num_posts,
-                               "num_comments":self.dlg.num_comments})
+                               "num_comments":self.dlg.num_comments,
+                               "api_key":self.dlg.api_key})
         self.unlock_ui()
         self.refresh()
         return True
@@ -197,7 +198,8 @@ class BlogAccounts(Dialog):
                             "pass":u"password",
                             "blog":u"http://blogname.wordpress.com",
                             "num_posts":10,
-                            "num_comments":20}]
+                            "num_comments":20,
+                            "api_key":u""}]
         values = [ (b["account"],b["blog"]) for b in self.blogs ]
         self.last_idx = min( self.last_idx, len(values)-1 )
         app.body.set_list( values, self.last_idx )
