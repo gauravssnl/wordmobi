@@ -2,6 +2,14 @@
 
 = Change log =
 
+= 0.9.0 - 2009/07/21 =
+  * Support for tag "more"
+  * Adding blog view statistics. Persistence missing yet.
+  * Returning listbox icons
+  * French translation added
+  * Support for installation on phone memory or card but python runtime must be installed in the same location
+  * Only supporting Python 1.9.x.  Python 1.4.x was deprecated.
+
 = 0.8.1 - 2009/05/25 =
   * Tags support added.
   * Recent comments for all post now are fetched with just one command.
