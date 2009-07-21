@@ -21,10 +21,8 @@ from wmglobals import TOUCH_ENABLED,DEFDIR, RESDIR
 from wpwrapper import BLOG
 
 # TODO
-# add this persistence info into global persistency strategy
-PRG_BIN = os.path.join(DEFDIR,u"stats.bin")
-BIN_VER = 1
-      
+# add persistency
+
 class Stats(Dialog):
     """
     """
@@ -34,19 +32,17 @@ class Stats(Dialog):
     def __init__(self,cbk):
         """
         """
-        self.update_in_progress = False
-        if not self.load():
-            self.blog_uri = BLOG.curr_blog["blog"]
-            self.api_key = BLOG.curr_blog["api_key"]
-            self.max_days = 365
-            self.stats = {"daily"  :{"data":[],"title":u"Blog views per day"},
-                          "weekly" :{"data":[],"title":u"Blog views per week"},
-                          "monthly":{"data":[],"title":u"Blog views per month"},
-                          "current":"daily"}
+        self.blog_uri = BLOG.curr_blog["blog"]
+        self.api_key = BLOG.curr_blog["api_key"]
+        self.max_days = 365
+        self.stats = {"daily"  :{"data":[],"title":u"Blog views per day"},
+                      "weekly" :{"data":[],"title":u"Blog views per week"},
+                      "monthly":{"data":[],"title":u"Blog views per month"},
+                      "current":"daily"}
         self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days)
         self.scr_buf = None
         self.toolbar = None
-        app.screen = 'full'
+        app.screen = 'normal'
         self.body = Canvas(redraw_callback = self.stats_canvas_redraw,
                            event_callback = self.stats_event,
                            resize_callback = self.stats_resize)
@@ -67,71 +63,54 @@ class Stats(Dialog):
         self.set_new_data(self.stats[self.stats["current"]]["title"],
                           self.stats[self.stats["current"]]["data"])
         self.create_toolbar(sz < 400)
-        Dialog.__init__(self,cbk,u"Stats",self.body)
+        self.menu = [(u"Update",self.update_stats),
+                     (u"Views",(
+                         (u"Daily",lambda: self.set_view('daily')),
+                         (u"weekly",lambda: self.set_view('weekly')),
+                         (u"Monthly",lambda: self.set_view('monthly')))),
+                     (u"Exit",self.close_app)]
+        Dialog.__init__(self,cbk,u"Stats",self.body,self.menu)
+        Dialog.refresh(self)
 
-    def load(self):
-        if os.path.exists(PRG_BIN):
-            try:
-                f = open(PRG_BIN,"rb")
-            except:
-                return False
-            version = pickle.load(f)
-            self.api_key = pickle.load(f)
-            self.blog_uri = pickle.load(f)
-            self.max_days = pickle.load(f)
-            self.stats = pickle.load(f)
-            return True
-        else:
-            return False
-
-    def save(self):
-        try:
-            f = open(PRG_BIN,"wb")
-        except:
-            return False
-        pickle.dump(BIN_VER,f)
-        pickle.dump(self.api_key,f)
-        pickle.dump(self.blog_uri,f)
-        pickle.dump(self.max_days,f)
-        pickle.dump(self.stats,f)
-        f.close()
-        return True
-            
     def update_stats(self):
+        if self.ui_is_locked():
+            return
         yn = popup_menu([u"Yes",u"No"],u"Download statistics ?")
         if yn is not None:
             if yn == 0:
-                self.update_in_progress = True
+                self.lock_ui(u"Downloading stats...")
                 try:
                     self.stats['daily']['data'] = self.wps.get_blog_views()
                 except:
                     note(u"Unable to download statistics. Please try again","info")
                 else:
+                    self.set_title(u"Processing...")
                     self.stats['monthly']['data'] = conv2monthly(self.stats['daily']['data'])
                     self.stats['weekly']['data'] = conv2weekly(self.stats['daily']['data'])
                     self.set_new_data(self.stats[self.stats["current"]]["title"],
                                       self.stats[self.stats["current"]]["data"])
-                    self.save()
-                self.update_in_progress = False
+                self.unlock_ui()
+                Dialog.refresh(self)
+                self.set_title(u"Stats")
+
+    def set_view(self,view_type):
+        self.stats["current"] = view_type
+        self.set_new_data(self.stats[self.stats["current"]]["title"],
+                          self.stats[self.stats["current"]]["data"])
 
     def toolbar_selected(self):
         item = self.toolbar.get_sel()
-        if self.update_in_progress:
-            return
         if item == 0:
             self.update_stats()
         elif item <= 3:
-            self.stats["current"] = ('daily','weekly','monthly')[item-1]
-            self.set_new_data(self.stats[self.stats["current"]]["title"],
-                              self.stats[self.stats["current"]]["data"])
-        else:
-            self.close_app()
-            
+            view_type = ('daily','weekly','monthly')[item-1]
+            self.set_view(view_type)
+
     def create_toolbar(self,small_icons):
         if small_icons:
-            imgs = ["refresh22.png","day22.png","week22.png","month22.png","back22.png"]
+            imgs = ["refresh22.png","day22.png","week22.png","month22.png"]
         else:
-            imgs = ["refresh44.png","day44.png","week44.png","month44.png","back44.png"]
+            imgs = ["refresh44.png","day44.png","week44.png","month44.png"]
         self.icons = []
         for img in imgs:
             self.icons.append(graphics.Image.open(os.path.join(RESDIR,img)))
@@ -276,7 +255,7 @@ class Stats(Dialog):
             self.toolbar.redraw()
 
     def refresh(self):
-        Application.refresh(self)
+        Dialog.refresh(self)
         self.stats_canvas_redraw()
         
     def stats_canvas_redraw(self,rect=None):
