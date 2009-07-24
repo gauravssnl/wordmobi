@@ -30,12 +30,15 @@
 
 = Next feature to be implemented =
 
+ # better camera support when taking photos
  # access point persistence
- # "test connection" option in access point selection/proxy/twitter setup
- # upload to flickr or other providers with xmlrpc/REST support
+ # upload to flickr
+ # multiple twitter accounts (one twitter account per blog)
+ # Summary in statistics dialog (number os posts, number of comments, number of new comments and so on)
 
 = Future enhancements and ideas =
 
+ # "test connection" option in access point selection/proxy/twitter setup
  # to upload also movies and other kind of files to his / her wordpress blog. There are many live-streaming apps allowing you to post / stream video directly from your mobile (CellSpin, Qik, LiveCliq, Flixwagon), but none of them is really helping when it comes to edit text or to arrange the post page.
  # Also adding .pdf or .doc to your webbased wordpress blog
  # Image selection with thumbnails support
@@ -55,9 +58,7 @@
  # add title in html (post preview)
  # better exception handler, providing more elucidative messages
  # retry option when uploading images
- # video support (Add support to Qik video)
  # custom entries for html formatting.I think it is possible to add this option and make the blogger life easier with all their tags already coded in some "custom" menu.
- # multiple twitter accounts
  # better camera support when taking photos
  # Offline comments
  # Offline category/TAGs creation
