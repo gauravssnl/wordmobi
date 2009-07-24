@@ -215,6 +215,7 @@ class Default(object):
         self.loc.pt_pmenu_img_url = u"Image URL:"
         self.loc.pt_pmenu_link_url = u"Link URL:"
         self.loc.pt_pmenu_linkyt_url = u"Youtube URL:"
+        self.loc.pt_pmenu_linkqik_url = u"Qik URL:"
         self.loc.pt_pmenu_send_post = u"Publish post ?"
         self.loc.pt_pmenu_post_title = u"Post title:"
         self.loc.pt_pmenu_images = u"Images"
