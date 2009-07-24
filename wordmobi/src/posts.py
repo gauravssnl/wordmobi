@@ -175,7 +175,13 @@ class PostContents(Dialog):
                                          "OPEN_TAG":u"",
                                          "CLOSE_TAG":u"",
                                          "OPEN_FUNC":lambda: self.insert_linkyt(),
-                                         "CLOSE_FUNC":None }        
+                                         "CLOSE_FUNC":None }
+        self.text_snippets["LINKQIK"]= { "MENU_NAME":u"Qik Link",
+                                         "MENU_STATE":False,
+                                         "OPEN_TAG":u"",
+                                         "CLOSE_TAG":u"",
+                                         "OPEN_FUNC":lambda: self.insert_linkqik(),
+                                         "CLOSE_FUNC":None }                
         self.text_snippets["OLIST"]  = { "MENU_NAME":u"List (ordered)",
                                          "MENU_STATE":False,
                                          "OPEN_TAG":u"<ol>",
@@ -295,7 +301,8 @@ class PostContents(Dialog):
                      (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
                         (gen_label("LINK"), gen_ckb("LINK")),
-                        (gen_label("LINKYT"), gen_ckb("LINKYT")))
+                        (gen_label("LINKYT"), gen_ckb("LINKYT")),
+                        (gen_label("LINKQIK"), gen_ckb("LINKQIK")))
                       ),
                     (LABELS.loc.pt_menu_lsts,(
                         (gen_label("OLIST"), gen_ckb("OLIST")),
@@ -369,6 +376,15 @@ class PostContents(Dialog):
         url = query(LABELS.loc.pt_pmenu_linkyt_url, "text", u"http://www.youtube.com/watch?v=")
         if url is not None:
             txt = u"[youtube=%s]" % (url)
+        if txt: 
+            self.body.add(txt)
+            self.refresh()
+
+    def insert_linkqik(self):
+        txt = u""
+        url = query(LABELS.loc.pt_pmenu_linkqik_url, "text", u"http://qik.com/video/<number>")
+        if url is not None:
+            txt = u"[qik url=%s]" % (url)
         if txt: 
             self.body.add(txt)
             self.refresh()
