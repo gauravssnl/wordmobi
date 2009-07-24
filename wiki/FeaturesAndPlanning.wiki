@@ -61,3 +61,5 @@
  # better camera support when taking photos
  # Offline comments
  # Offline category/TAGs creation
+ # Edit permalinks
+ # Threaded comment
