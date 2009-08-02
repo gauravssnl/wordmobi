@@ -212,6 +212,7 @@ class WordPressWrapper(object):
         return True
 
     def upload_images(self, fname):
+        img_src = fname #do not change path if upload fails
         app.title = LABELS.loc.wp_info_upld_img % ( os.path.basename(fname) ) 
         try:
             img_src = self.blog.newMediaObject(fname)
