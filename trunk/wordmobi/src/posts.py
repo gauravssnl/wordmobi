@@ -163,7 +163,7 @@ class PostContents(Dialog):
                                          "OPEN_TAG":u"",
                                          "CLOSE_TAG":u"",
                                          "OPEN_FUNC":lambda: self.insert_img(False),
-                                         "CLOSE_FUNC":lambda: self.insert_img(True) }
+                                         "CLOSE_FUNC":None }
         self.text_snippets["LINK"]   = { "MENU_NAME":u"Link",
                                          "MENU_STATE":False,
                                          "OPEN_TAG":u"",
