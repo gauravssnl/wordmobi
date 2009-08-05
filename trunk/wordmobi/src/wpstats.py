@@ -263,6 +263,7 @@ class Stats(Dialog):
         self.body.blit(self.scr_buf)
         
     def stats_buffer_redraw(self,rect=None):
+        self.body.begin_redraw()
         self.clear_screen()
         self.draw_grid()
         self.draw_points()
@@ -270,6 +271,7 @@ class Stats(Dialog):
         self.draw_selection()
         self.draw_toolbar()
         self.stats_canvas_redraw()
+        self.body.end_redraw()
    
     def stats_resize(self,rect=None):
         if self.scr_buf:
