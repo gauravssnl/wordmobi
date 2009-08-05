@@ -15,6 +15,7 @@ except:
     HAS_CAM = False
 import graphics
 import key_codes
+import sysinfo
 from appuifw import *
 from wmutil import *
 from filesel import FileSel
@@ -38,37 +39,48 @@ class TakePhoto(Dialog):
     def __init__(self):
         self.taken = False
         self.filename = ""
-        body = Canvas()
+        # camera defines
+        self.setup = {'image_size':0, 'flash_mode':0, 'exp_mode':0, 'white_mode':0  }       
+        body = Canvas(redraw_callback = None)
+        sz = max(body.size)
+        self.scr_buf = graphics.Image.new((sz,sz))        
         menu = [ (LABELS.loc.pt_menu_pict, self.take_photo),
+                 (LABELS.loc.pt_menu_res,self.img_size_menu),
+                 (LABELS.loc.pt_menu_flash,self.flash_mode_menu),
+                 (LABELS.loc.pt_menu_expos,self.exp_mode_menu),
+                 (LABELS.loc.pt_menu_white,self.white_mode_menu),
                  (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu)
         self.bind(key_codes.EKeySelect, self.take_photo)
-        
+
+    def img_size_menu(self):
+        img_sizes_str = [u"%dx%d" % (x[0],x[1]) for x in camera.image_sizes()]
+        res = popup_menu(img_sizes_str,LABELS.loc.pt_pmenu_res)
+        if res is not None:
+            self.setup['image_size'] = res
+
+    def flash_mode_menu(self):
+        res = popup_menu([unicode(x) for x in camera.flash_modes()],LABELS.loc.pt_pmenu_flash)
+        if res is not None:
+            self.setup['flash_mode'] = res
+
+    def exp_mode_menu(self):
+        res = popup_menu([unicode(x) for x in camera.exposure_modes()],LABELS.loc.pt_pmenu_expos)
+        if res is not None:
+            self.setup['exp_mode'] = res
+
+    def white_mode_menu(self):
+        res = popup_menu([unicode(x) for x in camera.white_balance_modes()],LABELS.loc.pt_pmenu_white)
+        if res is not None:
+            self.setup['white_mode'] = res            
+            
     def cancel_app(self):
         self.cancel = True
         self.filename = None
-
-    def get_options(self):
-        res = None
-        while res is None:
-            res = popup_menu([LABELS.loc.pt_list_320x240,
-                              LABELS.loc.pt_list_640x480],
-                             LABELS.loc.pt_pmenu_res)
-        self.res = ((320,240), (640,480))[res]
-        
-        flash = None
-        while flash is None:
-            flash = popup_menu([LABELS.loc.pt_list_fsh_auto,
-                                 LABELS.loc.pt_list_fsh_none,
-                                 LABELS.loc.pt_list_fsh_forc],
-                                LABELS.loc.pt_pmenu_flash)
-        self.flash = ("auto", "none", "forced")[flash]            
     
     def run(self):
-
         Dialog.refresh(self)
-        self.get_options()
-        
+
         try:
             camera.start_finder(self.redraw)
         except:
@@ -80,6 +92,7 @@ class TakePhoto(Dialog):
             
         try:
             camera.stop_finder()
+            camera.release()
         except:
             note(LABELS.loc.pt_err_cant_stop_viewf,"error")
         
@@ -87,7 +100,10 @@ class TakePhoto(Dialog):
 
     def take_photo(self):
         try:
-            img = camera.take_photo(size = self.res, flash = self.flash)
+            img = camera.take_photo(size = camera.image_sizes()[self.setup['image_size']],
+                                    flash = camera.flash_modes()[self.setup['flash_mode']],
+                                    exposure = camera.exposure_modes()[self.setup['exp_mode']],
+                                    white_balance = camera.white_balance_modes()[self.setup['white_mode']])
             self.filename = time.strftime("%Y%m%d_%H%M%S", time.localtime()) + ".jpg"
             self.filename = os.path.join(DEFDIR, "images", self.filename)
             img.save(self.filename)            
@@ -99,7 +115,20 @@ class TakePhoto(Dialog):
         self.taken = True
         
     def redraw(self, img):
-        app.body.blit(img)
+        def center(a,b):
+            m = int((a - b)/2)
+            if m < 0: m = 0
+            return m
+
+        xm = center(app.body.size[0],img.size[0])
+        ym = center(app.body.size[1],img.size[1])
+        
+        self.scr_buf.clear((255,255,255))
+        self.scr_buf.blit(img,target=(xm,ym))
+        app.body.blit(self.scr_buf)
+        #app.body.clear((255,255,255))
+        #app.body.blit(img,target=(xm,ym))
+        app.title = unicode(camera.image_sizes()[self.setup['image_size']])
 
 class PostContents(Dialog):
     
@@ -301,8 +330,8 @@ class PostContents(Dialog):
                      (LABELS.loc.pt_menu_refs,(
                         (gen_label("IMAGE"), gen_ckb("IMAGE")),
                         (gen_label("LINK"), gen_ckb("LINK")),
-                        (gen_label("LINKYT"), gen_ckb("LINKYT")),
-                        (gen_label("LINKQIK"), gen_ckb("LINKQIK")))
+                        (gen_label("LINKYT"), gen_ckb("LINKYT")))#,
+                        #(gen_label("LINKQIK"), gen_ckb("LINKQIK")))
                       ),
                     (LABELS.loc.pt_menu_lsts,(
                         (gen_label("OLIST"), gen_ckb("OLIST")),
