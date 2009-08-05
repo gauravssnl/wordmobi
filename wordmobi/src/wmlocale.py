@@ -147,6 +147,10 @@ class Default(object):
         self.loc.pt_menu_imgs = u"Images"
         self.loc.pt_menu_pubs = u"Publish"
         self.loc.pt_menu_s2tw = u"Send to Twitter"
+        self.loc.pt_menu_res = u"Image size"
+        self.loc.pt_menu_flash = u"Flash mode"
+        self.loc.pt_menu_expos = u"Exposure mode"
+        self.loc.pt_menu_white = u"White bal. mode"        
         
         # Posts lists
         self.loc.pt_list_320x240 = u"(320x240)"
@@ -209,8 +213,10 @@ class Default(object):
         # Posts popup menu
         self.loc.pt_pmenu_posts = u"Posts:"
         self.loc.pt_pmenu_del_post = u"Delete post ?"
-        self.loc.pt_pmenu_res = u"Resolution ?"
-        self.loc.pt_pmenu_flash = u"Flash ?"
+        self.loc.pt_pmenu_res = u"Image size ?"
+        self.loc.pt_pmenu_flash = u"Flash mode ?"
+        self.loc.pt_pmenu_expos = u"Exposure mode ?"
+        self.loc.pt_pmenu_white = u"White bal. mode ?"
         self.loc.pt_pmenu_img_src = u"Image from:"
         self.loc.pt_pmenu_img_url = u"Image URL:"
         self.loc.pt_pmenu_link_url = u"Link URL:"
