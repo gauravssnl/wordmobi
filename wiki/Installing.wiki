@@ -5,7 +5,7 @@
 === Use issue tracker to report problems instead commenting this page ===
  * http://code.google.com/p/wordmobi/issues/list
 === Drop me an email instead commenting this page ===
- * marcelobarosalmeida ([arroba]) gmail.com
+ * marcelobarrosalmeida (_at_) gmail.com
 
 
 = Installing wordmobi =
