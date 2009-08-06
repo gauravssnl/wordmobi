@@ -1,6 +1,13 @@
 #summary Wordmobi installation
 #labels Featured
 
+=== Read this page carefully, the whole page ===
+=== Use issue tracker to report problems instead commenting this page ===
+ * http://code.google.com/p/wordmobi/issues/list
+=== Drop me an email instead commenting this page ===
+ * marcelobarosalmeida ([arroba]) gmail.com
+
+
 = Installing wordmobi =
 
 <font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
