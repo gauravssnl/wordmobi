@@ -6,7 +6,7 @@
  * http://code.google.com/p/wordmobi/issues/list
 === Drop me an email instead commenting this page ===
  * marcelobarrosalmeida (_at_) gmail.com
-
+=== Comment this page if you really think that it is necessary (page with error, tips for installing, and so on) ===
 
 = Installing wordmobi =
 
