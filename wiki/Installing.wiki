@@ -1,12 +1,12 @@
 #summary Wordmobi installation
 #labels Featured
 
-=== Read this page carefully, the whole page ===
-=== Use issue tracker to report problems instead commenting this page ===
- * http://code.google.com/p/wordmobi/issues/list
-=== Drop me an email instead commenting this page ===
- * marcelobarrosalmeida (_at_) gmail.com
-=== Comment this page if you really think that it is necessary (page with error, tips for installing, and so on) ===
+
+= Read this page carefully, the whole page =
+
+ * Use [http://code.google.com/p/wordmobi/issues/list issue tracker] to report problems instead commenting this page
+ * Drop me an email instead commenting this page ( marcelobarrosalmeida (_at_) gmail.com  )
+ * Comment this page if you really think that it is necessary (page with errors, tips for installing, and so on). 
 
 = Installing wordmobi =
 
