@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Marcelo Barros de Almeida
+# marcelobarrosalmeida (at) gmail.com
+# License: GPL3
+
 import sys
 sys.path.append('e:\\Python')
 

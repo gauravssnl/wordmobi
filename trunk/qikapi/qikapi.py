@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Marcelo Barros de Almeida
 # marcelobarrosalmeida (at) gmail.com
+# License: GPL3
 
 import simplejson as json
 import urllib
