@@ -16,6 +16,7 @@ Wordmobi has [http://wiki.forum.nokia.com/index.php/Localization_Example_for_PyS
 || Romanian|| wmlocale_ro.py || [http://reinventer.wordpress.com Adinel Giboi] ||adinel.giboi (at) gmail.com ||
 || Simplified Chinese|| wmlocale_zh_cn.py || 王钟寅 (bt4wang) || bt4wang (at) gmail.com ||
 || French|| wmlocale_fr.py || Yann Nave ||ynave (at) directinfoservice.com ||
+|| Russian || wmlocale_ru.py || Cyrill Udartcev ||http://cyrill.co.uk ||
 
 = Translating Wordmobi =
 
