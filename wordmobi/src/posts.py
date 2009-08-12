@@ -370,8 +370,8 @@ class PostContents(Dialog):
                             xs = imgsz['size'][0]*scale/100
                             ys = imgsz['size'][1]*scale/100
                             scale_factor = u'width="%d" height="%d"' % (xs,ys)
-                    txt = u'<img border="0" class="aligncenter" src="%s" alt="%s" %s/>' % \
-                          (sel,os.path.basename(sel),scale_factor)
+                    txt = u'<a href="%s"><img border="0" class="aligncenter" src="%s" alt="%s" %s/></a>' % \
+                          (sel,sel,os.path.basename(sel),scale_factor)
             elif ir == 1 and HAS_CAM:
                 sel = TakePhoto().run()
                 if sel is not None:
