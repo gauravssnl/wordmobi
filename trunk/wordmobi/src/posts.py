@@ -18,11 +18,11 @@ import key_codes
 import sysinfo
 from appuifw import *
 from wmutil import *
-from filesel import FileSel
 from window import Dialog
 from comments import Comments
 import s60twitter
 from urllibproxy import UrllibProxy
+import pymgfetch
 
 # "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
 #from appuifw import InfoPopup 
@@ -355,7 +355,7 @@ class PostContents(Dialog):
                          LABELS.loc.pt_pmenu_img_src)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = pymgfetch.browse(filetype=pymgfetch.EImageFile, title=u"Images") 
                 if sel is not None:
                     self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
@@ -594,7 +594,7 @@ class NewPost(Dialog):
                          LABELS.loc.pt_pmenu_images)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = pymgfetch.browse(filetype=pymgfetch.EImageFile, title=u"Images")
                 if sel is not None:
                     self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
