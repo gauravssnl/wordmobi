@@ -177,7 +177,7 @@ class WordPressClient:
         self.password = password
         self.blogId = 0
         self.transport = transport
-        self._server = xmlrpclib.ServerProxy(self.url,self.transport)
+        self._server = xmlrpclib.ServerProxy(self.url,self.transport,'utf-8')
 
     def _filterPost(self, post):
         """Transform post struct in WordPressPost instance 
