@@ -584,7 +584,7 @@ class WordPressWrapper(object):
             f.close()
             if isinstance(self.blog_data,dict):
                 saved_keys = self.blog_data.keys()
-                new_keys = [ self.blog_hash(b["blog"],b["user"],b["pass"]) for b in blogs ] 
+                new_keys = [ self.blog_hash(b["blog"],b["user"]) for b in blogs ] 
                 for k in saved_keys:
                     if k not in new_keys:
                         del self.blog_data[k]
@@ -623,7 +623,7 @@ class WordPressWrapper(object):
             self.refresh()
             self.build_cat_dict()                        
 
-    def blog_hash(self,url,usr,pwd):
+    def blog_hash(self,url,usr):
         """ Create a hash for each blog in use
         """
         try:
@@ -632,7 +632,7 @@ class WordPressWrapper(object):
         except:
             import md5
 
-        h = md5.md5(url+usr+pwd)
+        h = md5.md5(url+usr)
         return h.hexdigest()
     
     def set_blog(self,bidx):
@@ -673,8 +673,7 @@ class WordPressWrapper(object):
                                        transp)
         self.blog.selectBlog(0)
         self.blog_key = self.blog_hash(self.curr_blog["blog"],
-                                       self.curr_blog["user"],
-                                       self.curr_blog["pass"])
+                                       self.curr_blog["user"])
         self.load()
         
 
