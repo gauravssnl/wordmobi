@@ -2,7 +2,7 @@
 
 # Translation by:
 #
-# Marcelo Barros <cyrill (at) cyrill.co.uk>
+# Cyrill Udartcev <cyrill (at) cyrill.co.uk>
 
 # Promo phrase
 promo_phrase = u"<br><br>Опубликовано с помощью <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
