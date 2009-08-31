@@ -33,6 +33,9 @@ xcopy /E "%WMTMPDIR%" "%PYS60DIR%\%WMTMPDIR%\"
 if exist "%PYS60DIR%\%ICON%" del /s/q "%PYS60DIR%\%ICON%"
 copy "%ICON%" "%PYS60DIR%\%ICON%"
 
+echo "Copying extensions"
+xcopy /E/Y extensions\* "%PYS60DIR%\module-repo\dev-modules\"
+
 echo "Generating for Python 1.9.x"
 pushd .
 cd "%PYS60DIR%"
