@@ -19,6 +19,7 @@ from types import StringTypes
 import pickle
 from wmglobals import TOUCH_ENABLED,DEFDIR, RESDIR
 from wpwrapper import BLOG
+from wmlocale import LABELS
 
 # TODO
 # add persistency
@@ -36,9 +37,9 @@ class Stats(Dialog):
         self.api_key = BLOG.curr_blog["api_key"]
         self.proxy = BLOG.proxy
         self.max_days = 365
-        self.stats = {"daily"  :{"data":[],"title":u"Blog views per day"},
-                      "weekly" :{"data":[],"title":u"Blog views per week"},
-                      "monthly":{"data":[],"title":u"Blog views per month"},
+        self.stats = {"daily"  :{"data":[],"title":LABELS.loc.ws_info_daily},
+                      "weekly" :{"data":[],"title":LABELS.loc.ws_info_weekly},
+                      "monthly":{"data":[],"title":LABELS.loc.ws_info_monthly},
                       "current":"daily"}
         self.wps = WPStats(self.api_key,self.blog_uri,max_days=self.max_days,proxy=self.proxy)
         self.scr_buf = None
@@ -64,35 +65,35 @@ class Stats(Dialog):
         self.set_new_data(self.stats[self.stats["current"]]["title"],
                           self.stats[self.stats["current"]]["data"])
         self.create_toolbar(sz < 400)
-        self.menu = [(u"Update",self.update_stats),
-                     (u"Views",(
-                         (u"Daily",lambda: self.set_view('daily')),
-                         (u"weekly",lambda: self.set_view('weekly')),
-                         (u"Monthly",lambda: self.set_view('monthly')))),
-                     (u"Exit",self.close_app)]
-        Dialog.__init__(self,cbk,u"Stats",self.body,self.menu)
+        self.menu = [(LABELS.loc.ws_menu_updt,self.update_stats),
+                     (LABELS.loc.ws_menu_views,(
+                         (LABELS.loc.ws_menu_daily,lambda: self.set_view('daily')),
+                         (LABELS.loc.ws_menu_weekly,lambda: self.set_view('weekly')),
+                         (LABELS.loc.ws_menu_monthly,lambda: self.set_view('monthly')))),
+                     (LABELS.loc.ws_menu_exit,self.close_app)]
+        Dialog.__init__(self,cbk,LABELS.loc.wm_menu_stat,self.body,self.menu)
         Dialog.refresh(self)
 
     def update_stats(self):
         if self.ui_is_locked():
             return
-        yn = popup_menu([u"Yes",u"No"],u"Download statistics ?")
+        yn = popup_menu([LABELS.loc.gm_yes,LABELS.loc.gm_no],LABELS.loc.ws_pmenu_downl_stats)
         if yn is not None:
             if yn == 0:
-                self.lock_ui(u"Downloading stats...")
+                self.lock_ui(LABELS.loc.ws_info_downloading)
                 try:
                     self.stats['daily']['data'] = self.wps.get_blog_views()
                 except:
-                    note(u"Unable to download statistics. Please try again","info")
+                    note(LABELS.loc.ws_info_downl_failed,"info")
                 else:
-                    self.set_title(u"Processing...")
+                    self.set_title(LABELS.loc.ws_info_processing)
                     self.stats['monthly']['data'] = conv2monthly(self.stats['daily']['data'])
                     self.stats['weekly']['data'] = conv2weekly(self.stats['daily']['data'])
                     self.set_new_data(self.stats[self.stats["current"]]["title"],
                                       self.stats[self.stats["current"]]["data"])
                 self.unlock_ui()
                 Dialog.refresh(self)
-                self.set_title(u"Stats")
+                self.set_title(LABELS.loc.ws_stats_dlg)
 
     def set_view(self,view_type):
         self.stats["current"] = view_type
@@ -182,8 +183,8 @@ class Stats(Dialog):
             self.toolbar.set_sel()
 
     def show_tooltip(self):
-        msg = u"%s\n%d views" % (self.data[self.selection][0],
-                                 self.data[self.selection][1])
+        msg = LABELS.loc.ws_info_views % (self.data[self.selection][0],
+                                          self.data[self.selection][1])
         self.tooltip.show(msg,(5,5),2000,0)
 
     def get_text_size(self,text,font):
