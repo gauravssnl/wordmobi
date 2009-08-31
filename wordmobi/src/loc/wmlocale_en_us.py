@@ -16,6 +16,7 @@ wm_menu_sets = u"Settings"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"About"
 wm_menu_exit = u"Exit"
+wm_menu_stat = u"Statistics"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Not supported yet."
@@ -139,7 +140,11 @@ pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Images"
 pt_menu_pubs = u"Publish"
 pt_menu_s2tw = u"Send to Twitter"
-        
+pt_menu_res = u"Image size"
+pt_menu_flash = u"Flash mode"
+pt_menu_expos = u"Exposure mode"
+pt_menu_white = u"White bal. mode"        
+
 # Posts lists
 pt_list_320x240 = u"(320x240)"
 pt_list_640x480 = u"(640x480)"
@@ -197,16 +202,19 @@ pt_err_cant_pst_cont = u"Impossible to download post contents"
 pt_err_unknown_ext = u"Unkown externsion for %s"
 pt_err_cant_tiny_url = u"Impossible to create tiny URL."
 pt_err_cant_send_twitter = u"Impossible to send post title to twitter."
-        
+
 # Posts popup menu
 pt_pmenu_posts = u"Posts:"
 pt_pmenu_del_post = u"Delete post ?"
-pt_pmenu_res = u"Resolution ?"
-pt_pmenu_flash = u"Flash ?"
+pt_pmenu_res = u"Image size ?"
+pt_pmenu_flash = u"Flash mode ?"
+pt_pmenu_expos = u"Exposure mode ?"
+pt_pmenu_white = u"White bal. mode ?"
 pt_pmenu_img_src = u"Image from:"
 pt_pmenu_img_url = u"Image URL:"
 pt_pmenu_link_url = u"Link URL:"
 pt_pmenu_linkyt_url = u"Youtube URL:"
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"Publish post ?"
 pt_pmenu_post_title = u"Post title:"
 pt_pmenu_images = u"Images"
@@ -220,11 +228,11 @@ st_info_blog_set = u"Blog settings"
 st_info_proxy_set = u"Proxy settings"
 st_info_twitter_set = u"Twitter settings"
 st_info_blog_acc_set = u"Blog account settings"
-        
+
 # Settings error
 st_err_no_access_point = u"Could't find any access point."
 st_err_one_ap_req = u"At least one access point is required."
-        
+
 # Settings query
 st_query_access_points = u"Access points:"
 st_query_proxy_add = u"Proxy address:"
@@ -233,7 +241,7 @@ st_query_proxy_usr = u"Proxy username:"
 st_query_proxy_pwd = u"Proxy password:"
 st_query_twitter_usr = u"Twitter user:"
 st_query_twitter_pwd = u"Twitter password:"
-        
+
 # Settings menu
 st_menu_canc = u"Cancel"
 st_menu_blog = u"Blog Accounts"
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"Username:"
 st_menu_blog_pwd = u"Password:"
 st_menu_blog_npt = u"Number of posts:"
 st_menu_blog_cpp = u"Number of comments per post:"
-st_menu_blog_eml = u"Email (for comments):"
-st_menu_blog_rnm = u"Real name (for comments):"
+st_menu_blog_key = u"API key:"
 st_menu_proxy_ena = u"Enabled"
 st_menu_proxy_add = u"Address"
 st_menu_proxy_prt = u"Port"
@@ -263,7 +270,7 @@ st_menu_new_blog = u"New"
 st_menu_cpy_blog = u"Copy"
 st_menu_del_blog = u"Delete"
 st_menu_edt_blog = u"Edit"
-            
+
 # languages support
 st_menu_en_us = u"English (USA)"
 st_menu_pt_br = u"Portuguese (Brazil)"
@@ -274,7 +281,9 @@ st_menu_nl = u"Dutch"
 st_menu_de = u"German"
 st_menu_ro = u"Romanian"
 st_menu_zh_cn = u"Simplified Chinese"
-        
+st_menu_fr = u"French"
+st_menu_ru = u"Russian"
+
 # Setting popup menu
 st_pmenu_lang = u"Language:"
 
@@ -305,7 +314,7 @@ wp_info_upld_post_cont = u"Uploading post contents..."
 wp_info_updt_post_list = u"Updating post list..."
 wp_info_cmt_approved = u"Comment approved."
 wp_info_cmt_del = u"Comment deleted."
-        
+
 # Wpwrapper list
 wp_list_uncategorized = u"Uncategorized"
 
@@ -323,3 +332,24 @@ tg_err_cant_updt_tags = u"Impossible to update tags."
 
 # Tags popup menu
 tg_pmenu_cats = u"Tags:"
+
+# WPStats main menu
+ws_menu_updt = u"Update"
+ws_menu_views = u"Views"
+ws_menu_daily = u"Daily"
+ws_menu_weekly = u"Weekly"
+ws_menu_monthly = u"Monthly"
+ws_menu_exit = u"Exit"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Download statistics ?"
+
+# WPStats info messages
+ws_info_downloading = u"Downloading stats..."
+ws_info_downl_failed = u"Unable to download statistics. Please try again"
+ws_info_processing = u"Processing..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d views"  
+ws_info_daily = u"Blog views per day"
+ws_info_weekly = u"Blog views per week"
+ws_info_monthly = u"Blog views per month"
