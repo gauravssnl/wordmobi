@@ -16,6 +16,7 @@ wm_menu_sets = u"Configurações"
 wm_menu_upgr = u"Atualização"
 wm_menu_abou = u"Sobre"
 wm_menu_exit = u"Sair"
+wm_menu_stat = u"Estatísticas"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Ainda não suportado."
@@ -139,6 +140,10 @@ pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Imagens"
 pt_menu_pubs = u"Publicar"
 pt_menu_s2tw = u"Enviar para o Twitter"
+pt_menu_res = u"Tamanho da imagem"
+pt_menu_flash = u"Modo de flash"
+pt_menu_expos = u"Modo de exposição"
+pt_menu_white = u"Equilíbrio de branco"  
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -207,10 +212,14 @@ pt_pmenu_img_src = u"Imagem de:"
 pt_pmenu_img_url = u"URL da imagem:"
 pt_pmenu_link_url = u"URL do link:"
 pt_pmenu_linkyt_url = u"URL do Youtube:"
+pt_pmenu_linkqik_url = u"URL do Qik:"
 pt_pmenu_send_post = u"Publicar post ?"
 pt_pmenu_post_title = u"Título do post:"
 pt_pmenu_images = u"Imagens"
 pt_pmenu_scale_img = u"Reduzir esta imagem?"
+pt_pmenu_scale_factor = u"Fator de escala (%)"
+pt_pmenu_images = u"Imagens"
+pt_pmenu_scale_img = u"Mudar a escala da imagem?"
 pt_pmenu_scale_factor = u"Fator de escala (%)"
 pt_pmenu_tags = u"Tags:"
 pt_pmenu_cats = u"Categorias:"
@@ -247,8 +256,7 @@ st_menu_blog_usr = u"Usuario:"
 st_menu_blog_pwd = u"Senha:"
 st_menu_blog_npt = u"Número de posts:"
 st_menu_blog_cpp = u"Número de comentários por post:"
-st_menu_blog_eml = u"Email (para comentários):"
-st_menu_blog_rnm = u"Nome real (para comentários):"
+st_menu_blog_key = u"API key:"
 st_menu_proxy_ena = u"Habilitado"
 st_menu_proxy_add = u"Endereço"
 st_menu_proxy_prt = u"Porta"
@@ -274,6 +282,8 @@ st_menu_nl = u"Holandês"
 st_menu_de = u"Alemão"
 st_menu_ro = u"Romeno"
 st_menu_zh_cn = u"Chinês simplificado"
+st_menu_fr = u"Francês"
+st_menu_ru = u"Russo"
 
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
@@ -323,3 +333,24 @@ tg_err_cant_updt_tags = u"Impossível atualizar a lista de tags."
 
 # Tags popup menu
 tg_pmenu_cats = u"Tags:"
+
+# WPStats main menu
+ws_menu_updt = u"Atualizar"
+ws_menu_views = u"Visualização"
+ws_menu_daily = u"Diária"
+ws_menu_weekly = u"Semanal"
+ws_menu_monthly = u"Mensal"
+ws_menu_exit = u"Sair"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Baixar estatísticas?"
+
+# WPStats info messages
+ws_info_downloading = u"Baixando estatísticas..."
+ws_info_downl_failed = u"Impossível baixar estatísticas. Por favor, tente de novo"
+ws_info_processing = u"Processando..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d visualizações"  
+ws_info_daily = u"Visualizações por dia"
+ws_info_weekly = u"Visualizações por semana"
+ws_info_monthly = u"Visualizações por mês"
