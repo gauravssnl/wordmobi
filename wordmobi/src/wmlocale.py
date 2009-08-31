@@ -16,7 +16,6 @@ class Default(object):
         # Wordmobi main menu
         self.loc.wm_menu_post = u"Posts"
         self.loc.wm_menu_comm = u"Comments"
-        self.loc.wm_menu_tags = u"Tags"
         self.loc.wm_menu_cats = u"Categories"
         self.loc.wm_menu_tags = u"Tags"
         self.loc.wm_menu_sets = u"Settings"
@@ -278,7 +277,6 @@ class Default(object):
         self.loc.st_menu_del_blog = u"Delete"
         self.loc.st_menu_edt_blog = u"Edit"
         
-        
         # languages support
         self.loc.st_menu_en_us = u"English (USA)"
         self.loc.st_menu_pt_br = u"Portuguese (Brazil)"
@@ -341,6 +339,26 @@ class Default(object):
         # Tags popup menu
         self.loc.tg_pmenu_cats = u"Tags:"
 
+        # WPStats main menu
+        self.loc.ws_menu_updt = u"Update"
+        self.loc.ws_menu_views = u"Views"
+        self.loc.ws_menu_daily = u"Daily"
+        self.loc.ws_menu_weekly = u"Weekly"
+        self.loc.ws_menu_monthly = u"Monthly"
+        self.loc.ws_menu_exit = u"Exit"
+
+        # WPStats popup menu
+        self.loc.ws_pmenu_downl_stats = u"Download statistics ?"
+
+        # WPStats info messages
+        self.loc.ws_info_downloading = u"Downloading stats..."
+        self.loc.ws_info_downl_failed = u"Unable to download statistics. Please try again"
+        self.loc.ws_info_processing = u"Processing..."
+        self.loc.ws_info_views = u"%s\n%d views"  # date \n num_views views
+        self.loc.ws_info_daily = u"Blog views per day"
+        self.loc.ws_info_weekly = u"Blog views per week"
+        self.loc.ws_info_monthly = u"Blog views per month"
+        
 class Locale(Default):
     "Multiple language support class"
     
