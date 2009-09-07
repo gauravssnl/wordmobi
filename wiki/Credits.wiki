@@ -14,7 +14,7 @@
   does not support yield statement. I have added some new
   methods as well.
 
-* openssl.exe borrowed froms tunnel project
+* openssl.exe borrowed froms tunnel project (it is used to generate sis files)
   http://www.stunnel.org/about/credits.html
 
 * Python proxy code found at activestate site, by Vaibhav Bhatia
