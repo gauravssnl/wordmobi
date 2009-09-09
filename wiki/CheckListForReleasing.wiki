@@ -2,6 +2,7 @@
 
  * Commit all changes to head or related branch
  * Check *VERSION* inside wmglobals.py
+ * Generate version for MGFETCH False and True (True is default)
  * Create a tag with version to be release in [http://code.google.com/p/wordmobi/source/browse/#svn/tags/wordmobi SVN]
  * Add sis, sis for 1.9.x and src to [http://code.google.com/p/wordmobi/downloads/list Downloads] section. Set them as *featured* and remove any previous featured download.
  * Update LatestVersion
