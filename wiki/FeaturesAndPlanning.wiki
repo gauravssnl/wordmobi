@@ -23,6 +23,7 @@
  * TAGs support
  * Tag more supported
  * Blog view statistics
+ * better camera support when taking photos
 
 = Partially implemented =
 
@@ -30,7 +31,6 @@
 
 = Next feature to be implemented =
 
- # better camera support when taking photos
  # access point persistence
  # upload to flickr
  # multiple twitter accounts (one twitter account per blog)
