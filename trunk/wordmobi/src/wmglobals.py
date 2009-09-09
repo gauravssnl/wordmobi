@@ -37,4 +37,8 @@ try:
 except:
     # python < 1.9.3 does not support touch ui
     TOUCH_ENABLED = False
+
+# Use standard media gallery
+MGFETCH = True
+
     

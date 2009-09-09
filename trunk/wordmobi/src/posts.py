@@ -22,17 +22,24 @@ from window import Dialog
 from comments import Comments
 import s60twitter
 from urllibproxy import UrllibProxy
-#import pymgfetch
-from filesel import FileSel
 
 # "from appuifw import *" above does not working properly ... missing InfoPopup in __all__
 #from appuifw import InfoPopup 
 
 from persist import DB
 from wpwrapper import BLOG
-from wmglobals import DEFDIR
+from wmglobals import DEFDIR, MGFETCH
 from wmlocale import LABELS
 
+if MGFETCH:
+    import pymgfetch
+    def select_file(last_dir=u''):
+        return pymgfetch.browse(filetype=pymgfetch.EImageFile,title=u"Images")
+else:
+    from filesel import FileSel
+    def select_file(last_dir=u''):
+        return FileSel(init_dir=last_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+    
 __all__ = [ "NewPost", "EditPost", "Posts" ]
 
 
@@ -356,7 +363,7 @@ class PostContents(Dialog):
                          LABELS.loc.pt_pmenu_img_src)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = select_file(self.init_dir)
                 if sel is not None:
                     self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
@@ -595,7 +602,7 @@ class NewPost(Dialog):
                          LABELS.loc.pt_pmenu_images)
         if ir is not None:
             if ir == 0:
-                sel = FileSel(init_dir=self.init_dir,mask = r"(.*\.jpeg|.*\.jpg|.*\.png|.*\.gif)").run()
+                sel = select_file(self.init_dir)
                 if sel is not None:
                     self.init_dir=os.path.dirname(sel)
                     ny = popup_menu([LABELS.loc.gm_no,LABELS.loc.gm_yes],
