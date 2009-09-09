@@ -7,8 +7,7 @@
   * Localization for statistics dialog
   * Russian support
   * Password changes will not remove local persistence anymore
-  * Improve "take picture" with white balance, all image modes, flash modes and
-exposure modes. A bug in Pys60 is not allowing full screen preview of images.
+  * Improve "take picture" with white balance, all image modes, flash modes and exposure modes. A bug in Pys60 is not allowing full screen preview of images.
   * Adding link to the full image when it is scaled
   * Fixing bugs related to api key missing in new blog accounts
 
