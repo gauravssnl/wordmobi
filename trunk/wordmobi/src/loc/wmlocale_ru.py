@@ -16,6 +16,7 @@ wm_menu_sets = u"Настройки"
 wm_menu_upgr = u"Обновить"
 wm_menu_abou = u"О программе"
 wm_menu_exit = u"Выход"
+wm_menu_stat = u"Статистика"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Пока не поддерживается."
@@ -139,7 +140,11 @@ pt_menu_tags = u"Теги"
 pt_menu_imgs = u"Изображения"
 pt_menu_pubs = u"Опубликовать"
 pt_menu_s2tw = u"Послать в Twitter"
-        
+pt_menu_res = u"Размер изображения"
+pt_menu_flash = u"Режим вспышки"
+pt_menu_expos = u"Экспозамер"
+pt_menu_white = u"Баланс белого"
+
 # Posts lists
 pt_list_320x240 = u"(320x240)"
 pt_list_640x480 = u"(640x480)"
@@ -203,15 +208,18 @@ pt_pmenu_posts = u"Записи:"
 pt_pmenu_del_post = u"Удалить запись ?"
 pt_pmenu_res = u"Разрешение ?"
 pt_pmenu_flash = u"Вспышка ?"
+pt_pmenu_expos = u"Экспозамер ?"
+pt_pmenu_white = u"Баланс белого ?"
 pt_pmenu_img_src = u"Изображение из:"
 pt_pmenu_img_url = u"Ссылка на изображение:"
 pt_pmenu_link_url = u"URL ссылки:"
 pt_pmenu_linkyt_url = u"Youtube URL:"
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"Опубликовать запись ?"
 pt_pmenu_post_title = u"Заголовок записи:"
 pt_pmenu_images = u"Изображения"
-pt_pmenu_scale_img = u"Масштабировать изображение?"
-pt_pmenu_scale_factor = u"Коэфф. масштабирования (%)"
+pt_pmenu_scale_img = u"Масштабировать изобр.?"
+pt_pmenu_scale_factor = u"Коэфф. масшт. (%)"
 pt_pmenu_tags = u"Теги:"
 pt_pmenu_cats = u"Рубрики:"
 
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"Логин:"
 st_menu_blog_pwd = u"Пароль:"
 st_menu_blog_npt = u"Количество записей:"
 st_menu_blog_cpp = u"Количество комментариев на запись:"
-st_menu_blog_eml = u"Email (для комментариев):"
-st_menu_blog_rnm = u"Имя (для комментариев):"
+st_menu_blog_key = u"Ключ API:"
 st_menu_proxy_ena = u"Включено"
 st_menu_proxy_add = u"Адрес"
 st_menu_proxy_prt = u"Порт"
@@ -273,9 +280,10 @@ st_menu_it = u"Italian"
 st_menu_nl = u"Dutch"
 st_menu_de = u"German"
 st_menu_ro = u"Romanian"
-st_menu_ru = u"Русский"
 st_menu_zh_cn = u"Simplified Chinese"
-        
+st_menu_fr = u"French"
+st_menu_ru = u"Russian"
+
 # Setting popup menu
 st_pmenu_lang = u"Язык:"
 
@@ -324,3 +332,24 @@ tg_err_cant_updt_tags = u"Невозможно обновить теги."
 
 # Tags popup menu
 tg_pmenu_cats = u"Теги:"
+
+# WPStats main menu
+ws_menu_updt = u"Обновить"
+ws_menu_views = u"Просмотры"
+ws_menu_daily = u"За день"
+ws_menu_weekly = u"За неделю"
+ws_menu_monthly = u"За месяц"
+ws_menu_exit = u"Выход"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Загрузить статистику ?"
+
+# WPStats info messages
+ws_info_downloading = u"Загрузка статистики..."
+ws_info_downl_failed = u"Невозможно загрузить статистику. Попробуйте еще раз"
+ws_info_processing = u"Обработка..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d просмотров"
+ws_info_daily = u"Просмотров за день"
+ws_info_weekly = u"Просмотров за неделю"
+ws_info_monthly = u"Просмоторов за месяц"

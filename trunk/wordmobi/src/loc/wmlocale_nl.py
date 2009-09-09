@@ -16,6 +16,7 @@ wm_menu_sets = u"Instellingen"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"Over"
 wm_menu_exit = u"Afsluiten"
+wm_menu_stat = u"Statistieken"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Wordt nog niet ondersteund."
@@ -139,6 +140,10 @@ pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Afbeeldingen"
 pt_menu_pubs = u"Publiceren"
 pt_menu_s2tw = u"Naar Twitter verstsuren"
+pt_menu_res = u"Afbeelding grootte"
+pt_menu_flash = u"Flits mode"
+pt_menu_expos = u"Exposure mode"
+pt_menu_white = u"Wit balans mode"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -201,17 +206,20 @@ pt_err_cant_send_twitter = u"Kan bericht titel niet naar Twitter versturen."
 # Posts popup menu
 pt_pmenu_posts = u"Berichten:"
 pt_pmenu_del_post = u"Bericht verwijderen ?"
-pt_pmenu_res = u"Resolutie ?"
-pt_pmenu_flash = u"Flits ?"
+pt_pmenu_res = u"Afbeelding grootte ?"
+pt_pmenu_flash = u"Flits mode ?"
+pt_pmenu_expos = u"Exposure mode ?"
+pt_pmenu_white = u"Wit balans mode ?"
 pt_pmenu_img_src = u"Afbeelding van:"
 pt_pmenu_img_url = u"Afbeelding URL:"
 pt_pmenu_link_url = u"Link URL:"
 pt_pmenu_linkyt_url = u"Youtube URL:"
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"Bericht publiceren ?"
 pt_pmenu_post_title = u"Bericht titel:"
 pt_pmenu_images = u"Afbeeldingen"
 pt_pmenu_scale_img = u"Deze afbeelding schalen?"
-pt_pmenu_scale_factor = u"Schalings factor (%)"
+pt_pmenu_scale_factor = u"Schaal factor (%)"
 pt_pmenu_tags = u"Tags:"
 pt_pmenu_cats = u"Categorieën:"
 
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"Gebruikersnaam:"
 st_menu_blog_pwd = u"Wachtwoord:"
 st_menu_blog_npt = u"Aantal berichten:"
 st_menu_blog_cpp = u"Aantal reacties per bericht:"
-st_menu_blog_eml = u"Email (voor reacties):"
-st_menu_blog_rnm = u"Echte naam (voor reacties):"
+st_menu_blog_key = u"API sleutel:"
 st_menu_proxy_ena = u"Ingeschakeld"
 st_menu_proxy_add = u"Adres"
 st_menu_proxy_prt = u"Poort"
@@ -274,6 +281,8 @@ st_menu_nl = u"Nederlands"
 st_menu_de = u"Duits"
 st_menu_ro = u"Roemeens"
 st_menu_zh_cn = u"Vereenvoudigd Chinees"
+st_menu_fr = u"Frans"
+st_menu_ru = u"Russisch"
 
 # Setting popup menu
 st_pmenu_lang = u"Taal:"
@@ -323,3 +332,24 @@ tg_err_cant_updt_tags = u"Fout bij bijwerken tags."
 
 # Tags popup menu
 tg_pmenu_cats = u"Tags:"
+
+# WPStats main menu
+ws_menu_updt = u"Bijwerken"
+ws_menu_views = u"Bekeken"
+ws_menu_daily = u"Dagelijks"
+ws_menu_weekly = u"Wekelijks"
+ws_menu_monthly = u"Maandelijks"
+ws_menu_exit = u"Sluiten"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Statistieken downloaden ?"
+
+# WPStats info messages
+ws_info_downloading = u"Statistieken downloaden..."
+ws_info_downl_failed = u"Fout bij downloaden statistieken. Probeer opnieuw"
+ws_info_processing = u"Verwerken..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d keer bekeken"
+ws_info_daily = u"Blog views per dag"
+ws_info_weekly = u"Blog views per week"
+ws_info_monthly = u"Blog views per maand"

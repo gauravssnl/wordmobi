@@ -16,6 +16,7 @@ wm_menu_sets = u"设置"
 wm_menu_upgr = u"升级"
 wm_menu_abou = u"关于"
 wm_menu_exit = u"退出"
+wm_menu_stat = u"统计"
 
 # Wordmobi error messages
 wm_err_not_supp = u"尚未支持。"
@@ -139,6 +140,10 @@ pt_menu_tags = u"Tags"
 pt_menu_imgs = u"图片"
 pt_menu_pubs = u"发布"
 pt_menu_s2tw = u"发送至 Twitter"
+pt_menu_res = u"图片大小"
+pt_menu_flash = u"闪光模式"
+pt_menu_expos = u"曝光模式"
+pt_menu_white = u"白平衡模式" 
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -202,11 +207,14 @@ pt_err_cant_send_twitter = u"无法发送文章标题至 Twitter。"
 pt_pmenu_posts = u"文章："
 pt_pmenu_del_post = u"是否删除文章？"
 pt_pmenu_res = u"分辨率？"
-pt_pmenu_flash = u"Flash？"
+pt_pmenu_flash = u"闪光模式？"
+pt_pmenu_expos = u"曝光模式？"
+pt_pmenu_white = u"白平衡模式？"
 pt_pmenu_img_src = u"图片来源："
 pt_pmenu_img_url = u"图片 URL："
 pt_pmenu_link_url = u"链接 URL："
 pt_pmenu_linkyt_url = u"Youtube URL："
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"发布文章？"
 pt_pmenu_post_title = u"文章标题："
 pt_pmenu_images = u"图片"
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"用户名："
 st_menu_blog_pwd = u"密码："
 st_menu_blog_npt = u"文章数："
 st_menu_blog_cpp = u"每篇文章评论数："
-st_menu_blog_eml = u"Email（评论用）："
-st_menu_blog_rnm = u"真名（评论用）："
+st_menu_blog_key = u"API key:"
 st_menu_proxy_ena = u"启用代理服务器"
 st_menu_proxy_add = u"地址"
 st_menu_proxy_prt = u"端口"
@@ -274,6 +281,8 @@ st_menu_nl = u"荷兰语"
 st_menu_de = u"德语"
 st_menu_ro = u"罗马尼亚语"
 st_menu_zh_cn = u"中文（中国）"
+st_menu_fr = u"法语"
+st_menu_ru = u"俄语"
 
 # Setting popup menu
 st_pmenu_lang = u"语言："
@@ -323,3 +332,24 @@ tg_err_cant_updt_tags = u"无法更新列表."
 
 # Tags popup menu
 tg_pmenu_cats = u"标签:"
+
+# WPStats main menu
+ws_menu_updt = u"更新"
+ws_menu_views = u"查看"
+ws_menu_daily = u"每日"
+ws_menu_weekly = u"每周"
+ws_menu_monthly = u"每月"
+ws_menu_exit = u"退出"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"下载统计？"
+
+# WPStats info messages
+ws_info_downloading = u"正在下载统计..."
+ws_info_downl_failed = u"无法下载统计，请重试"
+ws_info_processing = u"处理中..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d 查看"  
+ws_info_daily = u"Blog 每日查看"
+ws_info_weekly = u"Blog 每周查看"
+ws_info_monthly = u"Blog 每月查看"
