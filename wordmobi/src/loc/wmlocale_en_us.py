@@ -143,7 +143,7 @@ pt_menu_s2tw = u"Send to Twitter"
 pt_menu_res = u"Image size"
 pt_menu_flash = u"Flash mode"
 pt_menu_expos = u"Exposure mode"
-pt_menu_white = u"White bal. mode"        
+pt_menu_white = u"White bal. mode"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"

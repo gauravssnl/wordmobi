@@ -10,12 +10,13 @@ promo_phrase = u"<br><br>Publicado por <a href=\"http://wordmobi.googlecode.com\
 # Wordmobi main menu
 wm_menu_post = u"Entradas"
 wm_menu_comm = u"Comentarios"
-wm_menu_tags = u"Etiquetas"
 wm_menu_cats = u"Categorías"
+wm_menu_tags = u"Etiquetas"
 wm_menu_sets = u"Configuración"
 wm_menu_upgr = u"Actualizar"
 wm_menu_abou = u"Acerca de"
 wm_menu_exit = u"Salir"
+wm_menu_stat = u"Estadísticas"
 
 # Wordmobi error messages
 wm_err_not_supp = u"No implementado."
@@ -135,10 +136,14 @@ pt_menu_prvw = u"Previsualizar"
 pt_menu_titl = u"Título"
 pt_menu_cont = u"Contenido"
 pt_menu_cats = u"Categorías"
+pt_menu_tags = u"Etiquetas"
 pt_menu_imgs = u"Imágenes"
 pt_menu_pubs = u"Publicar"
 pt_menu_s2tw = u"Enviar a Twitter"
-pt_menu_tags = u"Etiquetas"
+pt_menu_res  = u"Tamaño de imagen"
+pt_menu_flash = u"Modo flash"
+pt_menu_expos = u"Modo exposición"
+pt_menu_white = u"Modo bal. blanco"   
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -203,10 +208,13 @@ pt_pmenu_posts = u"Opciones:"
 pt_pmenu_del_post = u"¿Eliminar entrada ?"
 pt_pmenu_res = u"¿Resolución ?"
 pt_pmenu_flash = u"¿Flash ?"
+pt_pmenu_expos = u"Modo exposición ?"
+pt_pmenu_white = u"Modo bal. blanco ?"
 pt_pmenu_img_src = u"Imágen de:"
 pt_pmenu_img_url = u"URL de imágen:"
 pt_pmenu_link_url = u"URL de vínculo:"
 pt_pmenu_linkyt_url = u"URL de Youtube :"
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"¿Enviar entrada ?"
 pt_pmenu_post_title = u"Título de la entrada:"
 pt_pmenu_images = u"Imágenes"
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"Nombre de usuario:"
 st_menu_blog_pwd = u"Contraseña:"
 st_menu_blog_npt = u"Número de entradas:"
 st_menu_blog_cpp = u"Número de comentarios por entrada:"
-st_menu_blog_eml = u"Email (para comentarios):"
-st_menu_blog_rnm = u"Nombre (para comentarios):"
+st_menu_blog_key = u"API key:"
 st_menu_proxy_ena = u"Estado"
 st_menu_proxy_add = u"Dirección"
 st_menu_proxy_prt = u"Puerto"
@@ -274,6 +281,8 @@ st_menu_nl = u"Holandés"
 st_menu_de = u"Alemán"
 st_menu_ro = u"Rumano"
 st_menu_zh_cn = u"Chino simplificado"
+st_menu_fr = u"Francés"
+st_menu_ru = u"Ruso"
 
 # Setting popup menu
 st_pmenu_lang = u"Idioma:"
@@ -323,3 +332,24 @@ tg_err_cant_updt_tags = u"No es posible actualizar la lista de etiquetas."
 
 # Tags popup menu
 tg_pmenu_cats = u"Etiquetas:"
+
+# WPStats main menu
+ws_menu_updt = u"Actualizar"
+ws_menu_views = u"Vistas"
+ws_menu_daily = u"Diario"
+ws_menu_weekly = u"Semanal"
+ws_menu_monthly = u"Mensual"
+ws_menu_exit = u"Salir"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Descargar estadísticas ?"
+
+# WPStats info messages
+ws_info_downloading = u"Descargando estadísticas..."
+ws_info_downl_failed = u"No es posible descargar las estadísticas. Por favor intente nuevamente."
+ws_info_processing = u"Procesando..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d vistas"  
+ws_info_daily = u"Vistas del blog por día"
+ws_info_weekly = u"Vistas del blog por semanas"
+ws_info_monthly = u"Vistas del blog por mes"

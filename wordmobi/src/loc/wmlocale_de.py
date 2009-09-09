@@ -16,6 +16,7 @@ wm_menu_sets = u"Einstellungen"
 wm_menu_upgr = u"Upgrade"
 wm_menu_abou = u"Über"
 wm_menu_exit = u"Ende"
+wm_menu_stat = u"Statistiken"
 
 # Wordmobi error messages
 wm_err_not_supp = u"Nicht unterstützt."
@@ -139,6 +140,10 @@ pt_menu_tags = u"Tags"
 pt_menu_imgs = u"Bilder"
 pt_menu_pubs = u"Veröffentlichen"
 pt_menu_s2tw = u"Senden an Twitter"
+pt_menu_res = u"Bildgröße ?"
+pt_menu_flash = u"Blitzmodus ?"
+pt_menu_expos = u"Exposure mode"
+pt_menu_white = u"Weißabgleich"
 
 # Posts lists
 pt_list_320x240 = u"(320x240)"
@@ -201,17 +206,20 @@ pt_err_cant_send_twitter = u"Artikel kann nicht an Twitter gesandt werden."
 # Posts popup menu
 pt_pmenu_posts = u"Artikel:"
 pt_pmenu_del_post = u"Artikel löschen ?"
-pt_pmenu_res = u"Auflösung ?"
-pt_pmenu_flash = u"Flash ?"
+pt_pmenu_res = u"Bildgröße ?"
+pt_pmenu_flash = u"Blitzmodus ?"
+pt_pmenu_expos = u"Exposure mode ?"
+pt_pmenu_white = u"Weißabgleich ?"
 pt_pmenu_img_src = u"Bild von:"
 pt_pmenu_img_url = u"Bild-URL:"
 pt_pmenu_link_url = u"Link-URL:"
 pt_pmenu_linkyt_url = u"Youtube-URL:"
+pt_pmenu_linkqik_url = u"Qik URL:"
 pt_pmenu_send_post = u"Artikel veröffentlichen ?"
 pt_pmenu_post_title = u"Artikel-Überschrift:"
 pt_pmenu_images = u"Bilder"
-pt_pmenu_scale_img = u"Maßstab dieses Bild?"
-pt_pmenu_scale_factor = u"Skalierungsfaktor (%)"
+pt_pmenu_scale_img = u"Das Bild anpassen?"
+pt_pmenu_scale_factor = u"Anpass-Faktor (%)"
 pt_pmenu_tags = u"Tags:"
 pt_pmenu_cats = u"Kategorien:"
 
@@ -247,8 +255,7 @@ st_menu_blog_usr = u"Benutzername:"
 st_menu_blog_pwd = u"Passwort:"
 st_menu_blog_npt = u"Artikelanzahl:"
 st_menu_blog_cpp = u"Kommentare je Beitrag:"
-st_menu_blog_eml = u"Email (für Kommentare):"
-st_menu_blog_rnm = u"Name (für Kommentare):"
+st_menu_blog_key = u"API key:"
 st_menu_proxy_ena = u"Aktiviert"
 st_menu_proxy_add = u"Adresse"
 st_menu_proxy_prt = u"Port"
@@ -274,6 +281,8 @@ st_menu_nl = u"Niederländisch"
 st_menu_de = u"Deutsch"
 st_menu_ro = u"Rumänisch"
 st_menu_zh_cn = u"Vereinfachtes Chinesisch"
+st_menu_fr = u"French"
+st_menu_ru = u"Russian"
 
 # Setting popup menu
 st_pmenu_lang = u"Sprache:"
@@ -323,3 +332,24 @@ tg_err_cant_updt_tags = u"Tags können nicht aktualisiert werden."
 
 # Tags popup menu
 tg_pmenu_cats = u"Tags:"
+
+# WPStats main menu
+ws_menu_updt = u"Aktualisieren"
+ws_menu_views = u"Besuche"
+ws_menu_daily = u"Täglich"
+ws_menu_weekly = u"Wöchentlich"
+ws_menu_monthly = u"Monatlich"
+ws_menu_exit = u"Ende"
+
+# WPStats popup menu
+ws_pmenu_downl_stats = u"Statistik laden ?"
+
+# WPStats info messages
+ws_info_downloading = u"Lade Daten herunter..."
+ws_info_downl_failed = u"Kein Statistik-Download möglich. Bitte nochmal versuchen"
+ws_info_processing = u"bitte warten..."
+# do not translate "%s\n%d", only translate views
+ws_info_views = u"%s\n%d Besucher"
+ws_info_daily = u"Blog Besucher pro Tag"
+ws_info_weekly = u"Blog Besucher pro Woche"
+ws_info_monthly = u"Blog Besucher pro Monat"
