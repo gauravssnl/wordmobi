@@ -58,7 +58,7 @@ class TakePhoto(Dialog):
                  (LABELS.loc.pt_menu_expos,self.exp_mode_menu),
                  (LABELS.loc.pt_menu_white,self.white_mode_menu),
                  (LABELS.loc.pt_menu_canc, self.cancel_app) ]
-        Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu)
+        Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu, self.cancel_app)
         self.bind(key_codes.EKeySelect, self.take_photo)
 
     def img_size_menu(self):
