@@ -2,6 +2,10 @@
 
 = Change log =
 
+= 0.9.3 - 2009/09/10 =
+  * Use Python for S60 1.9.6
+  * Fixed issues [http://code.google.com/p/wordmobi/issues/detail?id=62 62] and [http://code.google.com/p/wordmobi/issues/detail?id=63 63]
+
 = 0.9.2 - 2009/09/09 =
   * Standard S60 media gallery selection using pymgfetch
   * Localization for statistics dialog
