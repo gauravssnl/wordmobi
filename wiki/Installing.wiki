@@ -12,7 +12,7 @@
 
 <font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
 
-First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] (some phones like N79 may require a special PyS60 version, see comments at the end of the page ) and after [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3.sis Wordmobi 0.9.3]. If you have problems when lunching file selection dialog, please use [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3-nomgfetch.sis Wordmobi 0.9.3 with simple file selection] (some E55 users are reporting that only this version is working in their phones). I tested the current version in S60 3rd and 5th edition phones (E71 and XM 5800)
+First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] (some phones like N79 may require an special PyS60 version, see comments at the end of the page ) and after [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3.sis Wordmobi 0.9.3]. If you have problems when lunching file selection dialog, please use [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3-nomgfetch.sis Wordmobi 0.9.3 with simple file selection] (some E55 users are reporting that only this version is working in their phones). I tested the current version in S60 3rd and 5th edition phones (E71 and XM 5800)
 
 There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
 
