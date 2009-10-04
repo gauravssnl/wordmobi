@@ -5,7 +5,7 @@
 # Marcelo Barros <marcelobarrosalmeida (at) gmail.com>
 
 # Promo phrase
-promo_phrase = u"<br><br>Publicado pelo <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
+promo_phrase = u"<br><br>Via <a href=\"http://wordmobi.googlecode.com\">Wordmobi</a>" 
 
 # Wordmobi main menu
 wm_menu_post = u"Posts"
