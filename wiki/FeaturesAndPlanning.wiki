@@ -38,6 +38,7 @@
 
 = Future enhancements and ideas =
 
+ # Change background color, font color and maybe font when editing a new post.
  # "test connection" option in access point selection/proxy/twitter setup
  # to upload also movies and other kind of files to his / her wordpress blog. There are many live-streaming apps allowing you to post / stream video directly from your mobile (CellSpin, Qik, LiveCliq, Flixwagon), but none of them is really helping when it comes to edit text or to arrange the post page.
  # Also adding .pdf or .doc to your webbased wordpress blog
