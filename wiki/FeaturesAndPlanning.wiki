@@ -31,6 +31,7 @@
 
 = Next feature to be implemented =
 
+ # Image resizing before upload to save bandwidth/upload time
  # access point persistence
  # upload to flickr
  # multiple twitter accounts (one twitter account per blog)
