@@ -17,7 +17,7 @@ You must <font color="blue">*enable the installation of any application in your 
 
 == Python for S60 installation == 
 
-Install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] (some phones like N79 may require an special PyS60 version, see comments at the end of the page ).
+Install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime]. Some phones like N79 may require an special PyS60 version, called [https://garage.maemo.org/frs/download.php/6359/Python_1.9.6_fixed.sis Python_1.9.6_fixed.sis] (thanks to benjaminroesneremail@Jul 27, 2009).
 
 == Wordmobi installation ==
 
