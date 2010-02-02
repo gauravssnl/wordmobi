@@ -1,36 +1,51 @@
 #summary Wordmobi installation
 #labels Featured
 
-
 = Read this page carefully, the whole page =
 
- * Use [http://code.google.com/p/wordmobi/issues/list issue tracker] to report problems instead commenting this page
- * Drop me an email instead commenting this page ( marcelobarrosalmeida (_at_) gmail.com  )
- * Comment this page if you really think that it is necessary (page with errors, tips for installing, and so on). 
+ * Use [http://code.google.com/p/wordmobi/issues/list issue tracker] to report problems instead commenting this page.
+ * Send me an email instead commenting this page ( marcelobarrosalmeida (_at_) gmail.com  ).
+ * Comment this page if you really think that it is necessary (page with errors, tips for installing, problems not covered but solved by you and so on). 
 
-= Installing wordmobi =
+= Installation =
+
+== Certification issues ==
+
+You must <font color="blue">*enable the installation of any application in your mobile phone, not only the certificated ones*</font>. In Settings->Applications->App. Manager allow all applications and disable certification checks. If you receive messages related to "old certificates", just change your phone date to nearly one year ago and try to install Wordmobi again.
 
 <font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
 
-First install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] (some phones like N79 may require an special PyS60 version, see comments at the end of the page ) and after [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3.sis Wordmobi 0.9.3]. If you have problems when lunching file selection dialog, please use [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3-nomgfetch.sis Wordmobi 0.9.3 with simple file selection] (some E55 users are reporting that only this version is working in their phones). I tested the current version in S60 3rd and 5th edition phones (E71 and XM 5800)
+== Python for S60 installation == 
 
-There are requirements for Wordpress as well. Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer. 
+Install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime] (some phones like N79 may require an special PyS60 version, see comments at the end of the page ).
 
-Wordmobi saves all relevant data in the drive you have chosen, under directory {drive}:\data\python\wordmobidir. The following directories are used:
+== Wordmobi installation ==
 
- * {drive}:\data\python\wordmobidir => wordmobi python files and configuration files
- * {drive}:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
- * {drive}:\data\python\wordmobidir\images => snapshots taken
- * {drive}:\data\python\wordmobidir\loc => locales
- * {drive}:\data\python\wordmobidir\res => resource images
+Install [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3.sis Wordmobi 0.9.3]. If you have problems when lunching file selection dialog, please use  [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3-nomgfetch.sis Wordmobi 0.9.3 with simple file selection] (some E55 users are reporting that only this version is working in their phones). The current version was tested in S60 3rd and 5th edition phones (E71 and XM 5800 phones)
 
 = Setup =
 
+== Wordmobi setup ==
+
 Before using wordmobi, please setup your blog account, user details, proxy (if any) and access point. Proxy is supported, even if using  authentication. If your access point is not listed, please, save it to your connections before starting wordmobi.
+
+<font color="blue">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
 
 Wordmobi was designed to support any domain running wordpress with compatible XMLRPC API. <font color="blue">*Just set your blog address*</font> (for instance, http://www.mydomain.com or http://myblog.wordpress.com). If you have your blog running inside some subdirectory, like /my/blog, use http://www.mydomain.com/my/blog. <font color="blue">*Do not put any trailing slash and do not put xmlrpc.php at the end*</font> (they are automatically removed and just added when accessing your blog). 
 
 However, if your blog has a customized URL for XMLRPC API (not ending with xmlrpc.php), this URL will not be replaced. Just fill the blog address with you customized URL, including the php file name.
+
+== Wordpress setup ==
+
+<font color="blue">*It is necessary to activate xmlrpc support in wordpress for people running blogs in their own domains*</font> (blogs hosted in Wordpress.com have this option enabled per default). Check the following link to enable it (replace it using your blog URL):
+
+http://your_blog_url/wp-admin/options-writing.php
+
+See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]. 
+
+Comments will work only with Wordpress [http://comox.textdrive.com/pipermail/wp-xmlrpc/2008-October/000277.html 2.6.2] or newer.
+ 
+== Blog statistics ==
 
 If you want to use blog view statistics, pay attention in the following points:
  * For people running blogs in wordpress.com, just take note of your [http://faq.wordpress.com/2005/10/19/api-key/ API key] and setup your account with it. 
@@ -40,17 +55,12 @@ If you are not receiving the blog view statistics, please do the following:
  * Put the following URL in your browser <font color="blue">*http://stats.wordpress.com/csv.php?api_key={your_api}&blog_uri={your_blog_uri}&blog_id=0&days=365&limit=-1 *</font>  replacing {your_api} for you API key and {your_blog_uri} for your blog URL (the same string you put at account setup dialog, like http://yourblog.wordpress.com). Remove brackets for both fields.
  * Check if you are receiving a valid response with statistics or just a help page. 
 
-<font color="blue">*Usernames are case sensitive for wordpress*</font>, so take care when typing your username. Check if all fields does not have any trailer space.
+== Wordmobi directories ==
 
-Also <font color="blue">*enable installation of any application in your mobile phone, not only the certificated ones*</font>. In Settings->Applications->App. Manager allow all applications and disable certification checks.
+Wordmobi saves all relevant data in the drive you have chosen, under directory {drive}:\data\python\wordmobidir. The following directories are used:
 
-<font color="blue">*It is necessary to activate xmlrpc support in wordpress for people running blogs in their own domains*</font>. Check 
-
-http://blogname/wp-admin/options-writing.php
-
-for enabling it.
-
-See [http://coolwebdeveloper.com/2008/12/writing-your-wordpress-blog-articles-remotely-using-xml-rpc-using-windows-live-writer-with-your-wordpress-blog/ this link] and [http://www.wpnotifier.com/enable_xmlrpc.php this]. Blog running in wordpress domains have this already set.
-
-
-[http://media.share.ovi.com/m1/medium/0516/3fe35acf02a441e6884d01dde82c33b9.jpg]
+ * {drive}:\data\python\wordmobidir => wordmobi python files and configuration files
+ * {drive}:\data\python\wordmobidir\cache => temporary downloads and temporary htmls files used during preview. Its contents is cleared when wordmobi is closed.
+ * {drive}:\data\python\wordmobidir\images => snapshots taken
+ * {drive}:\data\python\wordmobidir\loc => locales
+ * {drive}:\data\python\wordmobidir\res => resource images
