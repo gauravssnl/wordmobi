@@ -13,8 +13,6 @@
 
 You must <font color="blue">*enable the installation of any application in your mobile phone, not only the certificated ones*</font>. In Settings->Applications->App. Manager allow all applications and disable certification checks. If you receive messages related to "old certificates", just change your phone date to nearly one year ago and try to install Wordmobi again.
 
-<font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
-
 == Python for S60 installation == 
 
 Install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runtime]. Some phones like N79 may require an special PyS60 version, called [https://garage.maemo.org/frs/download.php/6359/Python_1.9.6_fixed.sis Python_1.9.6_fixed.sis] (thanks to benjaminroesneremail@Jul 27, 2009).
@@ -22,6 +20,8 @@ Install [http://wordmobi.googlecode.com/files/Python_1.9.6.sis Python 1.9.6 runt
 == Wordmobi installation ==
 
 Install [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3.sis Wordmobi 0.9.3]. If you have problems when lunching file selection dialog, please use  [http://wordmobi.googlecode.com/files/Wordmobi-0.9.3-nomgfetch.sis Wordmobi 0.9.3 with simple file selection] (some E55 users are reporting that only this version is working in their phones). The current version was tested in S60 3rd and 5th edition phones (E71 and XM 5800 phones)
+
+<font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
 
 = Setup =
 
