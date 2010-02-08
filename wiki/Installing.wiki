@@ -64,3 +64,7 @@ Wordmobi saves all relevant data in the drive you have chosen, under directory {
  * {drive}:\data\python\wordmobidir\images => snapshots taken
  * {drive}:\data\python\wordmobidir\loc => locales
  * {drive}:\data\python\wordmobidir\res => resource images
+
+= Known problems =
+
+ * Some devices does not support media selection using thumbnails (Wordmobi-{version}.sis) and <font color="blue">*Wordmobi closes unexpectedly*</font>. In this case try to use the version without thumbnails (<font color="blue">*Wordmobi-{version}-nomgfetch.sis*</font>). This error was reported [http://code.google.com/p/wordmobi/issues/detail?id=69 here]
