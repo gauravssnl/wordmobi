@@ -60,7 +60,7 @@ import re
 import os
 import xmlrpclib
 #import datetime
-import time
+import mktimefix as time
 
 class WordPressException(exceptions.Exception):
     """Custom exception for WordPress client operations

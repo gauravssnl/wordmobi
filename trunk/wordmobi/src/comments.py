@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time
+import mktimefix as time
 import e32
 import key_codes
 import wordpresslib as wp

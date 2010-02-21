@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import time
+import mktimefix as time
 
 import urllib
 from beautifulsoup import BeautifulSoup
