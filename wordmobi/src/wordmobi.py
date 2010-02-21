@@ -7,7 +7,7 @@ try:
 except ImportError:
     pass
 import os
-import time
+import mktimefix as time
 import urllib
 from beautifulsoup import BeautifulSoup
 from urllibproxy import UrllibProxy
@@ -40,11 +40,11 @@ __license__ = "GPLv3"
 class BlogManager(Dialog):
     def __init__(self,cbk,title):
         # TODO Better icons or remove them
-        icons = [Icon(MIFFILE,8,8),
-                 Icon(MIFFILE,6,6),
-                 Icon(MIFFILE,4,4),
-                 Icon(MIFFILE,2,2),
-                 Icon(MIFFILE,16,16),
+        icons = [Icon(MIFFILE,16384+8,16384+8),
+                 Icon(MIFFILE,16384+6,16384+6),
+                 Icon(MIFFILE,16384+4,16384+4),
+                 Icon(MIFFILE,16384+2,16384+2),
+                 Icon(MIFFILE,16384+16,16384+16),
                  ]
         menu_labels = [ LABELS.loc.wm_menu_post,
                         LABELS.loc.wm_menu_comm,
@@ -112,7 +112,7 @@ class WordMobi(Application):
         app.screen='normal' # TODO check all app.xyz use
         app.directional_pad = False
         LABELS.set_locale(DB["language"])
-        self.wp_icon = Icon(MIFFILE,14,14)
+        self.wp_icon = Icon(MIFFILE,16384+14,16384+14)
         self.blogs = json.loads(DB["blog_list"])
         items = [ (b["account"],b["blog"],self.wp_icon) for b in self.blogs ]
         menu = [(LABELS.loc.wm_menu_exit, self.close_app)] 

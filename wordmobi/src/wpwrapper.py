@@ -1,5 +1,5 @@
 import os
-import time
+import mktimefix as time
 import urllib
 from beautifulsoup import BeautifulSoup
 from xmlrpclib import DateTime

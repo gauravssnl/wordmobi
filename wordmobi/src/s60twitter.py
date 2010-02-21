@@ -8,7 +8,7 @@ import base64
 import urllib
 from urllib import unquote, splittype, splithost
 import simplejson as json
-import time
+import mktimefix as time
 
 __all__ = [ "TwitterApi" ]
 
