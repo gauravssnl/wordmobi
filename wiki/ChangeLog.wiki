@@ -2,6 +2,10 @@
 
 = Change log =
 
+= 0.9.4 - 2010/02/21 =
+  * Use Python for S60 2.0
+  * No new features or bug fixed
+
 = 0.9.3 - 2009/09/10 =
   * Use Python for S60 1.9.6
   * Fixed issues [http://code.google.com/p/wordmobi/issues/detail?id=62 62] and [http://code.google.com/p/wordmobi/issues/detail?id=63 63]
