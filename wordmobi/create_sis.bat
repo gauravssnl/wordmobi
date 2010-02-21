@@ -1,3 +1,8 @@
+REM 
+REM DO NOT TRY TO GENERATE THE SIS FILE IF YOUR PATH CONTAINS SPACES.
+REM ENSYMBLE DOES NOT SUPPORT THEM ! COPY THIS PROJECT TO C:\
+REM BEFORE RUNNING THIS SCRIPT.
+REM
 @echo off
 
 IF "%1" EQU "" GOTO error
@@ -7,7 +12,8 @@ SET APPNAME=Wordmobi
 SET CAPBLS=NetworkServices+LocalServices+ReadUserData+WriteUserData+UserEnvironment
 SET SRCDIR=src
 SET WMTMPDIR=src.tmp
-SET ICON=wordmobi.svg
+SET ICON=wordmobi.svg  
+
 REM put you zip tool here
 SET ZIP="C:\Arquivos de programas\7-Zip\7z.exe"
 REM Path to module-repo, inside Python For S60 
@@ -26,32 +32,20 @@ copy  %SRCDIR%\loc\*.py  %WMTMPDIR%\extras\data\python\wordmobidir\loc
 copy  %SRCDIR%\res\*.png  %WMTMPDIR%\extras\data\python\wordmobidir\res
 copy  %SRCDIR%\wordmobi.mif  %WMTMPDIR%\extras\data\python\wordmobidir
 move %WMTMPDIR%\extras\data\python\wordmobidir\default.py  %WMTMPDIR%\
-  
-echo "Copying project to PyS60 dir"
-if exist "%PYS60DIR%\%WMTMPDIR%" rmdir /s/q "%PYS60DIR%\%WMTMPDIR%"
-xcopy /E "%WMTMPDIR%" "%PYS60DIR%\%WMTMPDIR%\"
-if exist "%PYS60DIR%\%ICON%" del /s/q "%PYS60DIR%\%ICON%"
-copy "%ICON%" "%PYS60DIR%\%ICON%"
+              
+if not exist .\module-repo\ xcopy /E "%PYS60DIR%\module-repo" .\module-repo\
+if not exist .\templates\   xcopy /E "%PYS60DIR%\templates"   .\templates\
+if not exist ensymble.py    xcopy /E "%PYS60DIR%\ensymble.py" .
+if not exist openssl.exe    xcopy /E "%PYS60DIR%\openssl.exe" .
 
 echo "Copying extensions"
-xcopy /E/Y extensions\* "%PYS60DIR%\module-repo\dev-modules\"
+xcopy /E/Y extensions\* .\module-repo\dev-modules\
 
 echo "Generating for Python 1.9.x"
-pushd .
-cd "%PYS60DIR%"
-echo "Creating sis"
 %PYTHON% ensymble.py py2sis %OPTS% "%WMTMPDIR%" "%APPNAME%-%1.sis"
 
-popd
-copy "%PYS60DIR%\%APPNAME%-%1.sis" .
 echo "Zipping source files"
-%ZIP% a -r -tzip %APPNAME%-%1-src.zip src\*.py src\*.mif src\*.png
-
-echo "Erasing"
-rmdir /s/q "%PYS60DIR%\%WMTMPDIR%"
-del /s/q "%PYS60DIR%\%ICON%"
-del "%PYS60DIR%\%APPNAME%-%1.sis"
-rmdir /s/q "%WMTMPDIR%"
+%ZIP% a -r -tzip %APPNAME%-%1-src.zip src
 
 goto end
 
@@ -59,5 +53,6 @@ goto end
 echo Sintaxe: %0 version
 
 :end
+
 
 
