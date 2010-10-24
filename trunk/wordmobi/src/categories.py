@@ -6,6 +6,7 @@ import key_codes
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
+from wmglobals import TOUCH_ENABLED
 
 __all__ = [ "Categories" ]
 
@@ -19,9 +20,10 @@ class Categories(Dialog):
         menu = self.menu_items + [( LABELS.loc.ca_menu_clos, self.close_app )]
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_cats, body, menu)
 
-        self.bind(key_codes.EKeyUpArrow, self.key_up)
-        self.bind(key_codes.EKeyDownArrow, self.key_down)
-        self.bind(key_codes.EKeyLeftArrow, self.key_left)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyUpArrow, self.key_up)
+            self.bind(key_codes.EKeyDownArrow, self.key_down)
+            self.bind(key_codes.EKeyLeftArrow, self.key_left)
 
     def key_left(self):
         if not self.ui_is_locked():

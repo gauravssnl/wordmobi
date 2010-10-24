@@ -13,6 +13,7 @@ import key_codes
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
+from wmglobals import TOUCH_ENABLED
 
 __all__ = [ "sel_access_point", "BlogSettings", "BlogAccounts", "ProxySettings", "Settings" ]
 
@@ -58,8 +59,9 @@ class BlogSettings(Dialog):
         
         Dialog.__init__(self, cbk, LABELS.loc.st_info_blog_set, body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.update_value)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.update_value)
             
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
@@ -127,8 +129,9 @@ class BlogAccounts(Dialog):
         body =  Listbox( [ (u"",u"") ], self.edit )
         Dialog.__init__(self, cbk, LABELS.loc.st_info_blog_acc_set, body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.edit)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.edit)
 
     def edit_cbk(self):
         self.lock_ui()
@@ -218,8 +221,9 @@ class ProxySettings(Dialog):
         
         Dialog.__init__(self, cbk, LABELS.loc.st_info_proxy_set, body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.update_value)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.update_value)
         
     def refresh(self):
         Dialog.refresh(self)
@@ -278,8 +282,9 @@ class TwitterSettings(Dialog):
         
         Dialog.__init__(self, cbk, LABELS.loc.st_info_twitter_set, body,  menu)
 
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.update_value)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.update_value)
         
     def refresh(self):
         Dialog.refresh(self)
@@ -323,8 +328,10 @@ class Settings(Dialog):
         self.lang_changed = False
         self.body = Listbox( [(u"",u"")],self.update_value)
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_sets, self.body)
-        self.bind(key_codes.EKeyRightArrow, self.update_value)
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)        
+
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyRightArrow, self.update_value)
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)        
 
     def refresh(self):
         Dialog.refresh(self)

@@ -28,7 +28,7 @@ from urllibproxy import UrllibProxy
 
 from persist import DB
 from wpwrapper import BLOG
-from wmglobals import DEFDIR, MGFETCH
+from wmglobals import DEFDIR, MGFETCH, TOUCH_ENABLED
 from wmlocale import LABELS
 
 if MGFETCH:
@@ -59,7 +59,9 @@ class TakePhoto(Dialog):
                  (LABELS.loc.pt_menu_white,self.white_mode_menu),
                  (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, lambda: True, LABELS.loc.pt_info_pict, body, menu, self.cancel_app)
-        self.bind(key_codes.EKeySelect, self.take_photo)
+        
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeySelect, self.take_photo)
 
     def img_size_menu(self):
         img_sizes_str = [u"%dx%d" % (x[0],x[1]) for x in camera.image_sizes()]
@@ -508,8 +510,10 @@ class NewPost(Dialog):
         body = Listbox([ (u"",u"") ], self.update_value_check_lock)
         menu = [ (LABELS.loc.pt_menu_canc, self.cancel_app) ]
         Dialog.__init__(self, cbk, LABELS.loc.pt_info_new_post, body, menu)
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
+        
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
         
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
@@ -792,10 +796,11 @@ class Posts(Dialog):
         
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_post, body, menu)
 
-        self.bind(key_codes.EKeyUpArrow, self.key_up)
-        self.bind(key_codes.EKeyDownArrow, self.key_down)
-        self.bind(key_codes.EKeyLeftArrow, self.key_left)
-        self.bind(key_codes.EKeyRightArrow, self.key_right)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyUpArrow, self.key_up)
+            self.bind(key_codes.EKeyDownArrow, self.key_down)
+            self.bind(key_codes.EKeyLeftArrow, self.key_left)
+            self.bind(key_codes.EKeyRightArrow, self.key_right)
 
     def key_left(self):
         if not self.ui_is_locked():

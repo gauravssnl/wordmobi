@@ -2,7 +2,7 @@ from window import Dialog
 from appuifw import *
 import key_codes
 
-from wmglobals import VERSION
+from wmglobals import VERSION, TOUCH_ENABLED
 from persist import DB
 from wmlocale import LABELS
 
@@ -22,8 +22,9 @@ class About(Dialog):
         
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_abou, Listbox( values, self.show_info ), menu)
         
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.show_info)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.show_info)
 
     def show_info(self):
         idx = self.body.current()

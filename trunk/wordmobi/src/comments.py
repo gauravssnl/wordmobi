@@ -10,6 +10,7 @@ from window import Dialog
 from persist import DB
 from wpwrapper import BLOG
 from wmlocale import LABELS
+from wmglobals import TOUCH_ENABLED
 
 __all__ = [ "NewComment", "EditComment", "Comments" ]
 
@@ -56,8 +57,10 @@ class NewComment(Dialog):
         body = Listbox( [ (u"",u"") ], self.update_value_check_lock )
         menu = [ ( LABELS.loc.cm_menu_canc, self.cancel_app ) ]
         Dialog.__init__(self, cbk, LABELS.loc.cm_info_new_cmt, body, menu)
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
-        self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
+        
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
+            self.bind(key_codes.EKeyRightArrow, self.update_value_check_lock)
 
     def refresh(self):
         Dialog.refresh(self) # must be called *before*
@@ -164,10 +167,11 @@ class Comments(Dialog):
         menu = self.menu_items + [( LABELS.loc.cm_menu_clos, self.close_app )]
         Dialog.__init__(self, cbk, LABELS.loc.wm_menu_comm, body, menu)
 
-        self.bind(key_codes.EKeyUpArrow, self.key_up)
-        self.bind(key_codes.EKeyDownArrow, self.key_down)
-        self.bind(key_codes.EKeyLeftArrow, self.key_left)
-        self.bind(key_codes.EKeyRightArrow, self.key_right)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyUpArrow, self.key_up)
+            self.bind(key_codes.EKeyDownArrow, self.key_down)
+            self.bind(key_codes.EKeyLeftArrow, self.key_left)
+            self.bind(key_codes.EKeyRightArrow, self.key_right)
 
     def key_left(self):
         if not self.ui_is_locked():

@@ -55,11 +55,12 @@ class Stats(Dialog):
             # create small graphics for tiny screens
             self.SRD = 2
             self.SLW = 2
-        self.body.bind(key_codes.EKeyLeftArrow,self.key_left)
-        self.body.bind(key_codes.EKeyRightArrow,self.key_right)
-        self.body.bind(key_codes.EKeySelect,self.key_sel)
-        self.body.bind(key_codes.EKeyUpArrow,self.key_up)
-        self.body.bind(key_codes.EKeyDownArrow,self.key_down)
+        if not TOUCH_ENABLED:
+            self.body.bind(key_codes.EKeyLeftArrow,self.key_left)
+            self.body.bind(key_codes.EKeyRightArrow,self.key_right)
+            self.body.bind(key_codes.EKeySelect,self.key_sel)
+            self.body.bind(key_codes.EKeyUpArrow,self.key_up)
+            self.body.bind(key_codes.EKeyDownArrow,self.key_down)
         self.tooltip = InfoPopup()
         self.font = ('dense',16,graphics.FONT_ANTIALIAS)
         self.set_new_data(self.stats[self.stats["current"]]["title"],
