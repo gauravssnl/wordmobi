@@ -519,6 +519,7 @@ from appuifw import *
 import e32
 import key_codes
 from wmlocale import LABELS
+from wmglobals import TOUCH_ENABLED
 
 __all__ = [ "Application", "Dialog" ]
 
@@ -574,7 +575,8 @@ class Window(object):
 
     def bind(self, key, cbk):
         " Bind a key to the body. A callback must be provided."
-        self.body.bind(key,cbk)
+        if not TOUCH_ENABLED:
+            self.body.bind(key,cbk)
         
     def refresh(self):
         " Update the application itens (menu, body and exit handler) "

@@ -26,7 +26,7 @@ from wpstats import Stats
 import wordpresslib as wp
 from wmutil import *
 from wmproxy import UrllibTransport
-from wmglobals import VERSION, DEFDIR, MIFFILE
+from wmglobals import VERSION, DEFDIR, MIFFILE, TOUCH_ENABLED
 from wpwrapper import BLOG
 from persist import DB
 from wmlocale import LABELS
@@ -66,8 +66,9 @@ class BlogManager(Dialog):
 
         self.dlg = None
         
-        self.bind(key_codes.EKeyRightArrow, self.update_value)
-        self.bind(key_codes.EKeyLeftArrow, self.key_left)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyRightArrow, self.update_value)
+            self.bind(key_codes.EKeyLeftArrow, self.key_left)
 
     def key_left(self):
         self.close_app()
@@ -137,8 +138,9 @@ class WordMobi(Application):
         self.dlg = None
         sel_access_point()
 
-        self.bind(key_codes.EKeyRightArrow, self.check_update_value)
-        self.bind(key_codes.EKeyLeftArrow, self.close_app)
+        if not TOUCH_ENABLED:
+            self.bind(key_codes.EKeyRightArrow, self.check_update_value)
+            self.bind(key_codes.EKeyLeftArrow, self.close_app)
 
     def _get_menu_labels(self):
         menu_labels = [ LABELS.loc.wm_menu_sets,
