@@ -21,7 +21,7 @@ If you are using old Wordmobi 0.9.3, you need install [http://wordmobi.googlecod
 
 == Wordmobi installation ==
 
-Install [http://wordmobi.googlecode.com/files/Wordmobi-0.9.4.sis Wordmobi 0.9.4]. If you have problems when lunching file selection dialog, please use  [http://wordmobi.googlecode.com/files/Wordmobi-0.9.4-nomgfetch.sis Wordmobi 0.9.4 with simple file selection] (some E55 users are reporting that only this version is working in their phones). The current version was tested in S60 3rd and 5th edition phones (E71 and XM 5800 phones)
+Install [http://wordmobi.googlecode.com/files/Wordmobi-0.9.5.sis Wordmobi 0.9.5]. 
 
 <font color="blue">*Wordmobi and Python runtime must be installed in the same location*</font>, phone memory or memory card. Python runtime does not support applications in different locations.
 
