@@ -15,9 +15,9 @@ SET WMTMPDIR=src.tmp
 SET ICON=wordmobi.svg  
 
 REM put you zip tool here
-SET ZIP="C:\Arquivos de programas\7-Zip\7z.exe"
+SET ZIP="C:\Program Files (x86)\7-Zip\7z.exe"
 REM Path to module-repo, inside Python For S60 
-SET PYS60DIR=C:\Arquivos de programas\PythonForS60
+SET PYS60DIR=C:\Program Files (x86)\PythonForS60
 
 SET OPTS=--verbose  --version="%1" --uid=0xefefefef ^
 --appname="%APPNAME%" --icon="%ICON%" ^
