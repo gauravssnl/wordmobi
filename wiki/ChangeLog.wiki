@@ -2,6 +2,10 @@
 
 = Change log =
 
+= 0.9.5 - 2011/05/29 =
+  * Use Python for S60 2.0
+  * Added support for Indonesian (thanks to Nikko Haendratnio)
+
 = 0.9.4 - 2010/02/21 =
   * Use Python for S60 2.0
   * No new features or bug fixed
