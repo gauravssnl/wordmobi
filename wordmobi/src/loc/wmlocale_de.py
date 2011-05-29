@@ -283,6 +283,7 @@ st_menu_ro = u"Rumänisch"
 st_menu_zh_cn = u"Vereinfachtes Chinesisch"
 st_menu_fr = u"French"
 st_menu_ru = u"Russian"
+st_menu_id = u"Indonesisch"
 
 # Setting popup menu
 st_pmenu_lang = u"Sprache:"

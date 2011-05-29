@@ -1,4 +1,4 @@
-# -*- coding: cp1252 -*-
+﻿# -*- coding: utf-8 -*-
 
 # Translation by:
 #
@@ -263,6 +263,7 @@ st_menu_it = u"Italiana"
 st_menu_nl = u"Olandeza"
 st_menu_de = u"Germana"
 st_menu_ro = u"Romana"
+st_menu_id = u"Indoneziană"
 
 # Setting popup menu
 st_pmenu_lang = u"Limba:"

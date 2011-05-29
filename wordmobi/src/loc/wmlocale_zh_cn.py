@@ -283,6 +283,7 @@ st_menu_ro = u"罗马尼亚语"
 st_menu_zh_cn = u"中文（中国）"
 st_menu_fr = u"法语"
 st_menu_ru = u"俄语"
+st_menu_id = u"印度尼西亚"
 
 # Setting popup menu
 st_pmenu_lang = u"语言："
