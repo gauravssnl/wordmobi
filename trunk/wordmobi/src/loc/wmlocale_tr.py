@@ -232,6 +232,9 @@ st_menu_nl = u"Hollandaca"
 st_menu_de = u"Almanca"
 st_menu_ro = u"Romen"
 st_menu_zh_cn = u"Basit Çince"
+st_menu_fr = u"Fransiz"
+st_menu_ru = u"Rus"
+st_menu_id = u"Endonezya"
 
 # Setting popup menu
 st_pmenu_lang = u"Dil:"
